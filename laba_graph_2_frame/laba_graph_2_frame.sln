@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34024.191
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "laba_graph_2_frame", "laba_graph_2_frame.csproj", "{9252D37D-3419-4BC5-A8B6-BEBC77BB7CE1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9252D37D-3419-4BC5-A8B6-BEBC77BB7CE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9252D37D-3419-4BC5-A8B6-BEBC77BB7CE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9252D37D-3419-4BC5-A8B6-BEBC77BB7CE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9252D37D-3419-4BC5-A8B6-BEBC77BB7CE1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BFE90CBA-5F97-4215-9ED0-8ACB5A839656}
+	EndGlobalSection
+EndGlobal
