@@ -81,10 +81,19 @@ namespace laba_graph_2_frame
                     (double h, double s, double v)=PixelRGBtoHSV(origPixelColor);
 
                     h += d_h;
-                    s *= d_s;
-                    v *= d_v;
 
+                    s *= d_s + 1.0;
+                    s=Math.Min(Math.Max(s,0),1);
 
+                    v*=d_v + 1.0;
+                  
+                    v = Math.Min(Math.Max(v, 0), 1);
+                    if (d_v < 0)
+                        v *= (d_v + 1);
+                    else
+                        v += (d_v * (1.0 - v));
+                    
+                    //v = Math.Min(Math.Max(v, 0), 1);
                     Color hsv_pixel = HSVtoRGB(h, s, v);
 
                     hsv_bitmap.SetPixel(x, y, hsv_pixel);   
