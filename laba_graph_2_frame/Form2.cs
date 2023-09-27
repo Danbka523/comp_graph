@@ -157,5 +157,10 @@ namespace laba_graph_2_frame
         {
 
         }
+
+        private void Form2_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

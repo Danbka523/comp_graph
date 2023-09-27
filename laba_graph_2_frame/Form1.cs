@@ -31,5 +31,10 @@ namespace laba_graph_2_frame
         {
             new Form4().ShowDialog();
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
