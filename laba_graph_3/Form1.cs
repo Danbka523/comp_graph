@@ -16,5 +16,20 @@ namespace laba_graph_3
         {
             InitializeComponent();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            new Form2().ShowDialog();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            new Form3().ShowDialog();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            new Form4().ShowDialog();
+        }
     }
 }

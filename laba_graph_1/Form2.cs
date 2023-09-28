@@ -116,7 +116,7 @@ namespace laba_graph_1
             }
 
             //double offy = GetOffsetY(min_y, max_y);
-            double rangeX = Math.Max(x1, x2) - Math.Min(x1, x2);
+            double rangeX = Math.Abs(Math.Max(x1, x2) - Math.Min(x1, x2));
             double rangeY = points_y.Max() - points_y.Min();
 
             // Debug.WriteLine(points_y.Max());
