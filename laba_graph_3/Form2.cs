@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace laba_graph_3
@@ -18,7 +20,10 @@ namespace laba_graph_3
         Pen z = new Pen(Color.Black);
         bool zalivka = false;
         bool imgZalivka = false;
+        bool isimgBound;
+        Bitmap bmp;
         Bitmap imgBmp;
+        Bitmap imgBound;
         public Form2()
         {
             InitializeComponent();
@@ -82,76 +87,193 @@ namespace laba_graph_3
         {
             if (zalivka) {
                 zalivka = false;
-
-                Queue<Point> points = new Queue<Point>();
-                Point curr = e.Location;
-                points.Enqueue(curr);
-                Bitmap bmp = (Bitmap)pictureBox1.Image;
-
-                while (points.Count != 0) { 
-                    curr = points.Dequeue();
-                    if (!CheckCoords(curr.X, curr.Y))
-                        continue;
-                    if (bmp.GetPixel(curr.X, curr.Y).ToArgb() != z.Color.ToArgb() && bmp.GetPixel(curr.X, curr.Y).ToArgb() != p.Color.ToArgb()  ) {
-                        bmp.SetPixel(curr.X, curr.Y, z.Color);
-                        points.Enqueue(new Point(curr.X+1,curr.Y));
-                        points.Enqueue(new Point(curr.X - 1, curr.Y));
-                        points.Enqueue(new Point(curr.X, curr.Y+1));
-                        points.Enqueue(new Point(curr.X, curr.Y-1));
-                    }
-                
-                }
-
-                pictureBox1.Image = bmp;
-                pictureBox1.Invalidate();
+                FillColor(e);
 
             }
 
             if (imgZalivka)
             {
-                imgZalivka = false;
+                bmp = new Bitmap(pictureBox1.Image);
+                imgZalivka = false;            
                 FillPicture(e.X, e.Y);
 
             }
+
+            if (isimgBound) {
+                isimgBound = false;
+                FindBounds(e.X,e.Y);
+            
+            }
+
+        }
+
+        private void FindBounds(int x, int y) { 
+            List<Point> points = new List<Point>();
+            Color targetColor = imgBound.GetPixel(x, y);
+            Point curr = new Point(x, y);
+
+            Queue<Point> queue = new Queue<Point>();
+            HashSet<Point> visited = new HashSet<Point>();
+            queue.Enqueue(curr);
+            
+            while (queue.Count>0) { 
+                curr=queue.Dequeue();
+
+                if (!CheckCoords(curr.X, curr.Y) || curr.X==imgBound.Width || curr.Y == imgBound.Height)
+                    continue;
+                if (visited.Contains(curr))
+                    continue;
+
+                if (imgBound.GetPixel(curr.X,curr.Y).ToArgb() == targetColor.ToArgb())
+                    points.Add(curr);
+
+                visited.Add(curr);
+                queue.Enqueue(new Point(curr.X+1,curr.Y));
+                queue.Enqueue(new Point(curr.X - 1, curr.Y));
+                queue.Enqueue(new Point(curr.X, curr.Y - 1));
+                queue.Enqueue(new Point(curr.X, curr.Y + 1));
+
+            }
+
+            foreach (Point p in points)
+            {
+                imgBound.SetPixel(p.X, p.Y, Color.Red);
+            }
+
+
+            pictureBox1.Image = imgBound;
+            pictureBox1.Invalidate();
+        }
+
+
+        private void FillColor(MouseEventArgs e) {
+
+            Queue<Point> points = new Queue<Point>();
+            Point curr = e.Location;
+            points.Enqueue(curr);
+            Bitmap bmp = (Bitmap)pictureBox1.Image;
+
+            while (points.Count != 0)
+            {
+                curr = points.Dequeue();
+                if (!CheckCoords(curr.X, curr.Y))
+                    continue;
+                if (bmp.GetPixel(curr.X, curr.Y).ToArgb() != z.Color.ToArgb() && bmp.GetPixel(curr.X, curr.Y).ToArgb() != p.Color.ToArgb())
+                {
+                    bmp.SetPixel(curr.X, curr.Y, z.Color);
+                    points.Enqueue(new Point(curr.X + 1, curr.Y));
+                    points.Enqueue(new Point(curr.X - 1, curr.Y));
+                    points.Enqueue(new Point(curr.X, curr.Y + 1));
+                    points.Enqueue(new Point(curr.X, curr.Y - 1));
+                }
+
+            }
+
+            pictureBox1.Image = bmp;
+            pictureBox1.Invalidate();
+        }
+
+        struct pnt {
+            public Point bmp_p;
+            public  Point pic_p;
+
+            public pnt(Point p1, Point p2) { 
+                bmp_p = p1;
+                pic_p = p2;
+            }
+
 
 
         }
 
         private void FillPicture(int x, int y)
         {
+            Queue < pnt > points = new Queue<pnt>();
+            points.Enqueue(new pnt ( new Point(x, y), new Point(0, 0) ));
+            pnt curr = new pnt(new Point(x, y), new Point(0, 0));
+ 
+          
 
-            int centX = x;
-            int centY = y;
-            int leftBorder;
-            Bitmap bmp = (Bitmap)pictureBox1.Image;
-            Color backColor = bmp.GetPixel(x, y);
-            while (bmp.GetPixel(x, y).ToArgb() == backColor.ToArgb() && x > 0)
-                x--;
-
-            leftBorder = ++x;
-            while (bmp.GetPixel(x, y).ToArgb() == backColor.ToArgb() && x < pictureBox1.Width - 1)
+            while (points.Count > 0)
             {
-                try { bmp.SetPixel(x, y, imgBmp.GetPixel(x - centX + imgBmp.Width / 2, y - centY + imgBmp.Height / 2)); }
-                catch (Exception t) { bmp.SetPixel(x, y, p.Color); }
+                curr = points.Dequeue();
+                if (!CheckCoords(curr.bmp_p.X, curr.bmp_p.Y))
+                    continue;
+                if (bmp.GetPixel(curr.bmp_p.X, curr.bmp_p.Y).ToArgb() != imgBmp.GetPixel(curr.pic_p.X, curr.pic_p.Y).ToArgb() && bmp.GetPixel(curr.bmp_p.X, curr.bmp_p.Y).ToArgb() != p.Color.ToArgb())
+                {
+                    bmp.SetPixel(curr.bmp_p.X, curr.bmp_p.Y, imgBmp.GetPixel(curr.pic_p.X, curr.pic_p.Y));
 
-                x++;
+                    if (curr.pic_p.X-1 == -1)
+                    {
+                            pnt newPoint = new pnt(new Point(curr.bmp_p.X - 1, curr.bmp_p.Y), new Point(imgBmp.Width-1, curr.pic_p.Y));
+                        
+                            points.Enqueue(newPoint);
+               
+                     
+                    }
+                    else
+                    {
+                        pnt newPoint = new pnt(new Point(curr.bmp_p.X - 1, curr.bmp_p.Y), new Point(curr.pic_p.X - 1, curr.pic_p.Y));
+                       
+                        points.Enqueue(newPoint);
+                    }
+
+
+                    if (curr.pic_p.X+1==imgBmp.Width)
+                    {
+
+                            pnt newPoint = new pnt(new Point(curr.bmp_p.X + 1, curr.bmp_p.Y), new Point(0, curr.pic_p.Y));
+                       
+                        points.Enqueue(newPoint);
+                      
+                    }
+                    else
+                    {
+                        pnt newPoint = new pnt(new Point(curr.bmp_p.X + 1, curr.bmp_p.Y), new Point(curr.pic_p.X + 1, curr.pic_p.Y));
+                        
+                        points.Enqueue(newPoint);
+                    }
+
+
+                    if (curr.pic_p.Y-1==-1)
+                    {
+          
+                            pnt newPoint = new pnt(new Point(curr.bmp_p.X, curr.bmp_p.Y - 1), new Point(curr.pic_p.X, imgBmp.Height-1));
+                      
+                        points.Enqueue(newPoint);
+            
+                     
+                    }
+                    else
+                    {
+                        pnt newPoint = new pnt(new Point(curr.bmp_p.X, curr.bmp_p.Y - 1), new Point(curr.pic_p.X, curr.pic_p.Y - 1));
+                    
+                        points.Enqueue(newPoint);
+                    }
+
+
+                    if (curr.pic_p.Y+1==imgBmp.Height)
+                    {
+                  
+                            pnt newPoint = new pnt(new Point(curr.bmp_p.X, curr.bmp_p.Y+1), new Point(curr.pic_p.X, 0));
+                        points.Enqueue(newPoint);
+ 
+                    
+                    }
+                    else
+                    {
+                        pnt newPoint = new pnt(new Point(curr.bmp_p.X, curr.bmp_p.Y + 1), new Point(curr.pic_p.X, curr.pic_p.Y + 1));
+                        points.Enqueue(newPoint);
+                    }
+
+                }
             }
             pictureBox1.Image = bmp;
             pictureBox1.Invalidate();
-            x = leftBorder;
-
-            while ( (bmp.GetPixel(x, y).ToArgb() == imgBmp.GetPixel(x - centX + imgBmp.Width / 2, y - centY + imgBmp.Height / 2).ToArgb()) && y > 0 && y < pictureBox1.Height - 1)
-            {
-                if (bmp.GetPixel(x, y - 1).ToArgb() == backColor.ToArgb())
-                    FillPicture(x, y - 1);
-
-                if (bmp.GetPixel(x, y + 1).ToArgb() == backColor.ToArgb())
-                    FillPicture(x, y + 1);
-
-                ++x;
-            }
-          
         }
+
+
+
         private bool CheckCoords(int x, int y)
         {
             return x > 0 && y > 0 && x < pictureBox1.Width && y < pictureBox1.Height;
@@ -168,6 +290,7 @@ namespace laba_graph_3
 
                 imgBmp = new Bitmap(filePath);
                 imgZalivka = true;
+                pictureBox2.Image = imgBmp;
             }
 
             pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -176,6 +299,23 @@ namespace laba_graph_3
         private void pictureBox1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = openFileDialog.FileName;
+
+
+                imgBound= new Bitmap(filePath);
+                isimgBound = true;
+                pictureBox1.Image = imgBound;
+            }
+
+            //pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
         }
     }
 }
