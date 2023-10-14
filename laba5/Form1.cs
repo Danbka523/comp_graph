@@ -16,5 +16,15 @@ namespace laba5
         {
             InitializeComponent();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            new LSystem().ShowDialog();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            new Midpoint().ShowDialog();
+        }
     }
 }
