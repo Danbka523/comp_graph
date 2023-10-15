@@ -26,5 +26,10 @@ namespace laba5
         {
             new Midpoint().ShowDialog();
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            new WithE().ShowDialog();
+        }
     }
 }
