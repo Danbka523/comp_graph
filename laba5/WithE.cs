@@ -118,7 +118,7 @@ namespace laba5
                         PointF p = new PointF(controlPoints[i - 1].X + (controlPoints[i].X - controlPoints[i - 1].X) / 2, controlPoints[i - 1].Y + (controlPoints[i].Y - controlPoints[i - 1].Y) / 2);
                         newControl.Add(p);
                         newControl.Add(controlPoints[i]);
-                    }
+                    }   
 
                 }
                 else
@@ -155,23 +155,7 @@ namespace laba5
 
             }
             g.DrawLines(bezierCurvePen, drawingPoints.ToArray());
-                //for (int i = 0; i < controlPoints.Count - 3; i++)
-                //{
-                //    GenPoint(controlPoints[i], controlPoints[i + 1], controlPoints[i + 2], controlPoints[i + 3]);
-
-                //}
-
-
-                //for (int i = 0; i < points.Count - 1; i++)
-                //{
-                //    g.DrawLine(bezierCurvePen, points[i], points[i + 1]);
-                //    
-                //}
-                //points.RemoveAll(x => controlPoints.Contains(x));
-                //g.DrawLines(bezierCurvePen, points.ToArray());
-
-                // points.ForEach(x => g.DrawEllipse(bezierCurvePen, x.X, x.Y, 3, 3));
-                pictureBox1.Invalidate();
+       pictureBox1.Invalidate();
             
 
         }
@@ -182,24 +166,6 @@ namespace laba5
             float x = (1 - t) * (1 - t) * (1 - t) * p0.X + (1 - t) * (1 - t) * 3 * t * p1.X + (1 - t) * t * 3 * t * p2.X + t * t * t * p3.X;
             float y = (1 - t) * (1 - t) * (1 - t) * p0.Y + (1 - t) * (1 - t) * 3 * t * p1.Y + (1 - t) * t * 3 * t * p2.Y + t * t * t * p3.Y;
             return new PointF(x, y);
-            // laba4.Matrix V = new laba4.Matrix(3, 4);
-
-            //            V.Fill(p0.X, p1.X, p2.X, p3.X, p0.Y, p1.Y, p2.Y, p3.Y, 0, 0, 0, 0);
-           // float step = 1.0f / 100;
-
-
-            //for (int i = 0; i < 100; i++)
-            //{
-            //    float t = i * step;
-            //    //laba4.Matrix T = new laba4.Matrix(4, 1);
-            //    //T[0, 0] = 1;
-            //    //T[1, 0] = t;
-            //    //T[2, 0] =(float)(t*t);
-            //    //T[3, 0] = (float)(t*t*t);
-            //    //laba4.Matrix VMT = V * BezMatrix * T;
-            //    //points.Add(new PointF(VMT[0,0], VMT[1,0]));
-            //    PointF p = new PointF(x, y); 
-            //    points.Add(p);
 
             //}
         }
