@@ -33,7 +33,7 @@ namespace laba6
 
         public List<Line> Lines{ get => lines; }
 
-        public MyPoint GetCenter() {
+        public Point GetCenter() {
             float x=0, y=0, z = 0;
             foreach (var line in lines)
             {
@@ -45,7 +45,7 @@ namespace laba6
             float centY = y/lines.Count;
             float centZ = z/lines.Count;
 
-            MyPoint res =new MyPoint(centX, centY, centZ);
+            Point res =new Point(centX, centY, centZ);
             return res;
         }
 

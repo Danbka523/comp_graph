@@ -16,7 +16,7 @@ namespace laba6
         Graphics g;
         Polyhedron figure;
         Pen figureDrawPen;
-        Transformations transitions;
+        Transformations transformations;
         bool isShowAxis;
 
         public Form1()
@@ -24,9 +24,9 @@ namespace laba6
             InitializeComponent();
             g = pictureBox1.CreateGraphics();
             g.Clear(Color.White);
-            MyPoint.world = new PointF(pictureBox1.Width / 2, pictureBox1.Height / 2);
+            Point.world = new PointF(pictureBox1.Width / 2, pictureBox1.Height / 2);
             figureDrawPen = new Pen(Color.Black, 5);
-            transitions = new Transformations();
+            transformations = new Transformations();
             
 
 
@@ -34,7 +34,27 @@ namespace laba6
         #region Interface
         private void button1_Click(object sender, EventArgs e)
         {
-            figure = new FigureCreator().getTr();
+            switch (comboBox1.Text)
+            {
+                case "тетраэдр":
+                    figure = new FigureCreator().GetTetrahedron();
+                    break;
+                case "гексаэдр":
+                    figure = new FigureCreator().GetHexahedron();
+                    break;
+                case "октаэдр":
+                    figure = new FigureCreator().GetOctahedron();
+                    break;
+                case "икосаэдр":
+                    figure = new FigureCreator().GetIcosahedron();
+                    break;
+                case "додекаэдр":
+                    figure = new FigureCreator().GetDodecahedron();
+                    break;
+                default:
+                    throw new ArgumentException("invalid figure");
+            }
+            
             ReDraw();
         }
 
@@ -46,17 +66,17 @@ namespace laba6
 
         private void mirrorButton_Click(object sender, EventArgs e)
         {
-            if (XYRadioButton.Checked)
+            if (comboBox2.Text=="XY")
             {
-                transitions.MirrorAroundAxis(figure, "XY");
+                transformations.MirrorAroundAxis(figure, "XY");
             }
-            if (XYRadioButton.Checked)
+            if (comboBox2.Text == "XZ")
             {
-                transitions.MirrorAroundAxis(figure, "XZ");
+                transformations.MirrorAroundAxis(figure, "XZ");
             }
-            if (XYRadioButton.Checked)
+            if (comboBox2.Text == "YZ")
             {
-                transitions.MirrorAroundAxis(figure, "YZ");
+                transformations.MirrorAroundAxis(figure, "YZ");
             }
             ReDraw();
         }
@@ -67,7 +87,7 @@ namespace laba6
             float y = float.Parse(cYtextBox.Text, CultureInfo.InvariantCulture);
             float z = float.Parse(cZtextBox.Text, CultureInfo.InvariantCulture);
 
-            transitions.Shift(figure, x, y, z);
+            transformations.Shift(figure, x, y, z);
             ReDraw();
         }
 
@@ -77,7 +97,7 @@ namespace laba6
             float y = float.Parse(sYtextBox.Text, CultureInfo.InvariantCulture);
             float z = float.Parse(sZtextBox.Text, CultureInfo.InvariantCulture);
 
-            transitions.Scale(figure, x, y, z);
+            transformations.Scale(figure, x, y, z);
             ReDraw();
         }
 
@@ -85,18 +105,36 @@ namespace laba6
         {
             float degree = float.Parse(degreeTextBox.Text);
 
-            if (XRadioButton.Checked)
+            if (comboBox3.Text=="X")
             {
-                transitions.RotateAroundCenterAxis(figure,degree, "X");
+                transformations.RotateAroundCenterAxis(figure,degree, "X");
             }
-            if (YRadioButton.Checked)
+            if (comboBox3.Text == "Y")
             {
-                transitions.RotateAroundCenterAxis(figure,degree, "Y");
+                transformations.RotateAroundCenterAxis(figure,degree, "Y");
             }
-            if (ZRadioButton.Checked)
+            if (comboBox3.Text == "Z")
             {
-                transitions.RotateAroundCenterAxis(figure,degree, "Z");
+                transformations.RotateAroundCenterAxis(figure,degree, "Z");
             }
+            ReDraw();
+        }
+
+
+        private void RotateCustomAxisButton_Click(object sender, EventArgs e)
+        {
+            float x1=float.Parse(x1textBox.Text,CultureInfo.InvariantCulture);
+            float y1=float.Parse(y1textBox.Text,CultureInfo.InvariantCulture);
+            float z1=float.Parse(z1textBox.Text,CultureInfo.InvariantCulture);
+            float x2=float.Parse(x2textBox.Text,CultureInfo.InvariantCulture);
+            float y2=float.Parse(y2textBox.Text,CultureInfo.InvariantCulture);
+            float z2=float.Parse(z2textBox.Text,CultureInfo.InvariantCulture);
+            
+            Point p1 = new Point(x1, y1, z1);
+            Point p2 = new Point(x2, y2, z2);
+
+            float degree = float.Parse(degreeCustom.Text);
+            transformations.RotateAroundCustomAxis(figure,degree,p1,p2);
             ReDraw();
         }
 
@@ -105,7 +143,17 @@ namespace laba6
             figure = null;
             ReDraw();
         }
+        private void perspectiveRadioButtom_CheckedChanged(object sender, EventArgs e)
+        {
+            Point.kind = ProjectionKind.PERSPECTIVE;
+            ReDraw();
+        }
 
+        private void isometricRadioButtom_CheckedChanged(object sender, EventArgs e)
+        {
+            Point.kind = ProjectionKind.ISOMETRIC;
+            ReDraw();
+        }
 
         #endregion
         #region Drawing
@@ -128,14 +176,14 @@ namespace laba6
 
         void DrawLine(Line l, Pen p)
         {
-            g.DrawLine(p, l.Start.Project(), l.End.Project());
+            g.DrawLine(p, l.Start.Projection(), l.End.Projection());
         }
 
         void DrawAxis()
         {
-            Line axisX = new Line(new MyPoint(0, 0, 0), new MyPoint(300, 0, 0));
-            Line axisY = new Line(new MyPoint(0, 0, 0), new MyPoint(0, 300, 0));
-            Line axisZ = new Line(new MyPoint(0, 0, 0), new MyPoint(0, 0, 300));
+            Line axisX = new Line(new Point(0, 0, 0), new Point(300, 0, 0));
+            Line axisY = new Line(new Point(0, 0, 0), new Point(0, 300, 0));
+            Line axisZ = new Line(new Point(0, 0, 0), new Point(0, 0, 300));
 
             DrawLine(axisX, new Pen(Color.Red, 5));
             DrawLine(axisY, new Pen(Color.Green, 5));
@@ -147,12 +195,14 @@ namespace laba6
         void ReDraw()
         {
             g.Clear(Color.White);
-            if (figure!=null)
-                DrawFigure(figure, figureDrawPen);
             if (isShowAxis)
                 DrawAxis();
+            if (figure!=null)
+                DrawFigure(figure, figureDrawPen);
+            
             //pictureBox1.Invalidate();
         }
+
 
 
 
@@ -160,5 +210,4 @@ namespace laba6
 
 
     }
-
 }

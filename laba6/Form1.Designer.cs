@@ -32,9 +32,6 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
             this.AxisCheckBox = new System.Windows.Forms.CheckBox();
-            this.XYRadioButton = new System.Windows.Forms.RadioButton();
-            this.XZRadioButton = new System.Windows.Forms.RadioButton();
-            this.YZRadioButton = new System.Windows.Forms.RadioButton();
             this.mirrorButton = new System.Windows.Forms.Button();
             this.cXtextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -53,10 +50,27 @@
             this.degreeTextBox = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.RotateAxisButton = new System.Windows.Forms.Button();
-            this.ZRadioButton = new System.Windows.Forms.RadioButton();
-            this.YRadioButton = new System.Windows.Forms.RadioButton();
-            this.XRadioButton = new System.Windows.Forms.RadioButton();
             this.clearButton = new System.Windows.Forms.Button();
+            this.perspectiveRadioButtom = new System.Windows.Forms.RadioButton();
+            this.isometricRadioButtom = new System.Windows.Forms.RadioButton();
+            this.RotateCustomAxisButton = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.degreeCustom = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.z2textBox = new System.Windows.Forms.TextBox();
+            this.y2textBox = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.x2textBox = new System.Windows.Forms.TextBox();
+            this.z1textBox = new System.Windows.Forms.TextBox();
+            this.y1textBox = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.x1textBox = new System.Windows.Forms.TextBox();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.comboBox3 = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -64,7 +78,7 @@
             // 
             this.pictureBox1.Location = new System.Drawing.Point(203, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1004, 603);
+            this.pictureBox1.Size = new System.Drawing.Size(1016, 618);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
@@ -103,38 +117,6 @@
             this.AxisCheckBox.Text = "Показать оси";
             this.AxisCheckBox.UseVisualStyleBackColor = true;
             this.AxisCheckBox.CheckedChanged += new System.EventHandler(this.AxisCheckBox_CheckedChanged);
-            // 
-            // XYRadioButton
-            // 
-            this.XYRadioButton.AutoSize = true;
-            this.XYRadioButton.Checked = true;
-            this.XYRadioButton.Location = new System.Drawing.Point(24, 68);
-            this.XYRadioButton.Name = "XYRadioButton";
-            this.XYRadioButton.Size = new System.Drawing.Size(39, 17);
-            this.XYRadioButton.TabIndex = 4;
-            this.XYRadioButton.TabStop = true;
-            this.XYRadioButton.Text = "XY";
-            this.XYRadioButton.UseVisualStyleBackColor = true;
-            // 
-            // XZRadioButton
-            // 
-            this.XZRadioButton.AutoSize = true;
-            this.XZRadioButton.Location = new System.Drawing.Point(69, 68);
-            this.XZRadioButton.Name = "XZRadioButton";
-            this.XZRadioButton.Size = new System.Drawing.Size(39, 17);
-            this.XZRadioButton.TabIndex = 5;
-            this.XZRadioButton.Text = "XZ";
-            this.XZRadioButton.UseVisualStyleBackColor = true;
-            // 
-            // YZRadioButton
-            // 
-            this.YZRadioButton.AutoSize = true;
-            this.YZRadioButton.Location = new System.Drawing.Point(117, 68);
-            this.YZRadioButton.Name = "YZRadioButton";
-            this.YZRadioButton.Size = new System.Drawing.Size(39, 17);
-            this.YZRadioButton.TabIndex = 6;
-            this.YZRadioButton.Text = "YZ";
-            this.YZRadioButton.UseVisualStyleBackColor = true;
             // 
             // mirrorButton
             // 
@@ -295,38 +277,6 @@
             this.RotateAxisButton.UseVisualStyleBackColor = true;
             this.RotateAxisButton.Click += new System.EventHandler(this.RotateAxisButton_Click);
             // 
-            // ZRadioButton
-            // 
-            this.ZRadioButton.AutoSize = true;
-            this.ZRadioButton.Location = new System.Drawing.Point(106, 253);
-            this.ZRadioButton.Name = "ZRadioButton";
-            this.ZRadioButton.Size = new System.Drawing.Size(32, 17);
-            this.ZRadioButton.TabIndex = 27;
-            this.ZRadioButton.Text = "Z";
-            this.ZRadioButton.UseVisualStyleBackColor = true;
-            // 
-            // YRadioButton
-            // 
-            this.YRadioButton.AutoSize = true;
-            this.YRadioButton.Location = new System.Drawing.Point(58, 253);
-            this.YRadioButton.Name = "YRadioButton";
-            this.YRadioButton.Size = new System.Drawing.Size(32, 17);
-            this.YRadioButton.TabIndex = 26;
-            this.YRadioButton.Text = "Y";
-            this.YRadioButton.UseVisualStyleBackColor = true;
-            // 
-            // XRadioButton
-            // 
-            this.XRadioButton.AutoSize = true;
-            this.XRadioButton.Checked = true;
-            this.XRadioButton.Location = new System.Drawing.Point(13, 253);
-            this.XRadioButton.Name = "XRadioButton";
-            this.XRadioButton.Size = new System.Drawing.Size(32, 17);
-            this.XRadioButton.TabIndex = 25;
-            this.XRadioButton.TabStop = true;
-            this.XRadioButton.Text = "X";
-            this.XRadioButton.UseVisualStyleBackColor = true;
-            // 
             // clearButton
             // 
             this.clearButton.Location = new System.Drawing.Point(114, 582);
@@ -337,15 +287,220 @@
             this.clearButton.UseVisualStyleBackColor = true;
             this.clearButton.Click += new System.EventHandler(this.clearButton_Click);
             // 
+            // perspectiveRadioButtom
+            // 
+            this.perspectiveRadioButtom.AutoSize = true;
+            this.perspectiveRadioButtom.Checked = true;
+            this.perspectiveRadioButtom.Location = new System.Drawing.Point(12, 540);
+            this.perspectiveRadioButtom.Name = "perspectiveRadioButtom";
+            this.perspectiveRadioButtom.Size = new System.Drawing.Size(104, 17);
+            this.perspectiveRadioButtom.TabIndex = 29;
+            this.perspectiveRadioButtom.TabStop = true;
+            this.perspectiveRadioButtom.Text = "Перспективная";
+            this.perspectiveRadioButtom.UseVisualStyleBackColor = true;
+            this.perspectiveRadioButtom.CheckedChanged += new System.EventHandler(this.perspectiveRadioButtom_CheckedChanged);
+            // 
+            // isometricRadioButtom
+            // 
+            this.isometricRadioButtom.AutoSize = true;
+            this.isometricRadioButtom.Location = new System.Drawing.Point(12, 563);
+            this.isometricRadioButtom.Name = "isometricRadioButtom";
+            this.isometricRadioButtom.Size = new System.Drawing.Size(111, 17);
+            this.isometricRadioButtom.TabIndex = 31;
+            this.isometricRadioButtom.Text = "Изометрическая";
+            this.isometricRadioButtom.UseVisualStyleBackColor = true;
+            this.isometricRadioButtom.CheckedChanged += new System.EventHandler(this.isometricRadioButtom_CheckedChanged);
+            // 
+            // RotateCustomAxisButton
+            // 
+            this.RotateCustomAxisButton.Location = new System.Drawing.Point(47, 419);
+            this.RotateCustomAxisButton.Name = "RotateCustomAxisButton";
+            this.RotateCustomAxisButton.Size = new System.Drawing.Size(84, 23);
+            this.RotateCustomAxisButton.TabIndex = 34;
+            this.RotateCustomAxisButton.Text = "Вращать";
+            this.RotateCustomAxisButton.UseVisualStyleBackColor = true;
+            this.RotateCustomAxisButton.Click += new System.EventHandler(this.RotateCustomAxisButton_Click);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(9, 396);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(50, 13);
+            this.label8.TabIndex = 33;
+            this.label8.Text = "Градусы";
+            // 
+            // degreeCustom
+            // 
+            this.degreeCustom.Location = new System.Drawing.Point(65, 393);
+            this.degreeCustom.Name = "degreeCustom";
+            this.degreeCustom.Size = new System.Drawing.Size(43, 20);
+            this.degreeCustom.TabIndex = 32;
+            this.degreeCustom.Text = "0";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(9, 317);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(47, 13);
+            this.label9.TabIndex = 38;
+            this.label9.Text = "Прямая";
+            // 
+            // z2textBox
+            // 
+            this.z2textBox.Location = new System.Drawing.Point(165, 364);
+            this.z2textBox.Name = "z2textBox";
+            this.z2textBox.Size = new System.Drawing.Size(32, 20);
+            this.z2textBox.TabIndex = 51;
+            this.z2textBox.Text = "1";
+            // 
+            // y2textBox
+            // 
+            this.y2textBox.Location = new System.Drawing.Point(99, 364);
+            this.y2textBox.Name = "y2textBox";
+            this.y2textBox.Size = new System.Drawing.Size(32, 20);
+            this.y2textBox.TabIndex = 50;
+            this.y2textBox.Text = "1";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(139, 367);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(18, 13);
+            this.label10.TabIndex = 49;
+            this.label10.Text = "z2";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(73, 367);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(18, 13);
+            this.label11.TabIndex = 48;
+            this.label11.Text = "y2";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(9, 367);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(18, 13);
+            this.label12.TabIndex = 47;
+            this.label12.Text = "x2";
+            // 
+            // x2textBox
+            // 
+            this.x2textBox.Location = new System.Drawing.Point(35, 364);
+            this.x2textBox.Name = "x2textBox";
+            this.x2textBox.Size = new System.Drawing.Size(32, 20);
+            this.x2textBox.TabIndex = 46;
+            this.x2textBox.Text = "1";
+            // 
+            // z1textBox
+            // 
+            this.z1textBox.Location = new System.Drawing.Point(165, 337);
+            this.z1textBox.Name = "z1textBox";
+            this.z1textBox.Size = new System.Drawing.Size(32, 20);
+            this.z1textBox.TabIndex = 44;
+            this.z1textBox.Text = "0";
+            // 
+            // y1textBox
+            // 
+            this.y1textBox.Location = new System.Drawing.Point(99, 337);
+            this.y1textBox.Name = "y1textBox";
+            this.y1textBox.Size = new System.Drawing.Size(32, 20);
+            this.y1textBox.TabIndex = 43;
+            this.y1textBox.Text = "0";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(139, 340);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(18, 13);
+            this.label13.TabIndex = 42;
+            this.label13.Text = "z1";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(73, 340);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(18, 13);
+            this.label14.TabIndex = 41;
+            this.label14.Text = "y1";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(9, 340);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(18, 13);
+            this.label15.TabIndex = 40;
+            this.label15.Text = "x1";
+            // 
+            // x1textBox
+            // 
+            this.x1textBox.Location = new System.Drawing.Point(35, 337);
+            this.x1textBox.Name = "x1textBox";
+            this.x1textBox.Size = new System.Drawing.Size(32, 20);
+            this.x1textBox.TabIndex = 39;
+            this.x1textBox.Text = "0";
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Items.AddRange(new object[] {
+            "XY",
+            "XZ",
+            "YZ"});
+            this.comboBox2.Location = new System.Drawing.Point(58, 64);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(73, 21);
+            this.comboBox2.TabIndex = 52;
+            this.comboBox2.Text = "XY";
+            // 
+            // comboBox3
+            // 
+            this.comboBox3.FormattingEnabled = true;
+            this.comboBox3.Items.AddRange(new object[] {
+            "X",
+            "Y",
+            "Z"});
+            this.comboBox3.Location = new System.Drawing.Point(50, 253);
+            this.comboBox3.Name = "comboBox3";
+            this.comboBox3.Size = new System.Drawing.Size(81, 21);
+            this.comboBox3.TabIndex = 53;
+            this.comboBox3.Text = "X";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1218, 615);
+            this.Controls.Add(this.comboBox3);
+            this.Controls.Add(this.comboBox2);
+            this.Controls.Add(this.z2textBox);
+            this.Controls.Add(this.y2textBox);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.x2textBox);
+            this.Controls.Add(this.z1textBox);
+            this.Controls.Add(this.y1textBox);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.label14);
+            this.Controls.Add(this.label15);
+            this.Controls.Add(this.x1textBox);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.RotateCustomAxisButton);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.degreeCustom);
+            this.Controls.Add(this.isometricRadioButtom);
+            this.Controls.Add(this.perspectiveRadioButtom);
             this.Controls.Add(this.clearButton);
-            this.Controls.Add(this.ZRadioButton);
-            this.Controls.Add(this.YRadioButton);
-            this.Controls.Add(this.XRadioButton);
             this.Controls.Add(this.RotateAxisButton);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.degreeTextBox);
@@ -364,9 +519,6 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cXtextBox);
             this.Controls.Add(this.mirrorButton);
-            this.Controls.Add(this.YZRadioButton);
-            this.Controls.Add(this.XZRadioButton);
-            this.Controls.Add(this.XYRadioButton);
             this.Controls.Add(this.AxisCheckBox);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.comboBox1);
@@ -385,9 +537,6 @@
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.CheckBox AxisCheckBox;
-        private System.Windows.Forms.RadioButton XYRadioButton;
-        private System.Windows.Forms.RadioButton XZRadioButton;
-        private System.Windows.Forms.RadioButton YZRadioButton;
         private System.Windows.Forms.Button mirrorButton;
         private System.Windows.Forms.TextBox cXtextBox;
         private System.Windows.Forms.Label label1;
@@ -406,10 +555,27 @@
         private System.Windows.Forms.TextBox degreeTextBox;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button RotateAxisButton;
-        private System.Windows.Forms.RadioButton ZRadioButton;
-        private System.Windows.Forms.RadioButton YRadioButton;
-        private System.Windows.Forms.RadioButton XRadioButton;
         private System.Windows.Forms.Button clearButton;
+        private System.Windows.Forms.RadioButton perspectiveRadioButtom;
+        private System.Windows.Forms.RadioButton isometricRadioButtom;
+        private System.Windows.Forms.Button RotateCustomAxisButton;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox degreeCustom;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox z2textBox;
+        private System.Windows.Forms.TextBox y2textBox;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox x2textBox;
+        private System.Windows.Forms.TextBox z1textBox;
+        private System.Windows.Forms.TextBox y1textBox;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox x1textBox;
+        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox comboBox3;
     }
 }
 

@@ -8,16 +8,16 @@ namespace laba6
 {
     internal class Line
     {
-        MyPoint start, end;
+        Point start, end;
 
-        public Line(MyPoint start, MyPoint end)
+        public Line(Point start, Point end)
         {
             this.start = start;
             this.end = end;
         }
 
-        public MyPoint Start { get => start; set => start=value; }
-        public MyPoint End { get => end; set => end=value; }
+        public Point Start { get => start; set => start=value; }
+        public Point End { get => end; set => end=value; }
 
     }
 }

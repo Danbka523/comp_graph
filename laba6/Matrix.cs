@@ -23,7 +23,7 @@ namespace laba6
             {
                 for (int j = 0; j < colCount; j++)
                 {
-                    matr[i, j] = (float)Math.Round(elems[i * colCount + j], 2);
+                    matr[i, j] = (float)Math.Round(elems[i * colCount + j], 5);
                 }
             }
             return this;
