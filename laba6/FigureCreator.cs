@@ -90,7 +90,8 @@ namespace laba6
             Point b = new Point(100, 250, 100);
             for (int i = 0; i < 10; i++)
             {
-                res.AddPolygon(new Polygon().Add(new Line(circlePoints[i], circlePoints[(i + 1) % 10])).Add(new Line(circlePoints[(i + 1) % 10], circlePoints[(i + 2) % 10])).Add(new Line(circlePoints[(i + 2) % 10], circlePoints[i])));
+                res.AddPolygon(new Polygon().Add(new Line(circlePoints[i], circlePoints[(i + 1) % 10]))
+                    .Add(new Line(circlePoints[(i + 1) % 10], circlePoints[(i + 2) % 10])).Add(new Line(circlePoints[(i + 2) % 10], circlePoints[i])));
             }
             res.AddPolygon(new Polygon().Add(new Line(circlePoints[1], a)).Add(new Line(a, circlePoints[3])).Add(new Line(circlePoints[3], circlePoints[1])));
             res.AddPolygon(new Polygon().Add(new Line(circlePoints[3], a)).Add(new Line(a, circlePoints[5])).Add(new Line(circlePoints[5], circlePoints[3])));

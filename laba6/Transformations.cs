@@ -211,10 +211,10 @@ namespace laba6
             RotateAroundAxis(figure, degree, axis);
 
             rotate = new Matrix(4, 4).Fill(
-       1, 0, 0, center.X,
-       0, 1, 0,center.Y,
-       0, 0, 1, center.Z,
-       0, 0, 0, 1
+       1f, 0, 0, center.X,
+       0, 1f, 0,center.Y,
+       0, 0, 1f, center.Z,
+       0, 0, 0, 1f
        );
             foreach (var poly in figure.Polygons)
             {
