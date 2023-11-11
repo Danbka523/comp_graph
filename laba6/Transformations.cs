@@ -161,24 +161,25 @@ namespace laba6
             float angleCos  = (float)Math.Cos(DegreeToRadian(degree));
 
             Point vec = new Point(p2.XF - p1.XF, p2.YF - p1.YF, p2.ZF - p1.ZF);
-            float len = vec.XF*vec.XF + vec.YF*vec.YF + vec.ZF*vec.ZF;
+            float len = (float)Math.Sqrt((double)(vec.XF*vec.XF + vec.YF*vec.YF + vec.ZF*vec.ZF));
+
             float l = vec.XF / len;
             float m = vec.YF / len;
             float n = vec.ZF / len;
 
             Matrix rotate = new Matrix(4, 4).Fill(
-                l * l + angleCos * (1f - l * l), l*(1f-angleCos)*m-n*angleSin,l*(1-angleCos)*n+m*angleSin,0,
+                l * l + angleCos * (1f - l * l), l*(1f-angleCos)*m-n*angleSin,l*(1f-angleCos)*n+m*angleSin,0,
                 l*(1f-angleCos)*m + n*angleSin, m*m+angleCos*(1f-m*m),m*(1f-angleCos)*n-l*angleSin,0,
                 l*(1f-angleCos)*n-m*angleSin,m*(1f-angleCos)*n+l*angleSin,n*n+angleCos*(1f-n*n),0,
-                0,0,0,1
+                0,0,0,1f
                 );
 
             foreach (var poly in figure.Polygons)
             {
                 foreach (var line in poly.Lines)
                 {
-                    var res_start = rotate * new Matrix(4, 1).Fill(line.Start.XF, line.Start.YF, line.Start.ZF, 1);
-                    var res_end = rotate * new Matrix(4, 1).Fill(line.End.XF, line.End.YF, line.End.ZF, 1);
+                    var res_start = rotate * new Matrix(4, 1).Fill(line.Start.XF, line.Start.YF, line.Start.ZF, 1f);
+                    var res_end = rotate * new Matrix(4, 1).Fill(line.End.XF, line.End.YF, line.End.ZF, 1f);
 
                     line.Start = new Point(res_start[0, 0], res_start[1, 0], res_start[2, 0]);
                     line.End = new Point(res_end[0, 0], res_end[1, 0], res_end[2, 0]);
@@ -212,7 +213,7 @@ namespace laba6
 
             rotate = new Matrix(4, 4).Fill(
        1f, 0, 0, center.X,
-       0, 1f, 0,center.Y,
+       0, 1f, 0, center.Y,
        0, 0, 1f, center.Z,
        0, 0, 0, 1f
        );

@@ -82,9 +82,9 @@ namespace laba6
             for (int angle = 0; angle < 360; angle += 36)
             {
                 if (angle % 72 == 0)
-                    circlePoints.Add(new Point((float)(circleCenter.X + (100 * Math.Cos(transformations.DegreeToRadian(angle)))), circleCenter.Y + 100, (float)(circleCenter.Z + (100 * Math.Sin(transformations.DegreeToRadian(angle))))));
+                    circlePoints.Add(new Point((float)(circleCenter.X + (100f * Math.Cos(transformations.DegreeToRadian(angle)))), circleCenter.Y + 100f, (float)(circleCenter.Z + (100f * Math.Sin(transformations.DegreeToRadian(angle))))));
                 else
-                    circlePoints.Add(new Point((float)(circleCenter.X + (100 * Math.Cos(transformations.DegreeToRadian(angle)))), circleCenter.Y, (float)(circleCenter.Z + (100 * Math.Sin(transformations.DegreeToRadian(angle))))));
+                    circlePoints.Add(new Point((float)(circleCenter.X + (100f * Math.Cos(transformations.DegreeToRadian(angle)))), circleCenter.Y, (float)(circleCenter.Z + (100f * Math.Sin(transformations.DegreeToRadian(angle))))));
             }
             Point a = new Point(100, 50, 100);
             Point b = new Point(100, 250, 100);

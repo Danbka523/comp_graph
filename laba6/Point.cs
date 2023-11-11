@@ -16,21 +16,11 @@ namespace laba6
     internal class Point
     {
         float x, y, z;
-        static float c = 0.001f;
+        static float c = 1000f;
         public static PointF world;
         public static ProjectionKind kind = ProjectionKind.PERSPECTIVE;
 
 
-        public Matrix perspective = new Matrix(4,4).Fill(
-            1,0,0,0,
-            0,1,0,0,
-            0,0,-c,0,
-            0,0,0,1);
-        public Matrix perspective2 = new Matrix(4, 4).Fill(
-           1, 0, 0, 0,
-           0, 1, 0, 0,
-           0, 0, 1, 0,
-           0, 0, 0, -c);
 
         //public Matrix isometric = new Matrix(4, 4).Fill(
         //    (float)Math.Cos(2), 0, (float)Math.Sin(2), 0,
@@ -59,7 +49,11 @@ namespace laba6
             if (kind == ProjectionKind.PERSPECTIVE)
             {
                // Matrix res = new Matrix(1, 4).Fill(XF, YF, ZF, 1) * perspective * (float)(1 / (-c * ZF + 1));
-                Matrix res = new Matrix(1, 4).Fill(XF, YF, ZF, 1) * perspective2 * (float)(1 / (-c * ZF+1));
+                Matrix res = new Matrix(1, 4).Fill(XF, YF, ZF, 1) * new Matrix(4,4).Fill(
+                    1,0,0,0,
+                    0,1,0,0,
+                    0,0,0,0,
+                    0,0,-1f/c,1) * (1-z/c);
                 return new PointF(world.X + res[0, 0], world.Y + res[0, 1]);
             }
             else
