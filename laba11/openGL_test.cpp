@@ -18,6 +18,14 @@ void ReleaseVBO();
 void ReleaseShader();
 void ShaderLog(unsigned int shader);
 
+bool is_gradient = 1;
+bool is_uni;
+bool is_const;
+bool is_fan = 1;
+bool is_quad;
+bool is_triag;
+bool is_penta;
+
 struct Vertex {
     GLfloat x;
     GLfloat y;
@@ -48,7 +56,7 @@ const char* VertexShaderGradientSource = R"(
     out vec4 vertexColor;
     void main() {
         gl_Position = vec4(coord,1.0, 1.0);
-        vertexColor = vec4(color[0],color[1],color[2],1);
+        vertexColor = color;
     }
 )";
 
@@ -155,9 +163,11 @@ void InitShader() {
     // Создаем вершинный шейдер
     GLuint vShader = glCreateShader(GL_VERTEX_SHADER);
     // Передаем исходный код
-    // glShaderSource(vShader, 1, &VertexShaderSource, NULL);
+    if (!is_gradient)
+        glShaderSource(vShader, 1, &VertexShaderSource, NULL);
+    else
     //gradient
-    glShaderSource(vShader, 1, &VertexShaderGradientSource, NULL);
+        glShaderSource(vShader, 1, &VertexShaderGradientSource, NULL);
     // Компилируем шейдер
     glCompileShader(vShader);
     std::cout << "vertex shader \n";
@@ -168,13 +178,16 @@ void InitShader() {
     // Передаем исходный код
     
     //для плоской заливки констатнотой в шейдере
-    //glShaderSource(fShader, 1, &FragShaderSourceConstColor, NULL);
+    if (is_const)
+        glShaderSource(fShader, 1, &FragShaderSourceConstColor, NULL);
 
+    if (is_uni)
     //uniform
-    //glShaderSource(fShader, 1, &FragShaderSourceUniformColor, NULL); 
+        glShaderSource(fShader, 1, &FragShaderSourceUniformColor, NULL); 
     
+    if (is_gradient)
     //градиент
-    glShaderSource(fShader, 1, &FragShaderSourceGradientColor, NULL);
+        glShaderSource(fShader, 1, &FragShaderSourceGradientColor, NULL);
 
 
 
@@ -199,18 +212,21 @@ void InitShader() {
     }
         // Вытягиваем ID атрибута из собранной программы
         const char* attr_name = "coord"; //имя в шейдере
-    Attrib_vertex = glGetAttribLocation(Program, attr_name);
-    if (Attrib_vertex == -1) {
-        std::cout << "could not bind attrib " << attr_name << std::endl;
-        return;
-    }
-
-            const char* attr_name1 = "color"; //имя в шейдере
-    Attrib_vertex = glGetAttribLocation(Program, attr_name1);
-    if (Attrib_vertex == -1) {
-        std::cout << "could not bind color " << attr_name << std::endl;
-        return;
-    }
+        
+            Attrib_vertex = glGetAttribLocation(Program, attr_name);
+            if (Attrib_vertex == -1) {
+                std::cout << "could not bind attrib " << attr_name << std::endl;
+                return;
+            }
+        
+            if (is_gradient) {
+                const char* attr_name1 = "color"; //имя в шейдере
+                Attrib_color = glGetAttribLocation(Program, attr_name1);
+                if (Attrib_color == -1) {
+                    std::cout << "could not bind color " << attr_name << std::endl;
+                    return;
+                }
+            }
     checkOpenGLerror();
 }
 
@@ -241,37 +257,89 @@ void InitVBO() {
         {radius * cos(angle + angleinc * 3),radius * sin(angle + angleinc * 3)},
         {radius * cos(angle + angleinc * 4),radius * sin(angle + angleinc * 4)},
         {radius * cos(angle + angleinc * 5),radius * sin(angle + angleinc * 5)},
-
-
     };
 
-    //Vertex triangleFan[] = {
-    //    {-0.5f,-0.5f},
-    //    {-0.5f,0.5f},
-    //    {-0.5f,1.0f},
-    //    {-0.5f,-0.5f},
-    //    {-0.5f,-0.5f},
-    //    {-0.5f,-0.5f},
-    //}
+    float phi = M_PI * 2 / 27;
+
+    Vertex fan[]{
+        {0,0},
+        {cos(M_PI/9),sin(M_PI/9)},
+        {cos(2*M_PI/9),sin(2*M_PI/9)},
+        {cos(3*M_PI/9),sin(3*M_PI/9)},
+        {cos(4*M_PI/9),sin(4*M_PI/9)},
+        {cos(5*M_PI/9),sin(5*M_PI/9)},
+        {cos(6*M_PI/9),sin(6*M_PI/9)},
+        {cos(7*M_PI/9),sin(7*M_PI/9)},
+        {cos(8*M_PI/9),sin(8*M_PI/9)},
+    };
+
 
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
     //Треугольник
-    glBufferData(GL_ARRAY_BUFFER, sizeof(triangle), triangle, GL_STATIC_DRAW);
+    if (is_triag)
+        glBufferData(GL_ARRAY_BUFFER, sizeof(triangle), triangle, GL_STATIC_DRAW);
     
     //Четырехугольник
-    //glBufferData(GL_ARRAY_BUFFER, sizeof(quadrilateral), quadrilateral, GL_STATIC_DRAW);
+    if (is_quad)
+        glBufferData(GL_ARRAY_BUFFER, sizeof(quadrilateral), quadrilateral, GL_STATIC_DRAW);
 
     //Пятиугольник
-    //glBufferData(GL_ARRAY_BUFFER, sizeof(pentagon), pentagon, GL_STATIC_DRAW);
+    if (is_penta)
+        glBufferData(GL_ARRAY_BUFFER, sizeof(pentagon), pentagon, GL_STATIC_DRAW);
     
-    float color3[3][4] = {
-    {1,0,0,1},{0,1,0,1},{0,0,0.5f,1}
-    };
-    glBindBuffer(GL_ARRAY_BUFFER, VBO_color);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(color3), color3, GL_STATIC_DRAW);
+    //Веер
+    if (is_fan)
+        glBufferData(GL_ARRAY_BUFFER, sizeof(fan), fan, GL_STATIC_DRAW);
 
+
+    float color3[3][4] = {
+    {1,0,0,1},{0,1,0,1},{0,0,1,1}
+    }; //triangle gradient
+
+    float color4[4][4] = {
+        {0.8f,0.5f,0.2f,1 },
+        {0.1f,1.0f,0.0f,1 },
+        {1.0f,0.1f,0.0f,1 },
+        {0.0f,1.0f,1.0f,1 },
+    }; // quad
+
+    float color5[5][4] = {
+        {0.8f,0.5f,0.2f,1 },
+        {0.1f,1.0f,0.0f,1 },
+        {1.0f,0.1f,0.0f,1 },
+        {0.0f,1.0f,1.0f,1 },
+        {1,1,1,1}
+    }; // penta
+
+    float colorf[9][4] = {
+       {0.8f,0.5f,0.2f,1 },
+       {0.1f,1.0f,0.0f,1 },
+       {1.0f,0.1f,0.0f,1 },
+       {0.0f,1.0f,1.0f,1 },
+       {1,1,1,1},
+       {0.5f,0.2f,1,1},
+       {0.3f,0.f,0.99f,1},
+       {0.1f,0.1f,0.f,1},
+       {1,1,1,1}
+    }; // fan
+
+    if (is_gradient) {
+        glBindBuffer(GL_ARRAY_BUFFER, VBO_color);
+        //tri
+        if (is_triag)
+            glBufferData(GL_ARRAY_BUFFER, sizeof(color3), color3, GL_STATIC_DRAW);
+        //quad
+        if (is_quad)
+            glBufferData(GL_ARRAY_BUFFER, sizeof(color4), color4, GL_STATIC_DRAW);
+        //penta
+        if (is_penta)
+            glBufferData(GL_ARRAY_BUFFER, sizeof(color5), color5, GL_STATIC_DRAW);
+        //fan
+        if (is_fan)
+            glBufferData(GL_ARRAY_BUFFER, sizeof(colorf), colorf, GL_STATIC_DRAW);
+    }
     checkOpenGLerror();
 }
 
@@ -297,26 +365,35 @@ void Draw() {
     // Указывая pointer 0 при подключенном буфере, мы указываем что данные в VBO
     glVertexAttribPointer(Attrib_vertex, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
-    glEnableVertexAttribArray(Attrib_color);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO_color);
-    glVertexAttribPointer(Attrib_color, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    if (is_gradient) {
 
+        glEnableVertexAttribArray(Attrib_color);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO_color);
+        glVertexAttribPointer(Attrib_color, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    }
     glBindBuffer(GL_ARRAY_BUFFER, 0); // Отключаем VBO
 
     //uniform   
-    /*float color[4] = { 0.1f,0,0.3f,1.0f };
-    location = glGetUniformLocation(Program,"color");
-    glUniform4f(location, color[0], color[1], color[2], color[3]);*/
+    if (is_uni) {
+        float color[4] = { 0.1f,0,0.3f,1.0f };
+        location = glGetUniformLocation(Program, "color");
+        glUniform4f(location, color[0], color[1], color[2], color[3]);
+    }
 
 
+    if (is_triag)
+        glDrawArrays(GL_TRIANGLES, 0, 3); //треугольник
+    if (is_quad)
+        glDrawArrays(GL_QUADS, 0, 4); // четырехугольник
+    if (is_penta)
+        glDrawArrays(GL_POLYGON, 0, 5); // пятиугольник
+    if (is_fan)
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 9);//веер
 
-    glDrawArrays(GL_TRIANGLES, 0, 3); //треугольник
-
-    //glDrawArrays(GL_QUADS, 0, 4); // четырехугольник
-    //glDrawArrays(GL_POLYGON, 0, 5); // пятиугольник
 
     glDisableVertexAttribArray(Attrib_vertex); // Отключаем массив атрибутов
-    glDisableVertexAttribArray(Attrib_color); // Отключаем массив атрибутов
+    if (is_gradient)
+        glDisableVertexAttribArray(Attrib_color); // Отключаем массив атрибутов
     glUseProgram(0); // Отключаем шейдерную программу
     checkOpenGLerror();
 }
