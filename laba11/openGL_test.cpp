@@ -21,10 +21,10 @@ void ShaderLog(unsigned int shader);
 bool is_gradient = 1;
 bool is_uni;
 bool is_const;
-bool is_fan = 1;
+bool is_fan;
 bool is_quad;
 bool is_triag;
-bool is_penta;
+bool is_penta = 1;
 
 struct Vertex {
     GLfloat x;
