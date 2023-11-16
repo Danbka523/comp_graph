@@ -4,7 +4,8 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <cmath>
-#include<iostream>
+#include <iostream>
+
 
 
 void SetIcon(sf::Window& wnd);
@@ -18,7 +19,7 @@ void ReleaseVBO();
 void ReleaseShader();
 void ShaderLog(unsigned int shader);
 
-bool is_gradient = 1;
+bool is_gradient=1;
 bool is_uni;
 bool is_const;
 bool is_fan;
@@ -247,10 +248,10 @@ void InitVBO() {
         {0.5f,-0.5f}
     };
 
-    float radius = 1.0f;
+    float radius = 1.f;
     float angleinc = 360.f / 5.0f;
     angleinc *= M_PI / 180.0f;
-    float angle = 180.0f;
+    float angle = 0.0f;
     Vertex pentagon[5] = {
         {radius * cos(angle + angleinc * 1),radius * sin(angle + angleinc * 1)},
         {radius * cos(angle + angleinc * 2),radius * sin(angle + angleinc * 2)},
@@ -306,7 +307,7 @@ void InitVBO() {
     }; // quad
 
     float color5[5][4] = {
-        {0.8f,0.5f,0.2f,1 },
+        {0.f,1.f,0.f,1 },
         {0.1f,1.0f,0.0f,1 },
         {1.0f,0.1f,0.0f,1 },
         {0.0f,1.0f,1.0f,1 },
