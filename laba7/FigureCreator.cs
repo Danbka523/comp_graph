@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -149,6 +150,82 @@ namespace laba7
             return res;
         }
 
+
+
+        public Polyhedron CreateRotation(string fileName) {
+            Polyhedron res = new();
+
+            List<string> prms = File.ReadAllText(fileName).Split(';').ToList();
+
+            string axis = prms[1];
+            int count = int.Parse(prms[2]);
+            int angle_inc = 360 / count;
+
+            List<Point> points = new();
+            List<string> p_str = prms[0].Split(' ',StringSplitOptions.RemoveEmptyEntries).ToList();
+            for (int i = 0; i < p_str.Count-2; i+=3)
+            {
+                    points.Add(new Point(float.Parse(p_str[i], CultureInfo.InvariantCulture),
+                                         float.Parse(p_str[i + 1], CultureInfo.InvariantCulture),
+                                         float.Parse(p_str[i + 2], CultureInfo.InvariantCulture)));
+            }
+
+            List<List<Point>> allPoints = new();
+            allPoints.Add(points);
+
+            for (int i = 1; i < count; i++)
+            {
+                allPoints.Add(transformations.RotateFigPoints(axis,points,i*angle_inc));
+            }
+
+            //i - набор j - точка в наборе 
+            for (int i = 0; i < allPoints.Count; i++)
+            {
+                if (i == allPoints.Count - 1)
+                {
+
+                    List<Line> lines = new();
+                    for (int j = 0; j < allPoints[i].Count() - 1; j++)
+                    {
+
+                        Line line1 = new Line(allPoints[i][j], allPoints[i][j + 1]);
+                        Line line2 = new Line(allPoints[0][j + 1],allPoints[0][j]);
+                        Line line3 = new Line(allPoints[0][j],allPoints[i][j]);
+                        Line line4 = new Line(allPoints[i][j + 1], allPoints[0][j + 1]);
+
+                        lines.Add(line1);
+                        lines.Add(line2);
+                        lines.Add(line3);
+                        lines.Add(line4);
+                    }
+                    Polygon p = new Polygon(lines);
+                    res.AddPolygon(p);
+                }
+                else
+                {
+                    List<Line> lines = new();
+                    for (int j = 0; j < allPoints[i].Count() - 1; j++)
+                    {
+
+                        Line line1 = new Line(allPoints[i][j], allPoints[i][j + 1]);
+                        Line line2 = new Line(allPoints[i + 1][j + 1], allPoints[i + 1][j]);
+                        Line line3 = new Line(allPoints[i + 1][j], allPoints[i][j]);
+                        Line line4 = new Line(allPoints[i][j + 1], allPoints[i + 1][j + 1]);
+
+                        lines.Add(line1);
+                        lines.Add(line2);
+                        lines.Add(line3);
+                        lines.Add(line4);
+                    }
+                    Polygon p = new Polygon(lines);
+                    res.AddPolygon(p);
+                }
+
+                
+            }
+            
+            return res;
+        }
 
     }
 }

@@ -73,6 +73,8 @@
             comboBox3 = new ComboBox();
             saveButton = new Button();
             loadButton = new Button();
+            label16 = new Label();
+            figureRotButton = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -531,11 +533,32 @@
             loadButton.UseVisualStyleBackColor = true;
             loadButton.Click += loadButton_Click;
             // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new System.Drawing.Point(1429, 9);
+            label16.Name = "label16";
+            label16.Size = new Size(106, 15);
+            label16.TabIndex = 56;
+            label16.Text = "Фигура вращения";
+            // 
+            // figureRotButton
+            // 
+            figureRotButton.Location = new System.Drawing.Point(1429, 27);
+            figureRotButton.Name = "figureRotButton";
+            figureRotButton.Size = new Size(75, 23);
+            figureRotButton.TabIndex = 57;
+            figureRotButton.Text = "Выбрать";
+            figureRotButton.UseVisualStyleBackColor = true;
+            figureRotButton.Click += figureRotButton_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1421, 710);
+            ClientSize = new Size(1684, 710);
+            Controls.Add(figureRotButton);
+            Controls.Add(label16);
             Controls.Add(loadButton);
             Controls.Add(saveButton);
             Controls.Add(comboBox3);
@@ -636,6 +659,8 @@
         private ComboBox comboBox3;
         private Button saveButton;
         private Button loadButton;
+        private Label label16;
+        private Button figureRotButton;
     }
 }
 

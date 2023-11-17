@@ -71,7 +71,7 @@ namespace laba7
             {
                 new DataManager().Save(saveFileDialog1.FileName, figure);
             }
-           
+
         }
         private void loadButton_Click(object sender, EventArgs e)
         {
@@ -84,7 +84,7 @@ namespace laba7
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     filePath = openFileDialog.FileName;
-                    figure = new DataManager().Load(filePath);              
+                    figure = new DataManager().Load(filePath);
                 }
             }
             ReDraw();
@@ -187,6 +187,23 @@ namespace laba7
             ReDraw();
         }
 
+        private void figureRotButton_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "txt files (*.txt)|*.txt";
+                openFileDialog.FilterIndex = 2;
+                openFileDialog.RestoreDirectory = true;
+                string filePath;
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    filePath = openFileDialog.FileName;
+                    figure = new FigureCreator().CreateRotation(filePath);
+                }
+            }
+            ReDraw();
+        }
+
         #endregion
         #region Drawing
         // Drawing
@@ -242,6 +259,7 @@ namespace laba7
 
 
 
-    
+
+      
     }
 }

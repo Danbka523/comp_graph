@@ -27,11 +27,15 @@ namespace laba7
                 foreach (var p in figure.Polygons)
                 {
                     outputFile.Write($"f ");
+                    List<int> vertsToAdd = new();
                     foreach (var line in p.Lines)
-                    {
-                        outputFile.Write($"{verts.IndexOf(line.Start)+1} ");
-
+                    {                       
+                        if (!vertsToAdd.Contains(verts.IndexOf(line.Start)+1))
+                            vertsToAdd.Add(verts.IndexOf(line.Start) + 1);
+                        if (!vertsToAdd.Contains(verts.IndexOf(line.End) + 1))
+                            vertsToAdd.Add(verts.IndexOf(line.End) + 1);
                     }
+                    vertsToAdd.ForEach(vert => { outputFile.Write($"{vert} "); });
                     outputFile.WriteLine();
                 }
             }

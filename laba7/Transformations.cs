@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.AxHost;
 
 namespace laba7
 {
@@ -106,35 +108,8 @@ namespace laba7
         }
 
         public void RotateAroundAxis(Polyhedron figure, float degree, string axis) {
-            double rad = DegreeToRadian(degree);
 
-            Matrix rotate;
-            switch (axis)
-            {
-                case "X":
-                    rotate = new Matrix(4, 4).Fill(
-                        1, 0, 0, 0,
-                        0, (float)Math.Cos(rad), (float)Math.Sin(rad), 0,
-                        0, -(float)Math.Sin(rad), (float)Math.Cos(rad), 0,
-                        0, 0, 0, 1);
-                    break;
-                case "Z":
-                    rotate = new Matrix(4, 4).Fill(
-                        (float)Math.Cos(rad), -(float)Math.Sin(rad), 0, 0,
-                        (float)Math.Sin(rad), (float)Math.Cos(rad), 0, 0,
-                        0, 0, 1, 0,
-                        0, 0, 0, 1);
-                    break;
-                case "Y":
-                    rotate = new Matrix(4, 4).Fill(
-                        (float)Math.Cos(rad), 0, (float)Math.Sin(rad), 0,
-                        0, 1, 0, 0,
-                        -(float)Math.Sin(rad), 0, (float)Math.Cos(rad), 0,
-                        0, 0, 0, 1);
-                    break;
-                default:
-                    throw new ArgumentException("invalid axis");
-            }
+            Matrix rotate=GetRotationAroundAxisMatrix(axis,degree);
 
             foreach (var poly in figure.Polygons)
             {
@@ -230,5 +205,55 @@ namespace laba7
             }
 
         }
+
+        private Matrix GetRotationAroundAxisMatrix(string axis,float degree)
+        {
+            axis = axis.Trim();
+            double rad = DegreeToRadian(degree);
+            Matrix rotate;
+            switch (axis)
+            {
+                case "X":
+                    rotate = new Matrix(4, 4).Fill(
+                        1, 0, 0, 0,
+                        0, (float)Math.Cos(rad), (float)Math.Sin(rad), 0,
+                        0, -(float)Math.Sin(rad), (float)Math.Cos(rad), 0,
+                        0, 0, 0, 1);
+                    break;
+                case "Z":
+                    rotate = new Matrix(4, 4).Fill(
+                        (float)Math.Cos(rad), -(float)Math.Sin(rad), 0, 0,
+                        (float)Math.Sin(rad), (float)Math.Cos(rad), 0, 0,
+                        0, 0, 1, 0,
+                        0, 0, 0, 1);
+                    break;
+                case "Y":
+                    rotate = new Matrix(4, 4).Fill(
+                        (float)Math.Cos(rad), 0, (float)Math.Sin(rad), 0,
+                        0, 1, 0, 0,
+                        -(float)Math.Sin(rad), 0, (float)Math.Cos(rad), 0,
+                        0, 0, 0, 1);
+                    break;
+                default:
+                    throw new ArgumentException("invalid axis");
+            }
+            return rotate;
+
+        }
+
+        public List<Point> RotateFigPoints(string axis, List<Point> points, int degree)
+        {
+            Matrix rotate = GetRotationAroundAxisMatrix(axis, degree);
+            List<Point> result = new List<Point>();
+            points.ForEach(p=>{
+                Matrix m = new Matrix(4, 1).Fill(p.XF, p.YF, p.ZF, 1);
+                var t = rotate * m;
+                result.Add(new Point(t[0, 0], t[1, 0], t[2, 0]));
+            });
+
+
+            return result;
+        }
+
     }
 }
