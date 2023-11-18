@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using AngouriMath;   //https://github.com/asc-community/AngouriMath?ysclid=lp2o5a92m5613424805
 
 namespace laba7
 {
@@ -151,7 +152,7 @@ namespace laba7
         }
 
 
-
+        
         public Polyhedron CreateRotation(string fileName) {
             Polyhedron res = new();
 
@@ -170,8 +171,10 @@ namespace laba7
                                          float.Parse(p_str[i + 2], CultureInfo.InvariantCulture)));
             }
 
-            List<List<Point>> allPoints = new();
-            allPoints.Add(points);
+            List<List<Point>> allPoints = new()
+            {
+                points
+            };
 
             for (int i = 1; i < count; i++)
             {
@@ -224,6 +227,41 @@ namespace laba7
                 
             }
             
+            return res;
+        }
+
+        public Polyhedron CreateFunction(string _x1, string _y1, string _x2, string _y2,string _hx,string _hy , string func) {
+            Polyhedron res = new();
+            
+            float x1 = float.Parse(_x1,CultureInfo.InvariantCulture);
+            float y1 = float.Parse(_y1,CultureInfo.InvariantCulture);
+            float x2 = float.Parse(_x2,CultureInfo.InvariantCulture);
+            float y2 = float.Parse(_y2,CultureInfo.InvariantCulture);
+            float hx = float.Parse(_hx,CultureInfo.InvariantCulture);
+            float hy = float.Parse(_hy,CultureInfo.InvariantCulture);
+
+            for (float i = x1; i < x2; i += hx)
+            {
+                for (float j = y1; j < y2; j += hy)
+                {
+                    // Генерация вершин квадрата
+                    Point topLeft = new Point(i, j, transformations.EvalFunc(func, i, j));
+                    Point topRight = new Point(i + hx, j, transformations.EvalFunc(func, i + hx, j));
+                    Point bottomRight = new Point(i + hx, j + hy, transformations.EvalFunc(func, i + hx, j + hy));
+                    Point bottomLeft = new Point(i, j + hy, transformations.EvalFunc(func, i, j + hy));
+
+                    // Создание полигонов
+                    res.AddPolygon(
+                        new Polygon().Add(new Line(topLeft, topRight))
+                        .Add(new Line(topRight, bottomRight))
+                        .Add(new Line(bottomRight, bottomLeft))
+                        .Add(new Line(bottomLeft, topLeft)));
+                     
+                }
+            }
+
+
+
             return res;
         }
 

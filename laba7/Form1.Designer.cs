@@ -58,32 +58,47 @@
             degreeCustom = new TextBox();
             label9 = new Label();
             z2textBox = new TextBox();
-            y2textBox = new TextBox();
+            y2functextBox = new TextBox();
             label10 = new Label();
             label11 = new Label();
             label12 = new Label();
-            x2textBox = new TextBox();
+            x2functextBox = new TextBox();
             z1textBox = new TextBox();
-            y1textBox = new TextBox();
+            y1functextBox = new TextBox();
             label13 = new Label();
             label14 = new Label();
             label15 = new Label();
-            x1textBox = new TextBox();
+            x1functextBox = new TextBox();
             comboBox2 = new ComboBox();
             comboBox3 = new ComboBox();
             saveButton = new Button();
             loadButton = new Button();
             label16 = new Label();
             figureRotButton = new Button();
+            label17 = new Label();
+            hTextBox = new TextBox();
+            funcTextBox = new TextBox();
+            label18 = new Label();
+            func1Button = new Button();
+            button2 = new Button();
+            y2textBox = new TextBox();
+            label19 = new Label();
+            label20 = new Label();
+            x2textBox = new TextBox();
+            y1textBox = new TextBox();
+            label21 = new Label();
+            label22 = new Label();
+            x1textBox = new TextBox();
+            label23 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // pictureBox1
             // 
-            pictureBox1.Location = new System.Drawing.Point(237, 0);
+            pictureBox1.Location = new System.Drawing.Point(237, 14);
             pictureBox1.Margin = new Padding(4, 3, 4, 3);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(1185, 713);
+            pictureBox1.Size = new Size(1174, 681);
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
             // 
@@ -368,12 +383,12 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new System.Drawing.Point(10, 366);
+            label9.Location = new System.Drawing.Point(1430, 57);
             label9.Margin = new Padding(4, 0, 4, 0);
             label9.Name = "label9";
-            label9.Size = new Size(50, 15);
+            label9.Size = new Size(56, 15);
             label9.TabIndex = 38;
-            label9.Text = "Прямая";
+            label9.Text = "Границы";
             // 
             // z2textBox
             // 
@@ -384,14 +399,14 @@
             z2textBox.TabIndex = 51;
             z2textBox.Text = "1";
             // 
-            // y2textBox
+            // y2functextBox
             // 
-            y2textBox.Location = new System.Drawing.Point(115, 420);
-            y2textBox.Margin = new Padding(4, 3, 4, 3);
-            y2textBox.Name = "y2textBox";
-            y2textBox.Size = new Size(37, 23);
-            y2textBox.TabIndex = 50;
-            y2textBox.Text = "1";
+            y2functextBox.Location = new System.Drawing.Point(1535, 111);
+            y2functextBox.Margin = new Padding(4, 3, 4, 3);
+            y2functextBox.Name = "y2functextBox";
+            y2functextBox.Size = new Size(37, 23);
+            y2functextBox.TabIndex = 50;
+            y2functextBox.Text = "0";
             // 
             // label10
             // 
@@ -406,7 +421,7 @@
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new System.Drawing.Point(85, 423);
+            label11.Location = new System.Drawing.Point(1505, 114);
             label11.Margin = new Padding(4, 0, 4, 0);
             label11.Name = "label11";
             label11.Size = new Size(19, 15);
@@ -416,21 +431,22 @@
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new System.Drawing.Point(10, 423);
+            label12.Location = new System.Drawing.Point(1430, 114);
             label12.Margin = new Padding(4, 0, 4, 0);
             label12.Name = "label12";
             label12.Size = new Size(19, 15);
             label12.TabIndex = 47;
             label12.Text = "x2";
             // 
-            // x2textBox
+            // x2functextBox
             // 
-            x2textBox.Location = new System.Drawing.Point(41, 420);
-            x2textBox.Margin = new Padding(4, 3, 4, 3);
-            x2textBox.Name = "x2textBox";
-            x2textBox.Size = new Size(37, 23);
-            x2textBox.TabIndex = 46;
-            x2textBox.Text = "1";
+            x2functextBox.Location = new System.Drawing.Point(1461, 111);
+            x2functextBox.Margin = new Padding(4, 3, 4, 3);
+            x2functextBox.Name = "x2functextBox";
+            x2functextBox.Size = new Size(37, 23);
+            x2functextBox.TabIndex = 46;
+            x2functextBox.Text = "0";
+            x2functextBox.TextChanged += x2textBox_TextChanged;
             // 
             // z1textBox
             // 
@@ -441,14 +457,14 @@
             z1textBox.TabIndex = 44;
             z1textBox.Text = "0";
             // 
-            // y1textBox
+            // y1functextBox
             // 
-            y1textBox.Location = new System.Drawing.Point(115, 389);
-            y1textBox.Margin = new Padding(4, 3, 4, 3);
-            y1textBox.Name = "y1textBox";
-            y1textBox.Size = new Size(37, 23);
-            y1textBox.TabIndex = 43;
-            y1textBox.Text = "0";
+            y1functextBox.Location = new System.Drawing.Point(1535, 80);
+            y1functextBox.Margin = new Padding(4, 3, 4, 3);
+            y1functextBox.Name = "y1functextBox";
+            y1functextBox.Size = new Size(37, 23);
+            y1functextBox.TabIndex = 43;
+            y1functextBox.Text = "0";
             // 
             // label13
             // 
@@ -463,7 +479,7 @@
             // label14
             // 
             label14.AutoSize = true;
-            label14.Location = new System.Drawing.Point(85, 392);
+            label14.Location = new System.Drawing.Point(1505, 83);
             label14.Margin = new Padding(4, 0, 4, 0);
             label14.Name = "label14";
             label14.Size = new Size(19, 15);
@@ -473,21 +489,21 @@
             // label15
             // 
             label15.AutoSize = true;
-            label15.Location = new System.Drawing.Point(10, 392);
+            label15.Location = new System.Drawing.Point(1430, 83);
             label15.Margin = new Padding(4, 0, 4, 0);
             label15.Name = "label15";
             label15.Size = new Size(19, 15);
             label15.TabIndex = 40;
             label15.Text = "x1";
             // 
-            // x1textBox
+            // x1functextBox
             // 
-            x1textBox.Location = new System.Drawing.Point(41, 389);
-            x1textBox.Margin = new Padding(4, 3, 4, 3);
-            x1textBox.Name = "x1textBox";
-            x1textBox.Size = new Size(37, 23);
-            x1textBox.TabIndex = 39;
-            x1textBox.Text = "0";
+            x1functextBox.Location = new System.Drawing.Point(1461, 80);
+            x1functextBox.Margin = new Padding(4, 3, 4, 3);
+            x1functextBox.Name = "x1functextBox";
+            x1functextBox.Size = new Size(37, 23);
+            x1functextBox.TabIndex = 39;
+            x1functextBox.Text = "0";
             // 
             // comboBox2
             // 
@@ -552,11 +568,168 @@
             figureRotButton.UseVisualStyleBackColor = true;
             figureRotButton.Click += figureRotButton_Click;
             // 
+            // label17
+            // 
+            label17.AutoSize = true;
+            label17.Location = new System.Drawing.Point(1456, 145);
+            label17.Margin = new Padding(4, 0, 4, 0);
+            label17.Name = "label17";
+            label17.Size = new Size(29, 15);
+            label17.TabIndex = 59;
+            label17.Text = "Шаг";
+            // 
+            // hTextBox
+            // 
+            hTextBox.Location = new System.Drawing.Point(1487, 142);
+            hTextBox.Margin = new Padding(4, 3, 4, 3);
+            hTextBox.Name = "hTextBox";
+            hTextBox.Size = new Size(37, 23);
+            hTextBox.TabIndex = 58;
+            hTextBox.Text = "0";
+            // 
+            // funcTextBox
+            // 
+            funcTextBox.Location = new System.Drawing.Point(1493, 172);
+            funcTextBox.Name = "funcTextBox";
+            funcTextBox.Size = new Size(179, 23);
+            funcTextBox.TabIndex = 60;
+            // 
+            // label18
+            // 
+            label18.AutoSize = true;
+            label18.Location = new System.Drawing.Point(1431, 175);
+            label18.Margin = new Padding(4, 0, 4, 0);
+            label18.Name = "label18";
+            label18.Size = new Size(55, 15);
+            label18.TabIndex = 61;
+            label18.Text = "Функция";
+            // 
+            // func1Button
+            // 
+            func1Button.Location = new System.Drawing.Point(1431, 257);
+            func1Button.Name = "func1Button";
+            func1Button.Size = new Size(104, 23);
+            func1Button.TabIndex = 62;
+            func1Button.Text = "sin(x)+sin(y)";
+            func1Button.UseVisualStyleBackColor = true;
+            func1Button.Click += func1Button_Click;
+            // 
+            // button2
+            // 
+            button2.Location = new System.Drawing.Point(1505, 205);
+            button2.Name = "button2";
+            button2.Size = new Size(86, 23);
+            button2.TabIndex = 63;
+            button2.Text = "Построить";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
+            // 
+            // y2textBox
+            // 
+            y2textBox.Location = new System.Drawing.Point(119, 420);
+            y2textBox.Margin = new Padding(4, 3, 4, 3);
+            y2textBox.Name = "y2textBox";
+            y2textBox.Size = new Size(37, 23);
+            y2textBox.TabIndex = 72;
+            y2textBox.Text = "0";
+            // 
+            // label19
+            // 
+            label19.AutoSize = true;
+            label19.Location = new System.Drawing.Point(89, 423);
+            label19.Margin = new Padding(4, 0, 4, 0);
+            label19.Name = "label19";
+            label19.Size = new Size(19, 15);
+            label19.TabIndex = 71;
+            label19.Text = "y2";
+            // 
+            // label20
+            // 
+            label20.AutoSize = true;
+            label20.Location = new System.Drawing.Point(14, 423);
+            label20.Margin = new Padding(4, 0, 4, 0);
+            label20.Name = "label20";
+            label20.Size = new Size(19, 15);
+            label20.TabIndex = 70;
+            label20.Text = "x2";
+            // 
+            // x2textBox
+            // 
+            x2textBox.Location = new System.Drawing.Point(45, 420);
+            x2textBox.Margin = new Padding(4, 3, 4, 3);
+            x2textBox.Name = "x2textBox";
+            x2textBox.Size = new Size(37, 23);
+            x2textBox.TabIndex = 69;
+            x2textBox.Text = "0";
+            // 
+            // y1textBox
+            // 
+            y1textBox.Location = new System.Drawing.Point(119, 389);
+            y1textBox.Margin = new Padding(4, 3, 4, 3);
+            y1textBox.Name = "y1textBox";
+            y1textBox.Size = new Size(37, 23);
+            y1textBox.TabIndex = 68;
+            y1textBox.Text = "0";
+            // 
+            // label21
+            // 
+            label21.AutoSize = true;
+            label21.Location = new System.Drawing.Point(89, 392);
+            label21.Margin = new Padding(4, 0, 4, 0);
+            label21.Name = "label21";
+            label21.Size = new Size(19, 15);
+            label21.TabIndex = 67;
+            label21.Text = "y1";
+            // 
+            // label22
+            // 
+            label22.AutoSize = true;
+            label22.Location = new System.Drawing.Point(14, 392);
+            label22.Margin = new Padding(4, 0, 4, 0);
+            label22.Name = "label22";
+            label22.Size = new Size(19, 15);
+            label22.TabIndex = 66;
+            label22.Text = "x1";
+            // 
+            // x1textBox
+            // 
+            x1textBox.Location = new System.Drawing.Point(45, 389);
+            x1textBox.Margin = new Padding(4, 3, 4, 3);
+            x1textBox.Name = "x1textBox";
+            x1textBox.Size = new Size(37, 23);
+            x1textBox.TabIndex = 65;
+            x1textBox.Text = "0";
+            // 
+            // label23
+            // 
+            label23.AutoSize = true;
+            label23.Location = new System.Drawing.Point(14, 366);
+            label23.Margin = new Padding(4, 0, 4, 0);
+            label23.Name = "label23";
+            label23.Size = new Size(50, 15);
+            label23.TabIndex = 64;
+            label23.Text = "Прямая";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1684, 710);
+            Controls.Add(y2textBox);
+            Controls.Add(label19);
+            Controls.Add(label20);
+            Controls.Add(x2textBox);
+            Controls.Add(y1textBox);
+            Controls.Add(label21);
+            Controls.Add(label22);
+            Controls.Add(x1textBox);
+            Controls.Add(label23);
+            Controls.Add(button2);
+            Controls.Add(func1Button);
+            Controls.Add(label18);
+            Controls.Add(funcTextBox);
+            Controls.Add(label17);
+            Controls.Add(hTextBox);
             Controls.Add(figureRotButton);
             Controls.Add(label16);
             Controls.Add(loadButton);
@@ -564,17 +737,17 @@
             Controls.Add(comboBox3);
             Controls.Add(comboBox2);
             Controls.Add(z2textBox);
-            Controls.Add(y2textBox);
+            Controls.Add(y2functextBox);
             Controls.Add(label10);
             Controls.Add(label11);
             Controls.Add(label12);
-            Controls.Add(x2textBox);
+            Controls.Add(x2functextBox);
             Controls.Add(z1textBox);
-            Controls.Add(y1textBox);
+            Controls.Add(y1functextBox);
             Controls.Add(label13);
             Controls.Add(label14);
             Controls.Add(label15);
-            Controls.Add(x1textBox);
+            Controls.Add(x1functextBox);
             Controls.Add(label9);
             Controls.Add(RotateCustomAxisButton);
             Controls.Add(label8);
@@ -644,23 +817,38 @@
         private TextBox degreeCustom;
         private Label label9;
         private TextBox z2textBox;
-        private TextBox y2textBox;
+        private TextBox y2functextBox;
         private Label label10;
         private Label label11;
         private Label label12;
-        private TextBox x2textBox;
+        private TextBox x2functextBox;
         private TextBox z1textBox;
-        private TextBox y1textBox;
+        private TextBox y1functextBox;
         private Label label13;
         private Label label14;
         private Label label15;
-        private TextBox x1textBox;
+        private TextBox x1functextBox;
         private ComboBox comboBox2;
         private ComboBox comboBox3;
         private Button saveButton;
         private Button loadButton;
         private Label label16;
         private Button figureRotButton;
+        private Label label17;
+        private TextBox hTextBox;
+        private TextBox funcTextBox;
+        private Label label18;
+        private Button func1Button;
+        private Button button2;
+        private TextBox y2textBox;
+        private Label label19;
+        private Label label20;
+        private TextBox x2textBox;
+        private TextBox y1textBox;
+        private Label label21;
+        private Label label22;
+        private TextBox x1textBox;
+        private Label label23;
     }
 }
 

@@ -30,10 +30,10 @@ namespace laba7
                     List<int> vertsToAdd = new();
                     foreach (var line in p.Lines)
                     {                       
-                        if (!vertsToAdd.Contains(verts.IndexOf(line.Start)+1))
-                            vertsToAdd.Add(verts.IndexOf(line.Start) + 1);
-                        if (!vertsToAdd.Contains(verts.IndexOf(line.End) + 1))
-                            vertsToAdd.Add(verts.IndexOf(line.End) + 1);
+                        if (!vertsToAdd.Contains(verts.FindIndex(x => x.XF == line.Start.XF && x.YF == line.Start.YF && x.ZF == line.Start.ZF) + 1))
+                            vertsToAdd.Add(verts.FindIndex(x => x.XF == line.Start.XF && x.YF == line.Start.YF && x.ZF == line.Start.ZF) + 1);
+                        if (!vertsToAdd.Contains(verts.FindIndex(x => x.XF == line.End.XF && x.YF == line.End.YF && x.ZF == line.End.ZF) + 1))
+                            vertsToAdd.Add(verts.FindIndex(x => x.XF == line.End.XF && x.YF == line.End.YF && x.ZF == line.End.ZF) + 1);
                     }
                     vertsToAdd.ForEach(vert => { outputFile.Write($"{vert} "); });
                     outputFile.WriteLine();
@@ -61,14 +61,13 @@ namespace laba7
                 if (t[0] == "f") {
                     var f = line.Split(" ",StringSplitOptions.RemoveEmptyEntries);
                     skipCount = f.Length - 1;
-                    for (int i = 1; i < f.Length-1; i++)
+
+                    for (int i = 1; i < f.Length - 1; i++)
                     {
                         fig_lines.Add(new Line(verts[int.Parse(f[i]) - 1], verts[int.Parse(f[i + 1]) - 1]));
                     }
                     fig_lines.Add(new Line(verts[int.Parse(f[1]) - 1], verts[int.Parse(f.Last()) - 1]));
-                }
-
-      
+                    } 
             }
 
             

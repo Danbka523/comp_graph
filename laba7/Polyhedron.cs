@@ -33,8 +33,10 @@ namespace laba7
             {
                 foreach (Line lines in poly.Lines)
                 {
-                    if (verts.FindIndex(x=>x.X==lines.Start.X && x.Y==lines.Start.Y && x.Z==lines.Start.Z)==-1)
+                    if (verts.FindIndex(x=>x.XF==lines.Start.XF && x.YF==lines.Start.YF && x.ZF==lines.Start.ZF)==-1)
                         verts.Add(lines.Start);
+                    if (verts.FindIndex(x=>x.XF==lines.End.XF && x.YF==lines.End.YF && x.ZF==lines.End.ZF)==-1)
+                        verts.Add(lines.End);
                 }
 
             }

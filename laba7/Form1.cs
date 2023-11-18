@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -204,6 +205,25 @@ namespace laba7
             ReDraw();
         }
 
+        private void func1Button_Click(object sender, EventArgs e)
+        {
+            funcTextBox.Text = func1Button.Text;
+        }
+
+
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            figure = new FigureCreator().CreateFunction(x1functextBox.Text,
+                                                        y1functextBox.Text,
+                                                        x2functextBox.Text,
+                                                        y2functextBox.Text,
+                                                        hTextBox.Text,
+                                                        hTextBox.Text,
+                                                        funcTextBox.Text);
+            ReDraw();
+        }
+
         #endregion
         #region Drawing
         // Drawing
@@ -260,6 +280,10 @@ namespace laba7
 
 
 
-      
+
+        private void x2textBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AngouriMath;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -253,6 +254,14 @@ namespace laba7
 
 
             return result;
+        }
+
+
+        public float EvalFunc(string func, float x,float y) {
+            var t = func.Replace("x", x.ToString()).Replace("y", y.ToString());
+
+            Entity f = func.Replace("x",x.ToString()).Replace("y",y.ToString()).Replace(",",".");
+            return (float)f.EvalNumerical();
         }
 
     }
