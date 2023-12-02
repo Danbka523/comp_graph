@@ -90,6 +90,10 @@
             label22 = new Label();
             x1textBox = new TextBox();
             label23 = new Label();
+            listBox1 = new ListBox();
+            label24 = new Label();
+            deleteSceneButton = new Button();
+            resetCameraButton = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -115,12 +119,12 @@
             // 
             // button1
             // 
-            button1.Location = new System.Drawing.Point(55, 45);
+            button1.Location = new System.Drawing.Point(58, 43);
             button1.Margin = new Padding(4, 3, 4, 3);
             button1.Name = "button1";
             button1.Size = new Size(100, 27);
             button1.TabIndex = 2;
-            button1.Text = "Нарисовать";
+            button1.Text = "Добавить";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
@@ -322,12 +326,14 @@
             clearButton.TabIndex = 28;
             clearButton.Text = "Очистить";
             clearButton.UseVisualStyleBackColor = true;
+            clearButton.Visible = false;
             clearButton.Click += clearButton_Click;
             // 
             // perspectiveRadioButtom
             // 
             perspectiveRadioButtom.AutoSize = true;
             perspectiveRadioButtom.Checked = true;
+            perspectiveRadioButtom.Enabled = false;
             perspectiveRadioButtom.Location = new System.Drawing.Point(14, 623);
             perspectiveRadioButtom.Margin = new Padding(4, 3, 4, 3);
             perspectiveRadioButtom.Name = "perspectiveRadioButtom";
@@ -336,11 +342,13 @@
             perspectiveRadioButtom.TabStop = true;
             perspectiveRadioButtom.Text = "Перспективная";
             perspectiveRadioButtom.UseVisualStyleBackColor = true;
+            perspectiveRadioButtom.Visible = false;
             perspectiveRadioButtom.CheckedChanged += perspectiveRadioButtom_CheckedChanged;
             // 
             // isometricRadioButtom
             // 
             isometricRadioButtom.AutoSize = true;
+            isometricRadioButtom.Enabled = false;
             isometricRadioButtom.Location = new System.Drawing.Point(14, 650);
             isometricRadioButtom.Margin = new Padding(4, 3, 4, 3);
             isometricRadioButtom.Name = "isometricRadioButtom";
@@ -348,6 +356,7 @@
             isometricRadioButtom.TabIndex = 31;
             isometricRadioButtom.Text = "Изометрическая";
             isometricRadioButtom.UseVisualStyleBackColor = true;
+            isometricRadioButtom.Visible = false;
             isometricRadioButtom.CheckedChanged += isometricRadioButtom_CheckedChanged;
             // 
             // RotateCustomAxisButton
@@ -710,11 +719,52 @@
             label23.TabIndex = 64;
             label23.Text = "Прямая";
             // 
+            // listBox1
+            // 
+            listBox1.FormattingEnabled = true;
+            listBox1.ItemHeight = 15;
+            listBox1.Location = new System.Drawing.Point(1429, 313);
+            listBox1.Name = "listBox1";
+            listBox1.Size = new Size(243, 94);
+            listBox1.TabIndex = 73;
+            listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged;
+            // 
+            // label24
+            // 
+            label24.AutoSize = true;
+            label24.Location = new System.Drawing.Point(1430, 292);
+            label24.Name = "label24";
+            label24.Size = new Size(41, 15);
+            label24.TabIndex = 74;
+            label24.Text = "Сцена";
+            // 
+            // deleteSceneButton
+            // 
+            deleteSceneButton.Location = new System.Drawing.Point(1431, 423);
+            deleteSceneButton.Name = "deleteSceneButton";
+            deleteSceneButton.Size = new Size(73, 23);
+            deleteSceneButton.TabIndex = 75;
+            deleteSceneButton.Text = "Удалить";
+            deleteSceneButton.UseVisualStyleBackColor = true;
+            // 
+            // resetCameraButton
+            // 
+            resetCameraButton.Location = new System.Drawing.Point(1597, 423);
+            resetCameraButton.Name = "resetCameraButton";
+            resetCameraButton.Size = new Size(75, 23);
+            resetCameraButton.TabIndex = 76;
+            resetCameraButton.Text = "Сброс";
+            resetCameraButton.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1684, 710);
+            Controls.Add(resetCameraButton);
+            Controls.Add(deleteSceneButton);
+            Controls.Add(label24);
+            Controls.Add(listBox1);
             Controls.Add(y2textBox);
             Controls.Add(label19);
             Controls.Add(label20);
@@ -777,9 +827,11 @@
             Controls.Add(button1);
             Controls.Add(comboBox1);
             Controls.Add(pictureBox1);
+            KeyPreview = true;
             Margin = new Padding(4, 3, 4, 3);
             Name = "Form1";
             Text = "триДЭ";
+            KeyPress += Form1_KeyPress;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -849,6 +901,10 @@
         private Label label22;
         private TextBox x1textBox;
         private Label label23;
+        private ListBox listBox1;
+        private Label label24;
+        private Button deleteSceneButton;
+        private Button resetCameraButton;
     }
 }
 
