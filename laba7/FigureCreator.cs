@@ -187,29 +187,31 @@ namespace laba7
                 if (i == allPoints.Count - 1)
                 {
 
-                    List<Line> lines = new();
+                    
                     for (int j = 0; j < allPoints[i].Count() - 1; j++)
                     {
-
+                        List<Line> lines = new();
                         Line line1 = new Line(allPoints[i][j], allPoints[i][j + 1]);
-                        Line line2 = new Line(allPoints[0][j + 1],allPoints[0][j]);
-                        Line line3 = new Line(allPoints[0][j],allPoints[i][j]);
+                        Line line2 = new Line(allPoints[0][j + 1], allPoints[0][j]);
+                        Line line3 = new Line(allPoints[0][j], allPoints[i][j]);
                         Line line4 = new Line(allPoints[i][j + 1], allPoints[0][j + 1]);
 
                         lines.Add(line1);
                         lines.Add(line2);
                         lines.Add(line3);
                         lines.Add(line4);
+
+                        Polygon p = new Polygon(lines);
+                        res.AddPolygon(p);
                     }
-                    Polygon p = new Polygon(lines);
-                    res.AddPolygon(p);
+                   
                 }
                 else
                 {
-                    List<Line> lines = new();
+                  
                     for (int j = 0; j < allPoints[i].Count() - 1; j++)
                     {
-
+                        List<Line> lines = new();
                         Line line1 = new Line(allPoints[i][j], allPoints[i][j + 1]);
                         Line line2 = new Line(allPoints[i + 1][j + 1], allPoints[i + 1][j]);
                         Line line3 = new Line(allPoints[i + 1][j], allPoints[i][j]);
@@ -219,9 +221,11 @@ namespace laba7
                         lines.Add(line2);
                         lines.Add(line3);
                         lines.Add(line4);
+
+                        Polygon p = new Polygon(lines);
+                        res.AddPolygon(p);
                     }
-                    Polygon p = new Polygon(lines);
-                    res.AddPolygon(p);
+                 
                 }
 
                 

@@ -28,6 +28,7 @@ namespace laba7
                 {
                     outputFile.Write($"f ");
                     List<int> vertsToAdd = new();
+          
                     foreach (var line in p.Lines)
                     {                       
                         if (!vertsToAdd.Contains(verts.FindIndex(x => x.XF == line.Start.XF && x.YF == line.Start.YF && x.ZF == line.Start.ZF) + 1))
