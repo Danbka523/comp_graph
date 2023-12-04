@@ -28,22 +28,30 @@ namespace laba8
             transformations=new Transformations();
         }
 
+        public void Reset() {
+            position = new Point(-10, 0, 0);
+            direction = new Vector(1, 0, 0);
+            up = new Vector(0, 0, 1);
+            right = (direction * up).Normalize();
+        }
+
         public void Move(float leftright = 0, float forwardbackward = 0, float updown = 0)
         {
             position.XF += leftright * right.XF + forwardbackward * direction.XF + updown * up.XF;
             position.YF += leftright * right.YF + forwardbackward * direction.YF + updown * up.YF;
             position.ZF += leftright * right.ZF + forwardbackward * direction.ZF + updown * up.ZF;
-            //Debug.WriteLine(right.ToString());
-            //Debug.WriteLine(direction.ToString());
-            //Debug.WriteLine(up.ToString());
-            //Debug.WriteLine(position.ToString());
+
         }
 
         public Point ToCameraView(Point p)
         {
-            return new Point(right.XF * (p.XF - position.XF) + right.YF * (p.YF - position.YF) + right.ZF * (p.ZF- position.ZF),
-                             up.XF * (p.XF - position.XF) + up.YF * (p.YF - position.YF) + up.ZF * (p.ZF - position.ZF),
-                             direction.XF * (p.XF - position.XF) + direction.YF * (p.YF - position.YF) + direction.ZF * (p.ZF - position.ZF));
+            return new Point(
+             right.XF* (p.XF - position.XF) + right.YF * (p.YF - position.YF) +
+             right.ZF * (p.ZF - position.ZF),
+             up.XF * (p.XF - position.XF) + up.YF * (p.YF - position.YF) +
+             up.ZF * (p.ZF - position.ZF),
+             direction.XF * (p.XF - position.XF) + direction.YF * (p.YF - position.YF) +
+             direction.ZF * (p.ZF - position.ZF));
         }
 
         public void ChangeView(float shiftX = 0, float shiftY = 0)
@@ -55,18 +63,16 @@ namespace laba8
  
                 transformations.RotateVectors(ref direction, ref up, (newPitch - pitch), right);
                 pitch = newPitch;
-                Debug.WriteLine(pitch);
+
            
             }
             if (newYaw != yaw)
             {
                 transformations.RotateVectors(ref direction, ref right, (newYaw - yaw), up);
                 yaw = newYaw;
-                Debug.WriteLine(yaw);
+   
             }
-            Debug.WriteLine(direction.ToString());
-            Debug.WriteLine(right.ToString());
-            Debug.WriteLine(up.ToString());
+
         }
 
 

@@ -94,6 +94,9 @@
             label24 = new Label();
             deleteSceneButton = new Button();
             resetCameraButton = new Button();
+            checkBoxNormal = new CheckBox();
+            checkBoxZ = new CheckBox();
+            button3 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -756,11 +759,46 @@
             resetCameraButton.Text = "Сброс";
             resetCameraButton.UseVisualStyleBackColor = true;
             // 
+            // checkBoxNormal
+            // 
+            checkBoxNormal.AutoSize = true;
+            checkBoxNormal.Location = new System.Drawing.Point(1431, 483);
+            checkBoxNormal.Name = "checkBoxNormal";
+            checkBoxNormal.Size = new Size(129, 19);
+            checkBoxNormal.TabIndex = 77;
+            checkBoxNormal.Text = "Отсечь нелицевые";
+            checkBoxNormal.UseVisualStyleBackColor = true;
+            checkBoxNormal.CheckedChanged += checkBoxNormal_CheckedChanged;
+            // 
+            // checkBoxZ
+            // 
+            checkBoxZ.AutoSize = true;
+            checkBoxZ.Location = new System.Drawing.Point(1431, 508);
+            checkBoxZ.Name = "checkBoxZ";
+            checkBoxZ.Size = new Size(65, 19);
+            checkBoxZ.TabIndex = 78;
+            checkBoxZ.Text = "Zbuffer";
+            checkBoxZ.UseVisualStyleBackColor = true;
+            checkBoxZ.CheckedChanged += checkBoxZ_CheckedChanged;
+            // 
+            // button3
+            // 
+            button3.Location = new System.Drawing.Point(1431, 533);
+            button3.Name = "button3";
+            button3.Size = new Size(129, 23);
+            button3.TabIndex = 79;
+            button3.Text = "Сбросить камеру";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1684, 710);
+            Controls.Add(button3);
+            Controls.Add(checkBoxZ);
+            Controls.Add(checkBoxNormal);
             Controls.Add(resetCameraButton);
             Controls.Add(deleteSceneButton);
             Controls.Add(label24);
@@ -905,6 +943,9 @@
         private Label label24;
         private Button deleteSceneButton;
         private Button resetCameraButton;
+        private CheckBox checkBoxNormal;
+        private CheckBox checkBoxZ;
+        private Button button3;
     }
 }
 

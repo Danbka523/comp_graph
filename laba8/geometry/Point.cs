@@ -27,16 +27,23 @@ namespace laba8
 
         // static Matrix isometric = new Matrix(3, 3).Fill((float)Math.Sqrt(3), 0, -(float)Math.Sqrt(3), 1, 2, 1, (float)Math.Sqrt(2), -(float)Math.Sqrt(2), (float)Math.Sqrt(2)) * (1 / (float)Math.Sqrt(6));
         static Matrix isometric = new Matrix(3, 3).Fill(
-            (float)(1/Math.Sqrt(2)), (float)(1 / Math.Sqrt(6)), (float)(1 / Math.Sqrt(3)),
+            (float)(1 / Math.Sqrt(2)), (float)(1 / Math.Sqrt(6)), (float)(1 / Math.Sqrt(3)),
             (float)(-1 / Math.Sqrt(2)), (float)(1 / Math.Sqrt(6)), (float)(1 / Math.Sqrt(3)),
-            0,(float)(-2 / Math.Sqrt(6)), (float)(1 / Math.Sqrt(3))
+            0, (float)(-2 / Math.Sqrt(6)), (float)(1 / Math.Sqrt(3))
             );
 
         static Matrix perspective;
 
-        public Point(float x, float y, float z) {
+        public Point(float x, float y, float z)
+        {
             this.x = x; this.y = y; this.z = z;
-            
+
+        }
+
+        public Point(Point p)
+        {
+            x = p.x; y = p.y; z = p.z;
+
         }
 
         public int X { get => (int)x; set => x = value; }
@@ -53,14 +60,15 @@ namespace laba8
             Point.zScreenNear = zScreenNear;
             Point.zScreenFar = zScreenFar;
             Point.fov = fov;
-            
+
             perspective = new Matrix(4, 4).Fill(screenSize.Height / ((float)Math.Tan(transformations.DegreeToRadian(fov / 2f)) * screenSize.Width), 0, 0, 0,
-                                                0, 1.0f /(float) Math.Tan(transformations.DegreeToRadian(fov / 2f)), 0, 0,
+                                                0, 1.0f / (float)Math.Tan(transformations.DegreeToRadian(fov / 2f)), 0, 0,
                                                 0, 0, -(zScreenFar + zScreenNear) / (zScreenFar - zScreenNear), -2f * (zScreenFar * zScreenNear) / (zScreenFar - zScreenNear),
                                                 0, 0, -1, 0);
 
         }
-        public (PointF?, float) Projection(Camera cam) {
+        public (PointF?, float) Projection(Camera cam)
+        {
 
             var viewCoord = cam.ToCameraView(this);
 
@@ -75,9 +83,9 @@ namespace laba8
                 case ProjectionKind.PERSPECTIVE:
                     if (viewCoord.ZF < 0)
                     {
-                        return (null,ZF);
+                        return (null, ZF);
                     }
-                 
+
                     Matrix res = new Matrix(1, 4).Fill(viewCoord.XF, viewCoord.YF, viewCoord.ZF, 1) * perspective;
                     if (res[0, 3] == 0)
                     {
@@ -90,17 +98,16 @@ namespace laba8
                     {
                         return (null, ZF);
                     }
-                    return (new PointF(world.X + res[0, 0] * world.X, world.Y + res[0, 1] * world.Y),ZF);
+                    return (new PointF(world.X + (float)res[0, 0] * world.X, world.Y + res[0, 1] * world.Y), ZF);
 
                 default:
                     throw new ArgumentException("invalid perspective");
-            }      
+            }
         }
 
         public override string ToString()
         {
-            return $"{XF} {YF} {ZF}";
+            return $"({XF} {YF} {ZF})";
         }
     }
 }
- 

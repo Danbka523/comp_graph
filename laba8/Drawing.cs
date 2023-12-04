@@ -8,20 +8,29 @@ using System.Windows.Forms;
 namespace laba8
 {
     using FastBitmap;
+
+    using System.Diagnostics;
+
+    public enum DRAWINGKIND {CASUAL,NORMAL,ZBUFFER };
     internal class Drawing
     {
         Graphics g;
         Pen figureDrawPen;
         Pen highLightPen;
         FastBitmap fbmp;
+        zBuffer zBuffer;
         PictureBox pictureBox;
         Camera camera;
         public List<Polyhedron> sceneFigures= new();
         public Polyhedron figure;
         public int highLightedIdx;
 
+        public DRAWINGKIND DRAWINGKIND = DRAWINGKIND.CASUAL;
+       
+
         public Drawing(Graphics g, PictureBox pictureBox, Camera camera)
         {
+            zBuffer = new zBuffer();
             this.pictureBox = pictureBox;
             figureDrawPen = new Pen(Color.Black, 5);
             highLightPen = new Pen(Color.Red, 5);
@@ -34,22 +43,27 @@ namespace laba8
         {
             foreach (Polygon poly in figure.Polygons)
             {
-                DrawPoly(poly, p);
+                if (poly.isFacial)
+                    DrawPoly(poly, p);
             }
         }
 
         void DrawPoly(Polygon p, Pen pen)
         {
-            foreach (var line in p.Lines)
+            //foreach (var line in p.Lines)
+            //{
+            //    DrawLine(line, pen);
+            //}
+            for (var i = 0; i < p.Verts.Count; i++)
             {
-                DrawLine(line, pen);
+                DrawLine(p.Verts[i], p.Verts[(i+1) % p.Verts.Count], pen);
             }
         }
 
-        void DrawLine(Line l, Pen p)
+        void DrawLine(Point start, Point end, Pen p)
         {
-            var p1 = l.Start.Projection(camera).Item1;
-            var p2 = l.End.Projection(camera).Item1;
+            var p1 = start.Projection(camera).Item1;
+            var p2 = end.Projection(camera).Item1;
             if (p1.HasValue && p2.HasValue)
                 DrawVuLine(p1,p2,p.Color);
 
@@ -146,9 +160,9 @@ namespace laba8
             Line axisY = new Line(new Point(0, 0, 0), new Point(0, 300, 0));
             Line axisZ = new Line(new Point(0, 0, 0), new Point(0, 0, 300));
 
-            DrawLine(axisX, new Pen(Color.Red, 5));
-            DrawLine(axisY, new Pen(Color.Green, 5));
-            DrawLine(axisZ, new Pen(Color.Blue, 5));
+            DrawLine(axisX.Start,axisX.End, new Pen(Color.Red, 5));
+            DrawLine(axisY.Start,axisY.End, new Pen(Color.Green, 5));
+            DrawLine(axisZ.Start,axisZ.End, new Pen(Color.Blue, 5));
 
 
         }
@@ -161,22 +175,103 @@ namespace laba8
             if (isShowAxis)
                 DrawAxis();
 
+
+
+            switch (DRAWINGKIND)
+            {
+                case DRAWINGKIND.CASUAL:                   
+                    DrawCasual();              
+                    break;
+                case DRAWINGKIND.NORMAL:
+                    DrawNormal();
+                    break;
+                case DRAWINGKIND.ZBUFFER:
+                    DrawZBuffer();
+                    break;
+                default:
+                    break;
+            }
+            pictureBox.Image = bmp;
+            fbmp.Dispose();
+            
+            //bmp.Dispose();
+            //pictureBox.Invalidate();
+        }
+
+        void DrawNormal()
+        {
+
+                for (int i = 0; i < sceneFigures.Count; i++)
+                {
+                FindNonFacial(sceneFigures[i]);
+                    if (i == highLightedIdx)
+                        DrawFigure((sceneFigures[i]), highLightPen);
+                    else
+                        DrawFigure((sceneFigures[i]), figureDrawPen);
+
+                }
+            
+        }
+
+        void FindNonFacial(Polyhedron figure) {
+
+            foreach (var poly in figure.Polygons)
+            {
+                Vector vectProec = new Vector(camera.ToCameraView(poly.GetCenter())).Normalize();
+                Debug.WriteLine("center " + camera.ToCameraView(poly.GetCenter()).ToString());
+                Debug.WriteLine("proec " +vectProec.ToString());
+                Debug.WriteLine(camera.position.ToString());
+                Vector vectNormal = poly.NormVector;
+                Debug.WriteLine("norm? " + vectNormal.ToString());
+                vectNormal = new Vector(camera.ToCameraView(new Point(vectNormal.XF, vectNormal.YF, vectNormal.ZF))).Normalize();
+                Debug.WriteLine("norm? " + vectNormal.ToString());
+                float vectScalar = vectNormal.Scalar(vectProec);
+                //float vectScalar = vectNormal.Scalar(camera.right.Normalize());
+                Debug.WriteLine("vectProec =" + vectProec.ToString());
+                //Debug.WriteLine("vectNormal =" + vectNormal.ToString());
+                Debug.WriteLine(vectScalar);
+                Debug.WriteLine(poly.ToString());
+
+
+                float cos = vectScalar / (vectProec.Module()*vectNormal.Module()); ;
+
+
+                poly.isFacial = cos < 0;
+                Debug.WriteLine("");
+            }
+            Debug.WriteLine("");
+
+        }
+
+        void DrawCasual() {
             for (int i = 0; i < sceneFigures.Count; i++)
             {
+                sceneFigures[i].ResetFacial();
                 if (i == highLightedIdx)
                     DrawFigure(sceneFigures[i], highLightPen);
                 else
                     DrawFigure(sceneFigures[i], figureDrawPen);
 
             }
+        }
 
-            fbmp.Dispose();
-            pictureBox.Image = bmp;              
-            //pictureBox.Invalidate();
+        Bitmap DrawZBuffer() {
+ 
+            return zBuffer.z_buf(pictureBox.Width, pictureBox.Height, sceneFigures, camera, GenerateColors(),fbmp);  
         }
 
         public void AddToScene(Polyhedron p) => sceneFigures.Add(p);
         public void RemoveInScene(Polyhedron p) => sceneFigures.Remove(p);
-    
+
+        List<Color> GenerateColors()
+        {
+            List<Color> res = new List<Color>();
+            Random r;
+            r = new Random();
+            for (int i = 0; i < 50; ++i)
+                res.Add(Color.FromArgb(r.Next(0, 255), r.Next(0, 100), r.Next(10, 255)));
+            return res;
+        }
+
     }
 }

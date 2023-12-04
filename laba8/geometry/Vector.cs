@@ -16,9 +16,11 @@ namespace laba8
             this.y = y;
             this.z = z;
         }
-        public Vector(Point point) : this(point.XF,point.YF,point.ZF) { }
+        public Vector(Point point) : this(point.XF, point.YF, point.ZF) { }
+        public Vector(Point start, Point end) : this(end.XF - start.XF, end.YF - start.YF, end.ZF - start.ZF) { }
 
-        public Vector Normalize() {
+        public Vector Normalize()
+        {
             float normalization = (float)Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2) + Math.Pow(z, 2));
             x /= normalization;
             y /= normalization;
@@ -54,10 +56,13 @@ namespace laba8
         {
             return new Vector(k * b.x, k * b.y, k * b.z);
         }
-        public float Scalar(Vector other) { 
-            return x*other.x+y*other.y+z*other.z;
+        public float Scalar(Vector other)
+        {
+            return x * other.XF + y * other.YF + z * other.ZF;
         }
-
+        public float Module() { 
+            return (float)Math.Sqrt(x * x + y * y + z * z);
+        }
         public override string ToString()
         {
             return $"{x} {y} {z}";
