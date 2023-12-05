@@ -9,148 +9,147 @@ using System.Threading.Tasks;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
 using AngouriMath;   //https://github.com/asc-community/AngouriMath?ysclid=lp2o5a92m5613424805
-using static AngouriMath.MathS;
 
 namespace laba8
 {
     internal class FigureCreator
     {
-        const int LEN = 200;
+        const int LEN = 150;
         Transformations transformations = new Transformations();
         public Polyhedron GetTetrahedron()
         {
             Polyhedron res = new Polyhedron();
-            Vertex a = new Vertex(0, 0, 0);
-            Vertex b = new Vertex(LEN, 0, LEN);
-            Vertex c = new Vertex(LEN, LEN, 0);
-            Vertex d = new Vertex(0, LEN, LEN);
-            res.AddPolygon(new Polygon().AddVerts(a,b,c));
-            res.AddPolygon(new Polygon().AddVerts(c, b, d));
-            res.AddPolygon(new Polygon().AddVerts(a, d, b));
-            res.AddPolygon(new Polygon().AddVerts(c, d, a)); 
+            Point a = new Point(0, 0, 0);
+            Point b = new Point(LEN, 0, LEN);
+            Point c = new Point(LEN, LEN, 0);
+            Point d = new Point(0, LEN, LEN);
+            res.AddPolygon(new Polygon().Add(new Line(a, c)).Add(new Line(c, b)).Add(new Line(b, a)));
+            res.AddPolygon(new Polygon().Add(new Line(c, b)).Add(new Line(b, d)).Add(new Line(d, c)));
+            res.AddPolygon(new Polygon().Add(new Line(b, d)).Add(new Line(d, a)).Add(new Line(a, b)));
+            res.AddPolygon(new Polygon().Add(new Line(c, d)).Add(new Line(d, a)).Add(new Line(a, c)));
             return res;
 
         }
-        //public Polyhedron GetHexahedron()
-        //{
-        //    Polyhedron res = new Polyhedron();
-        //    Vertex a = new Vertex(0, 0, 0);
-        //    Vertex b = new Vertex(LEN, 0, 0);
-        //    Vertex c = new Vertex(LEN, 0, LEN);
-        //    Vertex d = new Vertex(0, 0, LEN);
-        //    Vertex e = new Vertex(0, LEN, 0);
-        //    Vertex f = new Vertex(LEN, LEN, 0);
-        //    Vertex g = new Vertex(LEN, LEN, LEN);
-        //    Vertex h = new Vertex(0, LEN, LEN);
-        //    res.AddPolygon(new Polygon().Add(new Line(a, b)).Add(new Line(b, c)).Add(new Line(c, d)).Add(new Line(d, a))); 
-        //    res.AddPolygon(new Polygon().Add(new Line(b, c)).Add(new Line(c, g)).Add(new Line(g, f)).Add(new Line(f, b))); 
-        //    res.AddPolygon(new Polygon().Add(new Line(f, g)).Add(new Line(g, h)).Add(new Line(h, e)).Add(new Line(e, f)));
-        //    res.AddPolygon(new Polygon().Add(new Line(h, e)).Add(new Line(e, a)).Add(new Line(a, d)).Add(new Line(d, h)));
-        //    res.AddPolygon(new Polygon().Add(new Line(a, b)).Add(new Line(b, f)).Add(new Line(f, e)).Add(new Line(e, a)));
-        //    res.AddPolygon(new Polygon().Add(new Line(d, c)).Add(new Line(c, g)).Add(new Line(g, h)).Add(new Line(h, d)));
-        //    return res;
-        //}
+        public Polyhedron GetHexahedron()
+        {
+            Polyhedron res = new Polyhedron();
+            Point a = new Point(0, 0, 0);
+            Point b = new Point(LEN, 0, 0);
+            Point c = new Point(LEN, 0, LEN);
+            Point d = new Point(0, 0, LEN);
+            Point e = new Point(0, LEN, 0);
+            Point f = new Point(LEN, LEN, 0);
+            Point g = new Point(LEN, LEN, LEN);
+            Point h = new Point(0, LEN, LEN);
+            res.AddPolygon(new Polygon().Add(new Line(a, b)).Add(new Line(b, c)).Add(new Line(c, d)).Add(new Line(d, a))); 
+            res.AddPolygon(new Polygon().Add(new Line(b, c)).Add(new Line(c, g)).Add(new Line(g, f)).Add(new Line(f, b))); 
+            res.AddPolygon(new Polygon().Add(new Line(f, g)).Add(new Line(g, h)).Add(new Line(h, e)).Add(new Line(e, f)));
+            res.AddPolygon(new Polygon().Add(new Line(h, e)).Add(new Line(e, a)).Add(new Line(a, d)).Add(new Line(d, h)));
+            res.AddPolygon(new Polygon().Add(new Line(a, b)).Add(new Line(b, f)).Add(new Line(f, e)).Add(new Line(e, a)));
+            res.AddPolygon(new Polygon().Add(new Line(d, c)).Add(new Line(c, g)).Add(new Line(g, h)).Add(new Line(h, d)));
+            return res;
+        }
 
-        //public Polyhedron GetOctahedron()
-        //{
-        //    Polyhedron res = new Polyhedron();
-        //    Polyhedron cube = GetHexahedron();
+        public Polyhedron GetOctahedron()
+        {
+            Polyhedron res = new Polyhedron();
+            Polyhedron cube = GetHexahedron();
 
-        //    Vertex a = cube.Polygons[0].GetCenter();
-        //    Vertex b = cube.Polygons[1].GetCenter();
-        //    Vertex c = cube.Polygons[2].GetCenter();
-        //    Vertex d = cube.Polygons[3].GetCenter();
-        //    Vertex e = cube.Polygons[4].GetCenter();
-        //    Vertex f = cube.Polygons[5].GetCenter();
+            Point a = cube.Polygons[0].GetCenter();
+            Point b = cube.Polygons[1].GetCenter();
+            Point c = cube.Polygons[2].GetCenter();
+            Point d = cube.Polygons[3].GetCenter();
+            Point e = cube.Polygons[4].GetCenter();
+            Point f = cube.Polygons[5].GetCenter();
 
-        //    res.AddPolygon(new Polygon().Add(new Line(a, f)).Add(new Line(f,b)).Add(new Line(b,a)));
-        //    res.AddPolygon(new Polygon().Add(new Line(b,c)).Add(new Line(c,f)).Add(new Line(f,b)));
-        //    res.AddPolygon(new Polygon().Add(new Line(c, d)).Add(new Line(d,f)).Add(new Line(f,c)));
-        //    res.AddPolygon(new Polygon().Add(new Line(d,a)).Add(new Line(a,f)).Add(new Line(f,d)));
-        //    res.AddPolygon(new Polygon().Add(new Line(a, e)).Add(new Line(e,b)).Add(new Line(b,a)));
-        //    res.AddPolygon(new Polygon().Add(new Line(b, e)).Add(new Line(e,c)).Add(new Line(c,b)));
-        //    res.AddPolygon(new Polygon().Add(new Line(c, e)).Add(new Line(e,d)).Add(new Line(d,c)));
-        //    res.AddPolygon(new Polygon().Add(new Line(d, e)).Add(new Line(e,a)).Add(new Line(a,d)));
-
-
-        //    return res;
-        //}
+            res.AddPolygon(new Polygon().Add(new Line(a, f)).Add(new Line(f,b)).Add(new Line(b,a)));
+            res.AddPolygon(new Polygon().Add(new Line(b,c)).Add(new Line(c,f)).Add(new Line(f,b)));
+            res.AddPolygon(new Polygon().Add(new Line(c, d)).Add(new Line(d,f)).Add(new Line(f,c)));
+            res.AddPolygon(new Polygon().Add(new Line(d,a)).Add(new Line(a,f)).Add(new Line(f,d)));
+            res.AddPolygon(new Polygon().Add(new Line(a, e)).Add(new Line(e,b)).Add(new Line(b,a)));
+            res.AddPolygon(new Polygon().Add(new Line(b, e)).Add(new Line(e,c)).Add(new Line(c,b)));
+            res.AddPolygon(new Polygon().Add(new Line(c, e)).Add(new Line(e,d)).Add(new Line(d,c)));
+            res.AddPolygon(new Polygon().Add(new Line(d, e)).Add(new Line(e,a)).Add(new Line(a,d)));
 
 
+            return res;
+        }
 
-        //public Polyhedron GetIcosahedron() {
-        //    Polyhedron res = new Polyhedron();
-        //    Vertex circleCenter = new Vertex(100, 100, 100);
-        //    List<Vertex> circlePoints = new List<Vertex>();
-        //    for (int angle = 0; angle < 360; angle += 36)
-        //    {
-        //        if (angle % 72 == 0)
-        //            circlePoints.Add(new Vertex((float)(circleCenter.X + (100f * Math.Cos(transformations.DegreeToRadian(angle)))), circleCenter.Y + 100f, (float)(circleCenter.Z + (100f * Math.Sin(transformations.DegreeToRadian(angle))))));
-        //        else
-        //            circlePoints.Add(new Vertex((float)(circleCenter.X + (100f * Math.Cos(transformations.DegreeToRadian(angle)))), circleCenter.Y, (float)(circleCenter.Z + (100f * Math.Sin(transformations.DegreeToRadian(angle))))));
-        //    }
-        //    Vertex a = new Vertex(100, 50, 100);
-        //    Vertex b = new Vertex(100, 250, 100);
-        //    for (int i = 0; i < 10; i++)
-        //    {
-        //        res.AddPolygon(new Polygon().Add(new Line(circlePoints[i], circlePoints[(i + 1) % 10]))
-        //            .Add(new Line(circlePoints[(i + 1) % 10], circlePoints[(i + 2) % 10])).Add(new Line(circlePoints[(i + 2) % 10], circlePoints[i])));
-        //    }
-        //    res.AddPolygon(new Polygon().Add(new Line(circlePoints[1], a)).Add(new Line(a, circlePoints[3])).Add(new Line(circlePoints[3], circlePoints[1])));
-        //    res.AddPolygon(new Polygon().Add(new Line(circlePoints[3], a)).Add(new Line(a, circlePoints[5])).Add(new Line(circlePoints[5], circlePoints[3])));
-        //    res.AddPolygon(new Polygon().Add(new Line(circlePoints[5], a)).Add(new Line(a, circlePoints[7])).Add(new Line(circlePoints[7], circlePoints[5])));
-        //    res.AddPolygon(new Polygon().Add(new Line(circlePoints[7], a)).Add(new Line(a, circlePoints[9])).Add(new Line(circlePoints[9], circlePoints[7])));
-        //    res.AddPolygon(new Polygon().Add(new Line(circlePoints[9], a)).Add(new Line(a, circlePoints[1])).Add(new Line(circlePoints[1], circlePoints[9])));
 
-        //    res.AddPolygon(new Polygon().Add(new Line(circlePoints[0], b)).Add(new Line(b, circlePoints[2])).Add(new Line(circlePoints[2], circlePoints[0])));
-        //    res.AddPolygon(new Polygon().Add(new Line(circlePoints[2], b)).Add(new Line(b, circlePoints[4])).Add(new Line(circlePoints[4], circlePoints[2])));
-        //    res.AddPolygon(new Polygon().Add(new Line(circlePoints[4], b)).Add(new Line(b, circlePoints[6])).Add(new Line(circlePoints[6], circlePoints[4])));
-        //    res.AddPolygon(new Polygon().Add(new Line(circlePoints[6], b)).Add(new Line(b, circlePoints[8])).Add(new Line(circlePoints[8], circlePoints[6])));
-        //    res.AddPolygon(new Polygon().Add(new Line(circlePoints[8], b)).Add(new Line(b, circlePoints[0])).Add(new Line(circlePoints[0], circlePoints[8])));
-        //    return res;
-        //}
 
-        //public Polyhedron GetDodecahedron() {
-        //    Polyhedron res = new Polyhedron();
-        //    Polyhedron icos = GetIcosahedron();
+        public Polyhedron GetIcosahedron() {
+            Polyhedron res = new Polyhedron();
+            Point circleCenter = new Point(100, 100, 100);
+            List<Point> circlePoints = new List<Point>();
+            for (int angle = 0; angle < 360; angle += 36)
+            {
+                if (angle % 72 == 0)
+                    circlePoints.Add(new Point((float)(circleCenter.X + (100f * Math.Cos(transformations.DegreeToRadian(angle)))), circleCenter.Y + 100f, (float)(circleCenter.Z + (100f * Math.Sin(transformations.DegreeToRadian(angle))))));
+                else
+                    circlePoints.Add(new Point((float)(circleCenter.X + (100f * Math.Cos(transformations.DegreeToRadian(angle)))), circleCenter.Y, (float)(circleCenter.Z + (100f * Math.Sin(transformations.DegreeToRadian(angle))))));
+            }
+            Point a = new Point(100, 50, 100);
+            Point b = new Point(100, 250, 100);
+            for (int i = 0; i < 10; i++)
+            {
+                res.AddPolygon(new Polygon().Add(new Line(circlePoints[i], circlePoints[(i + 1) % 10]))
+                    .Add(new Line(circlePoints[(i + 1) % 10], circlePoints[(i + 2) % 10])).Add(new Line(circlePoints[(i + 2) % 10], circlePoints[i])));
+            }
+            res.AddPolygon(new Polygon().Add(new Line(circlePoints[1], a)).Add(new Line(a, circlePoints[3])).Add(new Line(circlePoints[3], circlePoints[1])));
+            res.AddPolygon(new Polygon().Add(new Line(circlePoints[3], a)).Add(new Line(a, circlePoints[5])).Add(new Line(circlePoints[5], circlePoints[3])));
+            res.AddPolygon(new Polygon().Add(new Line(circlePoints[5], a)).Add(new Line(a, circlePoints[7])).Add(new Line(circlePoints[7], circlePoints[5])));
+            res.AddPolygon(new Polygon().Add(new Line(circlePoints[7], a)).Add(new Line(a, circlePoints[9])).Add(new Line(circlePoints[9], circlePoints[7])));
+            res.AddPolygon(new Polygon().Add(new Line(circlePoints[9], a)).Add(new Line(a, circlePoints[1])).Add(new Line(circlePoints[1], circlePoints[9])));
 
-        //    List<Vertex> centers = new List<Vertex>();
+            res.AddPolygon(new Polygon().Add(new Line(circlePoints[0], b)).Add(new Line(b, circlePoints[2])).Add(new Line(circlePoints[2], circlePoints[0])));
+            res.AddPolygon(new Polygon().Add(new Line(circlePoints[2], b)).Add(new Line(b, circlePoints[4])).Add(new Line(circlePoints[4], circlePoints[2])));
+            res.AddPolygon(new Polygon().Add(new Line(circlePoints[4], b)).Add(new Line(b, circlePoints[6])).Add(new Line(circlePoints[6], circlePoints[4])));
+            res.AddPolygon(new Polygon().Add(new Line(circlePoints[6], b)).Add(new Line(b, circlePoints[8])).Add(new Line(circlePoints[8], circlePoints[6])));
+            res.AddPolygon(new Polygon().Add(new Line(circlePoints[8], b)).Add(new Line(b, circlePoints[0])).Add(new Line(circlePoints[0], circlePoints[8])));
+            return res;
+        }
 
-        //    foreach (Polygon poly in icos.Polygons) {
-        //        centers.Add(poly.GetCenter());
-        //    }
+        public Polyhedron GetDodecahedron() {
+            Polyhedron res = new Polyhedron();
+            Polyhedron icos = GetIcosahedron();
 
-        //    for (int i = 0; i < centers.Count/2; i++)
-        //    {
-        //        if (i % 2 == 0)
-        //        {
-        //            res.AddPolygon(new Polygon().Add(new Line(centers[i], centers[(i + 1) % 10]))
-        //                .Add(new Line(centers[(i + 1) % 10], centers[(i + 2) % 10]))
-        //                .Add(new Line(centers[(i + 2) % 10], centers[15 + (i / 2 + 1) % 5]))
-        //                .Add(new Line(centers[15 + (i / 2 + 1) % 5], centers[15 + i / 2]))
-        //                .Add(new Line(centers[15 + i / 2], centers[i])));
+            List<Point> centers = new List<Point>();
 
-        //            continue;
-        //        }
-        //        res.AddPolygon(new Polygon().Add(new Line(centers[i], centers[(i + 1) % 10]))
-        //            .Add(new Line(centers[(i + 1) % 10], centers[(i + 2) % 10]))
-        //            .Add(new Line(centers[(i + 2) % 10], centers[10 + (i / 2 + 1) % 5]))
-        //            .Add(new Line(centers[10 + (i / 2 + 1) % 5], centers[10 + i / 2]))
-        //            .Add(new Line(centers[10 + i / 2], centers[i])));
-        //    }
-        //    res.AddPolygon(new Polygon().Add(new Line(centers[15], centers[16]))
-        //        .Add(new Line(centers[16], centers[17]))
-        //        .Add(new Line(centers[17], centers[18]))
-        //        .Add(new Line(centers[18], centers[19]))
-        //        .Add(new Line(centers[19], centers[15])));
-        //    res.AddPolygon(new Polygon().Add(new Line(centers[10], centers[11]))
-        //        .Add(new Line(centers[11], centers[12]))
-        //        .Add(new Line(centers[12], centers[13]))
-        //        .Add(new Line(centers[13], centers[14]))
-        //        .Add(new Line(centers[14], centers[10])));
+            foreach (Polygon poly in icos.Polygons) {
+                centers.Add(poly.GetCenter());
+            }
 
-        //    return res;
-        //}
+            for (int i = 0; i < centers.Count/2; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    res.AddPolygon(new Polygon().Add(new Line(centers[i], centers[(i + 1) % 10]))
+                        .Add(new Line(centers[(i + 1) % 10], centers[(i + 2) % 10]))
+                        .Add(new Line(centers[(i + 2) % 10], centers[15 + (i / 2 + 1) % 5]))
+                        .Add(new Line(centers[15 + (i / 2 + 1) % 5], centers[15 + i / 2]))
+                        .Add(new Line(centers[15 + i / 2], centers[i])));
+
+                    continue;
+                }
+                res.AddPolygon(new Polygon().Add(new Line(centers[i], centers[(i + 1) % 10]))
+                    .Add(new Line(centers[(i + 1) % 10], centers[(i + 2) % 10]))
+                    .Add(new Line(centers[(i + 2) % 10], centers[10 + (i / 2 + 1) % 5]))
+                    .Add(new Line(centers[10 + (i / 2 + 1) % 5], centers[10 + i / 2]))
+                    .Add(new Line(centers[10 + i / 2], centers[i])));
+            }
+            res.AddPolygon(new Polygon().Add(new Line(centers[15], centers[16]))
+                .Add(new Line(centers[16], centers[17]))
+                .Add(new Line(centers[17], centers[18]))
+                .Add(new Line(centers[18], centers[19]))
+                .Add(new Line(centers[19], centers[15])));
+            res.AddPolygon(new Polygon().Add(new Line(centers[10], centers[11]))
+                .Add(new Line(centers[11], centers[12]))
+                .Add(new Line(centers[12], centers[13]))
+                .Add(new Line(centers[13], centers[14]))
+                .Add(new Line(centers[14], centers[10])));
+
+            return res;
+        }
 
 
         
@@ -163,16 +162,16 @@ namespace laba8
             int count = int.Parse(prms[2]);
             int angle_inc = 360 / count;
 
-            List<Vertex> points = new();
+            List<Point> points = new();
             List<string> p_str = prms[0].Split(' ',StringSplitOptions.RemoveEmptyEntries).ToList();
             for (int i = 0; i < p_str.Count-2; i+=3)
             {
-                    points.Add(new Vertex(float.Parse(p_str[i], CultureInfo.InvariantCulture),
+                    points.Add(new Point(float.Parse(p_str[i], CultureInfo.InvariantCulture),
                                          float.Parse(p_str[i + 1], CultureInfo.InvariantCulture),
                                          float.Parse(p_str[i + 2], CultureInfo.InvariantCulture)));
             }
 
-            List<List<Vertex>> allPoints = new()
+            List<List<Point>> allPoints = new()
             {
                 points
             };
@@ -188,21 +187,26 @@ namespace laba8
                 if (i == allPoints.Count - 1)
                 {
 
-                    List<Vertex> verts = new();
+                    List<Line> lines = new();
                     for (int j = 0; j < allPoints[i].Count() - 1; j++)
                     {
 
-                        verts.Add(allPoints[i][j]);
-                        verts.Add(allPoints[i][j+1]);
-                        verts.Add(allPoints[0][j+1]);
-                        verts.Add(allPoints[0][j]);
+                        Line line1 = new Line(allPoints[i][j], allPoints[i][j + 1]);
+                        Line line2 = new Line(allPoints[0][j + 1],allPoints[0][j]);
+                        Line line3 = new Line(allPoints[0][j],allPoints[i][j]);
+                        Line line4 = new Line(allPoints[i][j + 1], allPoints[0][j + 1]);
+
+                        lines.Add(line1);
+                        lines.Add(line2);
+                        lines.Add(line3);
+                        lines.Add(line4);
                     }
-                    Polygon p = new Polygon(verts);
+                    Polygon p = new Polygon(lines);
                     res.AddPolygon(p);
                 }
                 else
                 {
-                    List<Vertex> verts = new();
+                    List<Line> lines = new();
                     for (int j = 0; j < allPoints[i].Count() - 1; j++)
                     {
 
@@ -211,14 +215,12 @@ namespace laba8
                         Line line3 = new Line(allPoints[i + 1][j], allPoints[i][j]);
                         Line line4 = new Line(allPoints[i][j + 1], allPoints[i + 1][j + 1]);
 
-
-
-                        verts.Add(allPoints[i][j+1]);
-                        verts.Add(allPoints[i+1][j + 1]);
-                        verts.Add(allPoints[i][j]);
-                        verts.Add(allPoints[i][j+1]);
+                        lines.Add(line1);
+                        lines.Add(line2);
+                        lines.Add(line3);
+                        lines.Add(line4);
                     }
-                    Polygon p = new Polygon(verts);
+                    Polygon p = new Polygon(lines);
                     res.AddPolygon(p);
                 }
 
@@ -243,17 +245,23 @@ namespace laba8
                 for (float j = y1; j < y2; j += hy)
                 {
                     // Генерация вершин квадрата
-                    Vertex topLeft = new Vertex(i, j, transformations.EvalFunc(func, i, j));
-                    Vertex topRight = new Vertex(i + hx, j, transformations.EvalFunc(func, i + hx, j));
-                    Vertex bottomRight = new Vertex(i + hx, j + hy, transformations.EvalFunc(func, i + hx, j + hy));
-                    Vertex bottomLeft = new Vertex(i, j + hy, transformations.EvalFunc(func, i, j + hy));
+                    Point topLeft = new Point(i, j, transformations.EvalFunc(func, i, j));
+                    Point topRight = new Point(i + hx, j, transformations.EvalFunc(func, i + hx, j));
+                    Point bottomRight = new Point(i + hx, j + hy, transformations.EvalFunc(func, i + hx, j + hy));
+                    Point bottomLeft = new Point(i, j + hy, transformations.EvalFunc(func, i, j + hy));
 
                     // Создание полигонов
                     res.AddPolygon(
-                        new Polygon().AddVerts(topLeft,topRight,bottomRight,bottomLeft));
+                        new Polygon().Add(new Line(topLeft, topRight))
+                        .Add(new Line(topRight, bottomRight))
+                        .Add(new Line(bottomRight, bottomLeft))
+                        .Add(new Line(bottomLeft, topLeft)));
                      
                 }
             }
+
+
+
             return res;
         }
 

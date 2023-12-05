@@ -45,20 +45,20 @@ namespace laba8
                     listBox1.Items.Add($"TETRA {figureCount++}");
                     break;
                 case "гексаэдр":
-                   // drawing.AddToScene(new FigureCreator().GetHexahedron());
-                  //  listBox1.Items.Add($"HEXA {figureCount++}");
+                    drawing.figure = new FigureCreator().GetHexahedron();
+                    listBox1.Items.Add($"HEXA {figureCount++}");
                     break;
                 case "октаэдр":
-                   // drawing.AddToScene(new FigureCreator().GetOctahedron());
-                   // listBox1.Items.Add($"OCTA {figureCount++}");
+                    drawing.figure = new FigureCreator().GetOctahedron();
+                    listBox1.Items.Add($"OCTA {figureCount++}");
                     break;
                 case "икосаэдр":
-                  //  drawing.AddToScene(new FigureCreator().GetIcosahedron());
-                   // listBox1.Items.Add($"ICO {figureCount++}");
+                    drawing.figure = new FigureCreator().GetIcosahedron();
+                    listBox1.Items.Add($"ICO {figureCount++}");
                     break;
                 case "додекаэдр":
-                   // drawing.AddToScene(new FigureCreator().GetDodecahedron());
-                    //listBox1.Items.Add($"DODE {figureCount++}");
+                    drawing.figure = new FigureCreator().GetDodecahedron();
+                    listBox1.Items.Add($"DODE {figureCount++}");
                     break;
                 default:
                     throw new ArgumentException("invalid drawing.figure");
@@ -92,8 +92,7 @@ namespace laba8
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     filePath = openFileDialog.FileName;
-                    drawing.AddToScene (new DataManager().Load(filePath));
-                    listBox1.Items.Add($"OBJ {figureCount++}");
+                    drawing.figure = new DataManager().Load(filePath);
                 }
             }
             drawing.ReDraw(isShowAxis);
@@ -207,8 +206,7 @@ namespace laba8
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     filePath = openFileDialog.FileName;
-                    drawing.AddToScene (new FigureCreator().CreateRotation(filePath));
-                    listBox1.Items.Add($"OBRAZ {figureCount++}");
+                    drawing.figure = new FigureCreator().CreateRotation(filePath);
                 }
             }
             drawing.ReDraw(isShowAxis);
@@ -265,41 +263,14 @@ namespace laba8
                 case 'l': camera.ChangeView(shiftX: 2); break;
                 default: return;
             }
+            //if (isPruningFaces)
+            //{
+            //    shapeWithoutNonFacial = findNonFacial(sceneShapes[listBox.SelectedIndex], camera);
+            //    redrawShapeWithoutNonFacial();
+            //}
+            //else
             drawing.ReDraw(isShowAxis);
             e.Handled = true;
-        }
-
-        private void checkBoxNormal_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBoxNormal.Checked)
-            {
-                checkBoxZ.Checked = false;
-                drawing.DRAWINGKIND = DRAWINGKIND.NORMAL;
-            }
-            else
-            {
-                drawing.DRAWINGKIND = DRAWINGKIND.CASUAL;
-            }
-            drawing.ReDraw(isShowAxis);
-        }
-
-        private void checkBoxZ_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBoxZ.Checked)
-            {
-                checkBoxNormal.Checked = false;
-                drawing.DRAWINGKIND = DRAWINGKIND.ZBUFFER;
-            }
-            else
-            {
-                drawing.DRAWINGKIND = DRAWINGKIND.CASUAL;
-            }
-            drawing.ReDraw(isShowAxis);
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            camera.Reset();
         }
     }
 }
