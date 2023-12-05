@@ -256,30 +256,12 @@ namespace laba8
             return result;
         }
 
-        
+
         public float EvalFunc(string func, float x,float y) {
+            var t = func.Replace("x", x.ToString()).Replace("y", y.ToString());
+
             Entity f = func.Replace("x",x.ToString()).Replace("y",y.ToString()).Replace(",",".");
             return (float)f.EvalNumerical();
-        }
-
-        public void RotateVectors(ref Vector vector1, ref Vector vector2, float angle, Vector axis)
-        {
-            axis=axis.Normalize();
-            float l = axis.XF;
-            float m = axis.YF;
-            float n = axis.ZF;
-            float anglesin = (float)Math.Sin(DegreeToRadian(angle));
-            float anglecos = (float)Math.Cos(DegreeToRadian(angle));
-            Matrix rotation = new Matrix(4, 4).Fill(l * l + anglecos * (1f - l * l), l * (1f - anglecos) * m - n * anglesin, l * (1f - anglecos) * n + m * anglesin, 0,
-                                 l * (1f - anglecos) * m + n * anglesin, m * m + anglecos * (1f - m * m), m * (1f - anglecos) * n - l * anglesin, 0,
-                                 l * (1f - anglecos) * n - m * anglesin, m * (1f - anglecos) * n + l * anglesin, n * n + anglecos * (1f - n * n), 0,
-                                 0, 0, 0, 1f);
-
-            var res = rotation * new Matrix(4, 1).Fill(vector1.XF, vector1.YF, vector1.ZF, 1);
-            vector1 = new Vector(res[0, 0], res[1, 0], res[2, 0]).Normalize();
-
-            var res2 = rotation * new Matrix(4, 1).Fill(vector2.XF, vector2.YF, vector2.ZF, 1);
-            vector2 = new Vector(res2[0, 0], res2[1, 0], res2[2, 0]).Normalize();
         }
 
     }

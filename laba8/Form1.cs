@@ -1,5 +1,4 @@
-﻿using HonkSharp.Fluency;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,22 +16,21 @@ namespace laba8
     public partial class Form1 : Form
     {
         Graphics g;
+        Polyhedron figure;
+        Pen figureDrawPen;
         Transformations transformations;
         bool isShowAxis;
-        Drawing drawing;
-        Camera camera;
-        int figureCount = 1;
+
         public Form1()
         {
             InitializeComponent();
             g = pictureBox1.CreateGraphics();
             g.Clear(Color.White);
             Point.world = new PointF(pictureBox1.Width / 2, pictureBox1.Height / 2);
+            figureDrawPen = new Pen(Color.Black, 5);
             transformations = new Transformations();
-            camera = new Camera();
-            drawing = new Drawing(g, pictureBox1, camera);
-            Point.transformations = transformations;
-            Point.SetProjection(pictureBox1.Size, 1, 100, 45);
+
+
 
         }
         #region Interface
@@ -41,30 +39,25 @@ namespace laba8
             switch (comboBox1.Text)
             {
                 case "тетраэдр":
-                    drawing.AddToScene(new FigureCreator().GetTetrahedron());
-                    listBox1.Items.Add($"TETRA {figureCount++}");
+                    figure = new FigureCreator().GetTetrahedron();
                     break;
                 case "гексаэдр":
-                    drawing.figure = new FigureCreator().GetHexahedron();
-                    listBox1.Items.Add($"HEXA {figureCount++}");
+                    figure = new FigureCreator().GetHexahedron();
                     break;
                 case "октаэдр":
-                    drawing.figure = new FigureCreator().GetOctahedron();
-                    listBox1.Items.Add($"OCTA {figureCount++}");
+                    figure = new FigureCreator().GetOctahedron();
                     break;
                 case "икосаэдр":
-                    drawing.figure = new FigureCreator().GetIcosahedron();
-                    listBox1.Items.Add($"ICO {figureCount++}");
+                    figure = new FigureCreator().GetIcosahedron();
                     break;
                 case "додекаэдр":
-                    drawing.figure = new FigureCreator().GetDodecahedron();
-                    listBox1.Items.Add($"DODE {figureCount++}");
+                    figure = new FigureCreator().GetDodecahedron();
                     break;
                 default:
-                    throw new ArgumentException("invalid drawing.figure");
+                    throw new ArgumentException("invalid figure");
             }
 
-            drawing.ReDraw(isShowAxis);
+            ReDraw();
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -77,7 +70,7 @@ namespace laba8
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                new DataManager().Save(saveFileDialog1.FileName, drawing.figure);
+                new DataManager().Save(saveFileDialog1.FileName, figure);
             }
 
         }
@@ -92,33 +85,33 @@ namespace laba8
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     filePath = openFileDialog.FileName;
-                    drawing.figure = new DataManager().Load(filePath);
+                    figure = new DataManager().Load(filePath);
                 }
             }
-            drawing.ReDraw(isShowAxis);
+            ReDraw();
         }
 
         private void AxisCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             isShowAxis = !isShowAxis;
-            drawing.ReDraw(isShowAxis);
+            ReDraw();
         }
 
         private void mirrorButton_Click(object sender, EventArgs e)
         {
             if (comboBox2.Text == "XY")
             {
-                transformations.MirrorAroundAxis(drawing.figure, "XY");
+                transformations.MirrorAroundAxis(figure, "XY");
             }
             if (comboBox2.Text == "XZ")
             {
-                transformations.MirrorAroundAxis(drawing.figure, "XZ");
+                transformations.MirrorAroundAxis(figure, "XZ");
             }
             if (comboBox2.Text == "YZ")
             {
-                transformations.MirrorAroundAxis(drawing.figure, "YZ");
+                transformations.MirrorAroundAxis(figure, "YZ");
             }
-            drawing.ReDraw(isShowAxis);
+            ReDraw();
         }
 
         private void shiftButton_Click(object sender, EventArgs e)
@@ -127,8 +120,8 @@ namespace laba8
             float y = float.Parse(cYtextBox.Text, CultureInfo.InvariantCulture);
             float z = float.Parse(cZtextBox.Text, CultureInfo.InvariantCulture);
 
-            transformations.Shift(drawing.figure, x, y, z);
-            drawing.ReDraw(isShowAxis);
+            transformations.Shift(figure, x, y, z);
+            ReDraw();
         }
 
         private void scaleButton_Click(object sender, EventArgs e)
@@ -137,8 +130,8 @@ namespace laba8
             float y = float.Parse(sYtextBox.Text, CultureInfo.InvariantCulture);
             float z = float.Parse(sZtextBox.Text, CultureInfo.InvariantCulture);
 
-            transformations.Scale(drawing.figure, x, y, z);
-            drawing.ReDraw(isShowAxis);
+            transformations.Scale(figure, x, y, z);
+            ReDraw();
         }
 
         private void RotateAxisButton_Click(object sender, EventArgs e)
@@ -147,17 +140,17 @@ namespace laba8
 
             if (comboBox3.Text == "X")
             {
-                transformations.RotateAroundCenterAxis(drawing.figure, degree, "X");
+                transformations.RotateAroundCenterAxis(figure, degree, "X");
             }
             if (comboBox3.Text == "Y")
             {
-                transformations.RotateAroundCenterAxis(drawing.figure, degree, "Y");
+                transformations.RotateAroundCenterAxis(figure, degree, "Y");
             }
             if (comboBox3.Text == "Z")
             {
-                transformations.RotateAroundCenterAxis(drawing.figure, degree, "Z");
+                transformations.RotateAroundCenterAxis(figure, degree, "Z");
             }
-            drawing.ReDraw(isShowAxis);
+            ReDraw();
         }
 
 
@@ -174,25 +167,25 @@ namespace laba8
             Point p2 = new Point(x2, y2, z2);
 
             float degree = float.Parse(degreeCustom.Text);
-            transformations.RotateAroundCustomAxis(drawing.figure, degree, p1, p2);
-            drawing.ReDraw(isShowAxis);
+            transformations.RotateAroundCustomAxis(figure, degree, p1, p2);
+            ReDraw();
         }
 
         private void clearButton_Click(object sender, EventArgs e)
         {
-            drawing.figure = null;
-            drawing.ReDraw(isShowAxis);
+            figure = null;
+            ReDraw();
         }
         private void perspectiveRadioButtom_CheckedChanged(object sender, EventArgs e)
         {
             Point.kind = ProjectionKind.PERSPECTIVE;
-            drawing.ReDraw(isShowAxis);
+            ReDraw();
         }
 
         private void isometricRadioButtom_CheckedChanged(object sender, EventArgs e)
         {
             Point.kind = ProjectionKind.ISOMETRIC;
-            drawing.ReDraw(isShowAxis);
+            ReDraw();
         }
 
         private void figureRotButton_Click(object sender, EventArgs e)
@@ -206,10 +199,10 @@ namespace laba8
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     filePath = openFileDialog.FileName;
-                    drawing.figure = new FigureCreator().CreateRotation(filePath);
+                    figure = new FigureCreator().CreateRotation(filePath);
                 }
             }
-            drawing.ReDraw(isShowAxis);
+            ReDraw();
         }
 
         private void func1Button_Click(object sender, EventArgs e)
@@ -221,56 +214,76 @@ namespace laba8
 
         private void button2_Click(object sender, EventArgs e)
         {
-            drawing.figure = new FigureCreator().CreateFunction(x1functextBox.Text,
+            figure = new FigureCreator().CreateFunction(x1functextBox.Text,
                                                         y1functextBox.Text,
                                                         x2functextBox.Text,
                                                         y2functextBox.Text,
                                                         hTextBox.Text,
                                                         hTextBox.Text,
                                                         funcTextBox.Text);
-            drawing.ReDraw(isShowAxis);
+            ReDraw();
         }
 
         #endregion
+        #region Drawing
+        // Drawing
+        void DrawFigure(Polyhedron figure, Pen p)
+        {
+            foreach (Polygon poly in figure.Polygons)
+            {
+                DrawPoly(poly, p);
+            }
+        }
+
+        void DrawPoly(Polygon p, Pen pen)
+        {
+            foreach (var line in p.Lines)
+            {
+                DrawLine(line, pen);
+            }
+        }
+
+        void DrawLine(Line l, Pen p)
+        {
+            g.DrawLine(p, l.Start.Projection(), l.End.Projection());
+        }
+
+        void DrawAxis()
+        {
+            Line axisX = new Line(new Point(0, 0, 0), new Point(300, 0, 0));
+            Line axisY = new Line(new Point(0, 0, 0), new Point(0, 300, 0));
+            Line axisZ = new Line(new Point(0, 0, 0), new Point(0, 0, 300));
+
+            DrawLine(axisX, new Pen(Color.Red, 5));
+            DrawLine(axisY, new Pen(Color.Green, 5));
+            DrawLine(axisZ, new Pen(Color.Blue, 5));
+
+
+        }
+
+        void ReDraw()
+        {
+            g.Clear(Color.White);
+            if (isShowAxis)
+                DrawAxis();
+            if (figure != null)
+                DrawFigure(figure, figureDrawPen);
+
+            //pictureBox1.Invalidate();
+        }
+
+
+
+
+        #endregion
+
+
+
+
 
         private void x2textBox_TextChanged(object sender, EventArgs e)
         {
 
-        }
-
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            int idx = listBox1.SelectedIndex;
-            if (idx != -1)
-            {
-                drawing.figure = drawing.sceneFigures[idx];
-            }
-        }
-
-        private void Form1_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            switch (e.KeyChar)
-            {
-                case 'w': camera.Move(forwardbackward: 5); break;
-                case 'a': camera.Move(leftright: 5); break;
-                case 's': camera.Move(forwardbackward: -5); break;
-                case 'd': camera.Move(leftright: -5); break;
-                case 'q': camera.Move(updown: 5); break;
-                case 'e': camera.Move(updown: -5); break;
-                case 'i': camera.ChangeView(shiftY: 2); break;
-                case 'j': camera.ChangeView(shiftX: -2); break;
-                case 'k': camera.ChangeView(shiftY: -2); break;
-                case 'l': camera.ChangeView(shiftX: 2); break;
-                default: return;
-            }
-            //if (isPruningFaces)
-            //{
-            //    shapeWithoutNonFacial = findNonFacial(sceneShapes[listBox.SelectedIndex], camera);
-            //    redrawShapeWithoutNonFacial();
-            //}
-            //else
-            drawing.ReDraw(isShowAxis);
-            e.Handled = true;
         }
     }
 }

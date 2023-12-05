@@ -10,7 +10,7 @@ namespace laba8
 {
     public enum ProjectionKind
     {
-        PERSPECTIVE, CENTRAL, ISOMETRIC, PARALLEL
+        PERSPECTIVE, CENTRAL, ISOMETRIC
     }
 
     internal class Point
@@ -19,87 +19,50 @@ namespace laba8
         static float c = 1000f;
         public static PointF world;
         public static ProjectionKind kind = ProjectionKind.PERSPECTIVE;
-        public static Size screenSize;
-        public static float zScreenFar;
-        public static float zScreenNear;
-        public static float fov;
-        public static Transformations transformations;
 
+
+
+        //public Matrix isometric = new Matrix(4, 4).Fill(
+        //    (float)Math.Cos(2), 0, (float)Math.Sin(2), 0,
+        //    (float)Math.Sin(4) * (float)Math.Sin(2), (float)Math.Cos(4), -(float)Math.Sin(4) * (float)Math.Cos(2), 0,
+        //    0, 0, 0, 0,
+        //    0, 0, 0, 1);
         // static Matrix isometric = new Matrix(3, 3).Fill((float)Math.Sqrt(3), 0, -(float)Math.Sqrt(3), 1, 2, 1, (float)Math.Sqrt(2), -(float)Math.Sqrt(2), (float)Math.Sqrt(2)) * (1 / (float)Math.Sqrt(6));
         static Matrix isometric = new Matrix(3, 3).Fill(
             (float)(1/Math.Sqrt(2)), (float)(1 / Math.Sqrt(6)), (float)(1 / Math.Sqrt(3)),
             (float)(-1 / Math.Sqrt(2)), (float)(1 / Math.Sqrt(6)), (float)(1 / Math.Sqrt(3)),
             0,(float)(-2 / Math.Sqrt(6)), (float)(1 / Math.Sqrt(3))
             );
-
-        static Matrix perspective;
-
         public Point(float x, float y, float z) {
             this.x = x; this.y = y; this.z = z;
-            
         }
 
         public int X { get => (int)x; set => x = value; }
-        public int Y { get => (int)y; set => y = value; }
-        public int Z { get => (int)z; set => z = value; }
+        public int Y { get => (int)y; set => x = value; }
+        public int Z { get => (int)z; set => x = value; }
 
         public float XF { get => x; set => x = value; }
-        public float YF { get => y; set => y = value; }
-        public float ZF { get => z; set => z = value; }
+        public float YF { get => y; set => x = value; }
+        public float ZF { get => z; set => x = value; }
 
-        public static void SetProjection(Size screenSize, float zScreenNear, float zScreenFar, float fov)
-        {
-            Point.screenSize = screenSize;
-            Point.zScreenNear = zScreenNear;
-            Point.zScreenFar = zScreenFar;
-            Point.fov = fov;
-            
-            perspective = new Matrix(4, 4).Fill(screenSize.Height / ((float)Math.Tan(transformations.DegreeToRadian(fov / 2f)) * screenSize.Width), 0, 0, 0,
-                                                0, 1.0f /(float) Math.Tan(transformations.DegreeToRadian(fov / 2f)), 0, 0,
-                                                0, 0, -(zScreenFar + zScreenNear) / (zScreenFar - zScreenNear), -2f * (zScreenFar * zScreenNear) / (zScreenFar - zScreenNear),
-                                                0, 0, -1, 0);
-
-        }
-        public (PointF?, float) Projection(Camera cam) {
-
-            var viewCoord = cam.ToCameraView(this);
-
-            switch (kind)
+        public PointF Projection() {
+            if (kind == ProjectionKind.PERSPECTIVE)
             {
-                case ProjectionKind.PARALLEL:
-                    if (viewCoord.ZF > 0)
-                    {
-                        return (new PointF(world.X + viewCoord.XF, world.Y + viewCoord.YF), ZF);
-                    }
-                    return (null, -1);
-                case ProjectionKind.PERSPECTIVE:
-                    if (viewCoord.ZF < 0)
-                    {
-                        return (null,ZF);
-                    }
-                 
-                    Matrix res = new Matrix(1, 4).Fill(viewCoord.XF, viewCoord.YF, viewCoord.ZF, 1) * perspective;
-                    if (res[0, 3] == 0)
-                    {
-                        return (null, ZF);
-                    }
-                    res *= 1.0f / res[0, 3];
-                    res[0, 0] = Math.Clamp(res[0, 0], -1, 1);
-                    res[0, 1] = Math.Clamp(res[0, 1], -1, 1);
-                    if (res[0, 2] < 0)
-                    {
-                        return (null, ZF);
-                    }
-                    return (new PointF(world.X + res[0, 0] * world.X, world.Y + res[0, 1] * world.Y),ZF);
-
-                default:
-                    throw new ArgumentException("invalid perspective");
-            }      
-        }
-
-        public override string ToString()
-        {
-            return $"{XF} {YF} {ZF}";
+               // Matrix res = new Matrix(1, 4).Fill(XF, YF, ZF, 1) * perspective * (float)(1 / (-c * ZF + 1));
+                Matrix res = new Matrix(1, 4).Fill(XF, YF, ZF, 1) * new Matrix(4,4).Fill(
+                    1,0,0,0,
+                    0,1,0,0,
+                    0,0,0,0,
+                    0,0,-1f/c,1) * (1-z/c);
+                return new PointF(world.X + res[0, 0], world.Y + res[0, 1]);
+            }
+            else
+            {
+               // Matrix res = new Matrix(3, 3).Fill(1, 0, 0, 0, 1, 0, 0, 0, 0) * isometric * new Matrix(3, 1).Fill(XF, YF, ZF);
+                Matrix res = new Matrix(1, 3).Fill(XF, YF, ZF) * isometric;
+               // return new PointF(world.X + res[0, 0], world.Y + res[1, 0]);
+                return new PointF(world.X + res[0, 0], world.Y + res[0, 1]);
+            }
         }
     }
 }
