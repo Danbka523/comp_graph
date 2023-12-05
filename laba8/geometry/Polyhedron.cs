@@ -11,40 +11,42 @@ namespace laba8
     {
         List<Polygon> polygons;
 
-        public Polyhedron() { 
+        public Polyhedron()
+        {
             polygons = new List<Polygon>();
         }
 
-        public Polyhedron AddPolygon(Polygon poly) {
+        public Polyhedron AddPolygon(Polygon poly)
+        {
             polygons.Add(poly);
             return this;
         }
 
-        public Polyhedron AddPolygons(List<Polygon> polys) { 
+        public Polyhedron AddPolygons(List<Polygon> polys)
+        {
             polygons.AddRange(polys);
             return this;
         }
 
         public List<Polygon> Polygons { get { return polygons; } }
-
-        public List<Point> GetVerts() { 
-            List<Point> verts = new();
+        public List<Vertex> GetVerts() { 
+            List<Vertex> verts = new List<Vertex>();
             foreach (Polygon poly in polygons)
             {
-                foreach (Line lines in poly.Lines)
+                foreach (var item in poly.Verts)
                 {
-                    if (verts.FindIndex(x=>x.XF==lines.Start.XF && x.YF==lines.Start.YF && x.ZF==lines.Start.ZF)==-1)
-                        verts.Add(lines.Start);
-                    if (verts.FindIndex(x=>x.XF==lines.End.XF && x.YF==lines.End.YF && x.ZF==lines.End.ZF)==-1)
-                        verts.Add(lines.End);
+                    if (!verts.Contains(item))
+                        verts.Add(item);
                 }
-
             }
-
             return verts;
+        } 
+        public void ResetFacial()
+        {
+            foreach (Polygon poly in polygons)
+                poly.isFacial = true;
         }
 
-    
     }
 
 

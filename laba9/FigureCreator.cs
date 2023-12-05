@@ -11,7 +11,7 @@ using System.Windows.Forms.VisualStyles;
 using AngouriMath;   //https://github.com/asc-community/AngouriMath?ysclid=lp2o5a92m5613424805
 using static AngouriMath.MathS;
 
-namespace laba8
+namespace laba9
 {
     internal class FigureCreator
     {
@@ -19,7 +19,7 @@ namespace laba8
         Transformations transformations = new Transformations();
         public Polyhedron GetTetrahedron()
         {
-            Polyhedron res = new Polyhedron();
+            Polyhedron res = new Polyhedron(Color.Empty);
             Vertex a = new Vertex(0, 0, 0);
             Vertex b = new Vertex(LEN, 0, LEN);
             Vertex c = new Vertex(LEN, LEN, 0);
@@ -31,25 +31,26 @@ namespace laba8
             return res;
 
         }
-        //public Polyhedron GetHexahedron()
-        //{
-        //    Polyhedron res = new Polyhedron();
-        //    Vertex a = new Vertex(0, 0, 0);
-        //    Vertex b = new Vertex(LEN, 0, 0);
-        //    Vertex c = new Vertex(LEN, 0, LEN);
-        //    Vertex d = new Vertex(0, 0, LEN);
-        //    Vertex e = new Vertex(0, LEN, 0);
-        //    Vertex f = new Vertex(LEN, LEN, 0);
-        //    Vertex g = new Vertex(LEN, LEN, LEN);
-        //    Vertex h = new Vertex(0, LEN, LEN);
-        //    res.AddPolygon(new Polygon().Add(new Line(a, b)).Add(new Line(b, c)).Add(new Line(c, d)).Add(new Line(d, a))); 
-        //    res.AddPolygon(new Polygon().Add(new Line(b, c)).Add(new Line(c, g)).Add(new Line(g, f)).Add(new Line(f, b))); 
-        //    res.AddPolygon(new Polygon().Add(new Line(f, g)).Add(new Line(g, h)).Add(new Line(h, e)).Add(new Line(e, f)));
-        //    res.AddPolygon(new Polygon().Add(new Line(h, e)).Add(new Line(e, a)).Add(new Line(a, d)).Add(new Line(d, h)));
-        //    res.AddPolygon(new Polygon().Add(new Line(a, b)).Add(new Line(b, f)).Add(new Line(f, e)).Add(new Line(e, a)));
-        //    res.AddPolygon(new Polygon().Add(new Line(d, c)).Add(new Line(c, g)).Add(new Line(g, h)).Add(new Line(h, d)));
-        //    return res;
-        //}
+        public Polyhedron GetHexahedron()
+        {
+            Polyhedron res = new Polyhedron(Color.Empty);
+            Vertex a = new Vertex(0, 0, 0);
+            Vertex b = new Vertex(0, 200, 0);
+            Vertex c = new Vertex(200, 200, 0);
+            Vertex d = new Vertex(200, 0, 0);
+            Vertex e = new Vertex(0, 0, 200);
+            Vertex f = new Vertex(0, 200, 200);
+            Vertex g = new Vertex(200, 200, 200);
+            Vertex h = new Vertex(200, 0, 200);
+            res.AddPolygon(new Polygon(a,b,c,d));
+            res.AddPolygon(new Polygon(a,e,h,d));
+            res.AddPolygon(new Polygon(a,e,f,b));
+            res.AddPolygon(new Polygon(b,f,g,c));
+            res.AddPolygon(new Polygon(e,f,g,h));
+            res.AddPolygon(new Polygon(d,h,g,c));
+           
+            return res;
+        }
 
         //public Polyhedron GetOctahedron()
         //{
@@ -153,9 +154,9 @@ namespace laba8
         //}
 
 
-        
+
         public Polyhedron CreateRotation(string fileName) {
-            Polyhedron res = new();
+            Polyhedron res = new(Color.Empty);
 
             List<string> prms = File.ReadAllText(fileName).Split(';').ToList();
 
@@ -229,7 +230,7 @@ namespace laba8
         }
 
         public Polyhedron CreateFunction(string _x1, string _y1, string _x2, string _y2,string _hx,string _hy , string func) {
-            Polyhedron res = new();
+            Polyhedron res = new(Color.Empty);
             
             float x1 = float.Parse(_x1,CultureInfo.InvariantCulture);
             float y1 = float.Parse(_y1,CultureInfo.InvariantCulture);

@@ -7,6 +7,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using static System.Windows.Forms.AxHost;
 
 namespace laba8
@@ -55,13 +56,11 @@ namespace laba8
 
             foreach (var poly in figure.Polygons)
             {
-                foreach (var line in poly.Lines)
+                for (int i = 0; i < poly.Verts.Count; i++)
                 {
-                    var res_start = mirror * new Matrix(4, 1).Fill(line.Start.XF, line.Start.YF, line.Start.ZF, 1);
-                    var res_end = mirror * new Matrix(4, 1).Fill(line.End.XF, line.End.YF, line.End.ZF, 1);
-
-                    line.Start = new Point(res_start[0, 0], res_start[1, 0], res_start[2, 0]);
-                    line.End = new Point(res_end[0, 0], res_end[1, 0], res_end[2, 0]);
+                    var res = mirror * new Matrix(4, 1).Fill(poly.Verts[i].XF, poly.Verts[i].YF, poly.Verts[i].ZF,1);
+                    var p = new Point(res[0, 0], res[1, 0], res[2, 0]);
+                    poly.Verts[i] = new Vertex(p);
                 }
             }
         
@@ -77,33 +76,32 @@ namespace laba8
 
             foreach (var poly in figure.Polygons)
             {
-                foreach (var line in poly.Lines)
+              
+              
+                for (int i = 0; i < poly.Verts.Count; i++)
                 {
-                    var res_start = shift * new Matrix(4, 1).Fill(line.Start.XF, line.Start.YF, line.Start.ZF, 1);
-                    var res_end = shift * new Matrix(4, 1).Fill(line.End.XF, line.End.YF, line.End.ZF, 1);
-
-                    line.Start = new Point(res_start[0, 0], res_start[1, 0], res_start[2, 0]);
-                    line.End = new Point(res_end[0, 0], res_end[1, 0], res_end[2, 0]);
+                    var res = shift * new Matrix(4, 1).Fill(poly.Verts[i].XF, poly.Verts[i].YF, poly.Verts[i].ZF, 1);
+                    var p = new Point(res[0, 0], res[1, 0], res[2, 0]);
+                    poly.Verts[i] = new Vertex(p);
                 }
             }
         }
 
-        public void Scale(Polyhedron figure, float sX, float sY, float sZ) { 
+        public void Scale(Polyhedron figure, float sX, float sY, float sZ)
+        {
             Matrix scale = new Matrix(4, 4).Fill(
-                sX,0,0,0,
-                0,sY,0,0,
-                0,0,sZ,0,
-                0,0,0,1
+                sX, 0, 0, 0,
+                0, sY, 0, 0,
+                0, 0, sZ, 0,
+                0, 0, 0, 1
                 );
             foreach (var poly in figure.Polygons)
             {
-                foreach (var line in poly.Lines)
+                for (int i = 0; i < poly.Verts.Count; i++)
                 {
-                    var res_start = scale * new Matrix(4, 1).Fill(line.Start.XF, line.Start.YF, line.Start.ZF, 1);
-                    var res_end = scale * new Matrix(4, 1).Fill(line.End.XF, line.End.YF, line.End.ZF, 1);
-
-                    line.Start = new Point(res_start[0, 0], res_start[1, 0], res_start[2, 0]);
-                    line.End = new Point(res_end[0, 0], res_end[1, 0], res_end[2, 0]);
+                    var res = scale * new Matrix(4, 1).Fill(poly.Verts[i].XF, poly.Verts[i].YF, poly.Verts[i].ZF, 1);
+                    var p = new Point(res[0, 0], res[1, 0], res[2, 0]);
+                    poly.Verts[i] = new Vertex(p);
                 }
             }
         }
@@ -114,13 +112,11 @@ namespace laba8
 
             foreach (var poly in figure.Polygons)
             {
-                foreach (var line in poly.Lines)
+                for (int i = 0; i < poly.Verts.Count; i++)
                 {
-                    var res_start = rotate * new Matrix(4, 1).Fill(line.Start.XF, line.Start.YF, line.Start.ZF, 1);
-                    var res_end = rotate * new Matrix(4, 1).Fill(line.End.XF, line.End.YF, line.End.ZF, 1);
-
-                    line.Start = new Point(res_start[0, 0], res_start[1, 0], res_start[2, 0]);
-                    line.End = new Point(res_end[0, 0], res_end[1, 0], res_end[2, 0]);
+                    var res = rotate * new Matrix(4, 1).Fill(poly.Verts[i].XF, poly.Verts[i].YF, poly.Verts[i].ZF, 1);
+                    var p = new Point(res[0, 0], res[1, 0], res[2, 0]);
+                    poly.Verts[i] = new Vertex(p);
                 }
             }
 
@@ -152,13 +148,11 @@ namespace laba8
 
             foreach (var poly in figure.Polygons)
             {
-                foreach (var line in poly.Lines)
+                for (int i = 0; i < poly.Verts.Count; i++)
                 {
-                    var res_start = rotate * new Matrix(4, 1).Fill(line.Start.XF, line.Start.YF, line.Start.ZF, 1f);
-                    var res_end = rotate * new Matrix(4, 1).Fill(line.End.XF, line.End.YF, line.End.ZF, 1f);
-
-                    line.Start = new Point(res_start[0, 0], res_start[1, 0], res_start[2, 0]);
-                    line.End = new Point(res_end[0, 0], res_end[1, 0], res_end[2, 0]);
+                    var res = rotate * new Matrix(4, 1).Fill(poly.Verts[i].XF, poly.Verts[i].YF, poly.Verts[i].ZF, 1);
+                    var p = new Point(res[0, 0], res[1, 0], res[2, 0]);
+                    poly.Verts[i] = new Vertex(p);
                 }
             }
         }
@@ -175,13 +169,11 @@ namespace laba8
                 );
             foreach (var poly in figure.Polygons)
             {
-                foreach (var line in poly.Lines)
+                for (int i = 0; i < poly.Verts.Count; i++)
                 {
-                    var res_start = rotate * new Matrix(4, 1).Fill(line.Start.XF, line.Start.YF, line.Start.ZF, 1);
-                    var res_end = rotate * new Matrix(4, 1).Fill(line.End.XF, line.End.YF, line.End.ZF, 1);
-
-                    line.Start = new Point(res_start[0, 0], res_start[1, 0], res_start[2, 0]);
-                    line.End = new Point(res_end[0, 0], res_end[1, 0], res_end[2, 0]);
+                    var res = rotate * new Matrix(4, 1).Fill(poly.Verts[i].XF, poly.Verts[i].YF, poly.Verts[i].ZF, 1);
+                    var p = new Point(res[0, 0], res[1, 0], res[2, 0]);
+                    poly.Verts[i] = new Vertex(p);
                 }
             }
 
@@ -195,13 +187,11 @@ namespace laba8
        );
             foreach (var poly in figure.Polygons)
             {
-                foreach (var line in poly.Lines)
+                for (int i = 0; i < poly.Verts.Count; i++)
                 {
-                    var res_start = rotate * new Matrix(4, 1).Fill(line.Start.XF, line.Start.YF, line.Start.ZF, 1);
-                    var res_end = rotate * new Matrix(4, 1).Fill(line.End.XF, line.End.YF, line.End.ZF, 1);
-
-                    line.Start = new Point(res_start[0, 0], res_start[1, 0], res_start[2, 0]);
-                    line.End = new Point(res_end[0, 0], res_end[1, 0], res_end[2, 0]);
+                    var res = rotate * new Matrix(4, 1).Fill(poly.Verts[i].XF, poly.Verts[i].YF, poly.Verts[i].ZF, 1);
+                    var p = new Point(res[0, 0], res[1, 0], res[2, 0]);
+                    poly.Verts[i] = new Vertex(p);
                 }
             }
 
@@ -242,14 +232,14 @@ namespace laba8
 
         }
 
-        public List<Point> RotateFigPoints(string axis, List<Point> points, int degree)
+        public List<Vertex> RotateFigPoints(string axis, List<Vertex> points, int degree)
         {
             Matrix rotate = GetRotationAroundAxisMatrix(axis, degree);
-            List<Point> result = new List<Point>();
+            List<Vertex> result = new List<Vertex>();
             points.ForEach(p=>{
                 Matrix m = new Matrix(4, 1).Fill(p.XF, p.YF, p.ZF, 1);
                 var t = rotate * m;
-                result.Add(new Point(t[0, 0], t[1, 0], t[2, 0]));
+                result.Add(new Vertex(t[0, 0], t[1, 0], t[2, 0]));
             });
 
 
