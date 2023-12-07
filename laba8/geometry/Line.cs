@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace laba8
+namespace laba7
 {
     internal class Line
     {
+        //TODO: ERASE
         Point start, end;
 
         public Line(Point start, Point end)

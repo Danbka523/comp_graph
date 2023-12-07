@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace laba8
+namespace laba7
 {
     internal class Matrix
     {

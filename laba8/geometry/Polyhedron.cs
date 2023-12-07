@@ -5,12 +5,12 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace laba8
+namespace laba7
 {
     internal class Polyhedron
     {
         List<Polygon> polygons;
-
+        public bool isHighLighthed;
         public Polyhedron() { 
             polygons = new List<Polygon>();
         }
@@ -27,24 +27,25 @@ namespace laba8
 
         public List<Polygon> Polygons { get { return polygons; } }
 
-        public List<Point> GetVerts() { 
-            List<Point> verts = new();
-            foreach (Polygon poly in polygons)
-            {
-                foreach (Line lines in poly.Lines)
-                {
-                    if (verts.FindIndex(x=>x.XF==lines.Start.XF && x.YF==lines.Start.YF && x.ZF==lines.Start.ZF)==-1)
-                        verts.Add(lines.Start);
-                    if (verts.FindIndex(x=>x.XF==lines.End.XF && x.YF==lines.End.YF && x.ZF==lines.End.ZF)==-1)
-                        verts.Add(lines.End);
-                }
+        public List<Vertex> GetVerts() {
+            List<Vertex> verts=new();
 
+            foreach (var poly in polygons)
+            {
+                foreach (var vert in poly.Verts)
+                {
+                    if (!verts.Contains(vert))
+                         verts.Add(vert);
+                }
             }
 
             return verts;
         }
 
-    
+        public void ResetFacial() {
+            foreach (var poly in polygons)
+                poly.isFacial = true;
+        }
     }
 
 

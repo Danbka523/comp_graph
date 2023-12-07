@@ -12,4 +12,8 @@
     <PackageReference Include="AngouriMath" Version="1.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="models\" />
+  </ItemGroup>
+
 </Project>

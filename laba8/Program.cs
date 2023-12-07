@@ -1,4 +1,4 @@
-namespace laba8
+namespace laba7
 {
     internal static class Program
     {
@@ -10,6 +10,7 @@ namespace laba8
         {
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
+            Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
             ApplicationConfiguration.Initialize();
             Application.Run(new Form1());
         }

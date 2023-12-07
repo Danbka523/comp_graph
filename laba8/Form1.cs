@@ -1,8 +1,8 @@
-﻿using HonkSharp.Fluency;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -12,27 +12,33 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace laba8
+namespace laba7
 {
     public partial class Form1 : Form
     {
         Graphics g;
+        Pen figureDrawPen;
+        Pen figureHighPen;
         Transformations transformations;
         bool isShowAxis;
         Drawing drawing;
+        int checkedIdx = 0;
         Camera camera;
-        int figureCount = 1;
         public Form1()
         {
             InitializeComponent();
             g = pictureBox1.CreateGraphics();
             g.Clear(Color.White);
             Point.world = new PointF(pictureBox1.Width / 2, pictureBox1.Height / 2);
-            transformations = new Transformations();
-            camera = new Camera();
-            drawing = new Drawing(g, pictureBox1, camera);
-            Point.transformations = transformations;
             Point.SetProjection(pictureBox1.Size, 1, 100, 45);
+            figureDrawPen = new Pen(Color.Black, 2);
+            figureHighPen = new Pen(Color.Red, 2);
+            transformations = new Transformations();
+            drawing = new Drawing(pictureBox1, g);
+            camera = drawing.cam;
+            drawing.figureDrawPen = figureDrawPen;
+            drawing.highlightPen = figureHighPen;
+
 
         }
         #region Interface
@@ -42,26 +48,22 @@ namespace laba8
             {
                 case "тетраэдр":
                     drawing.AddToScene(new FigureCreator().GetTetrahedron());
-                    listBox1.Items.Add($"TETRA {figureCount++}");
+                    sceneFigures.Items.Add("TET");
                     break;
                 case "гексаэдр":
-                    drawing.figure = new FigureCreator().GetHexahedron();
-                    listBox1.Items.Add($"HEXA {figureCount++}");
+                    //   drawing.scene[checkedIdx] = new FigureCreator().GetHexahedron();
                     break;
                 case "октаэдр":
-                    drawing.figure = new FigureCreator().GetOctahedron();
-                    listBox1.Items.Add($"OCTA {figureCount++}");
+                    //   drawing.scene[checkedIdx] = new FigureCreator().GetOctahedron();
                     break;
                 case "икосаэдр":
-                    drawing.figure = new FigureCreator().GetIcosahedron();
-                    listBox1.Items.Add($"ICO {figureCount++}");
+                    //   drawing.scene[checkedIdx] = new FigureCreator().GetIcosahedron();
                     break;
                 case "додекаэдр":
-                    drawing.figure = new FigureCreator().GetDodecahedron();
-                    listBox1.Items.Add($"DODE {figureCount++}");
+                    //   drawing.scene[checkedIdx] = new FigureCreator().GetDodecahedron();
                     break;
                 default:
-                    throw new ArgumentException("invalid drawing.figure");
+                    throw new ArgumentException("invalid drawing.scene[checkedIdx]");
             }
 
             drawing.ReDraw(isShowAxis);
@@ -77,7 +79,7 @@ namespace laba8
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                new DataManager().Save(saveFileDialog1.FileName, drawing.figure);
+                new DataManager().Save(saveFileDialog1.FileName, drawing.scene[checkedIdx]);
             }
 
         }
@@ -92,7 +94,8 @@ namespace laba8
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     filePath = openFileDialog.FileName;
-                    drawing.figure = new DataManager().Load(filePath);
+                    drawing.AddToScene(new DataManager().Load(filePath));
+                    sceneFigures.Items.Add("OBJ");
                 }
             }
             drawing.ReDraw(isShowAxis);
@@ -108,36 +111,36 @@ namespace laba8
         {
             if (comboBox2.Text == "XY")
             {
-                transformations.MirrorAroundAxis(drawing.figure, "XY");
+                transformations.MirrorAroundAxis(drawing.scene[checkedIdx], "XY");
             }
             if (comboBox2.Text == "XZ")
             {
-                transformations.MirrorAroundAxis(drawing.figure, "XZ");
+                transformations.MirrorAroundAxis(drawing.scene[checkedIdx], "XZ");
             }
             if (comboBox2.Text == "YZ")
             {
-                transformations.MirrorAroundAxis(drawing.figure, "YZ");
+                transformations.MirrorAroundAxis(drawing.scene[checkedIdx], "YZ");
             }
             drawing.ReDraw(isShowAxis);
         }
 
         private void shiftButton_Click(object sender, EventArgs e)
         {
-            float x = float.Parse(cXtextBox.Text, CultureInfo.InvariantCulture);
-            float y = float.Parse(cYtextBox.Text, CultureInfo.InvariantCulture);
-            float z = float.Parse(cZtextBox.Text, CultureInfo.InvariantCulture);
+            float x = float.Parse(cXtextBox.Text);
+            float y = float.Parse(cYtextBox.Text);
+            float z = float.Parse(cZtextBox.Text);
 
-            transformations.Shift(drawing.figure, x, y, z);
+            transformations.Shift(drawing.scene[checkedIdx], x, y, z);
             drawing.ReDraw(isShowAxis);
         }
 
         private void scaleButton_Click(object sender, EventArgs e)
         {
-            float x = float.Parse(sXtextBox.Text, CultureInfo.InvariantCulture);
-            float y = float.Parse(sYtextBox.Text, CultureInfo.InvariantCulture);
-            float z = float.Parse(sZtextBox.Text, CultureInfo.InvariantCulture);
+            float x = float.Parse(sXtextBox.Text);
+            float y = float.Parse(sYtextBox.Text);
+            float z = float.Parse(sZtextBox.Text);
 
-            transformations.Scale(drawing.figure, x, y, z);
+            transformations.Scale(drawing.scene[checkedIdx], x, y, z);
             drawing.ReDraw(isShowAxis);
         }
 
@@ -147,15 +150,15 @@ namespace laba8
 
             if (comboBox3.Text == "X")
             {
-                transformations.RotateAroundCenterAxis(drawing.figure, degree, "X");
+                transformations.RotateAroundCenterAxis(drawing.scene[checkedIdx], degree, "X");
             }
             if (comboBox3.Text == "Y")
             {
-                transformations.RotateAroundCenterAxis(drawing.figure, degree, "Y");
+                transformations.RotateAroundCenterAxis(drawing.scene[checkedIdx], degree, "Y");
             }
             if (comboBox3.Text == "Z")
             {
-                transformations.RotateAroundCenterAxis(drawing.figure, degree, "Z");
+                transformations.RotateAroundCenterAxis(drawing.scene[checkedIdx], degree, "Z");
             }
             drawing.ReDraw(isShowAxis);
         }
@@ -163,24 +166,24 @@ namespace laba8
 
         private void RotateCustomAxisButton_Click(object sender, EventArgs e)
         {
-            float x1 = float.Parse(x1textBox.Text, CultureInfo.InvariantCulture);
-            float y1 = float.Parse(y1textBox.Text, CultureInfo.InvariantCulture);
-            float z1 = float.Parse(z1textBox.Text, CultureInfo.InvariantCulture);
-            float x2 = float.Parse(x2textBox.Text, CultureInfo.InvariantCulture);
-            float y2 = float.Parse(y2textBox.Text, CultureInfo.InvariantCulture);
-            float z2 = float.Parse(z2textBox.Text, CultureInfo.InvariantCulture);
+            float x1 = float.Parse(x1textBox.Text);
+            float y1 = float.Parse(y1textBox.Text);
+            float z1 = float.Parse(z1textBox.Text);
+            float x2 = float.Parse(x2textBox.Text);
+            float y2 = float.Parse(y2textBox.Text);
+            float z2 = float.Parse(z2textBox.Text);
 
-            Point p1 = new Point(x1, y1, z1);
-            Point p2 = new Point(x2, y2, z2);
+            Vertex p1 = new Vertex(x1, y1, z1);
+            Vertex p2 = new Vertex(x2, y2, z2);
 
             float degree = float.Parse(degreeCustom.Text);
-            transformations.RotateAroundCustomAxis(drawing.figure, degree, p1, p2);
+            transformations.RotateAroundCustomAxis(drawing.scene[checkedIdx], degree, p1, p2);
             drawing.ReDraw(isShowAxis);
         }
 
         private void clearButton_Click(object sender, EventArgs e)
         {
-            drawing.figure = null;
+            drawing.ClearScene();
             drawing.ReDraw(isShowAxis);
         }
         private void perspectiveRadioButtom_CheckedChanged(object sender, EventArgs e)
@@ -206,7 +209,7 @@ namespace laba8
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     filePath = openFileDialog.FileName;
-                    drawing.figure = new FigureCreator().CreateRotation(filePath);
+                    drawing.AddToScene(new FigureCreator().CreateRotation(filePath));
                 }
             }
             drawing.ReDraw(isShowAxis);
@@ -221,29 +224,57 @@ namespace laba8
 
         private void button2_Click(object sender, EventArgs e)
         {
-            drawing.figure = new FigureCreator().CreateFunction(x1functextBox.Text,
+            drawing.scene.Add(new FigureCreator().CreateFunction(x1functextBox.Text,
                                                         y1functextBox.Text,
                                                         x2functextBox.Text,
                                                         y2functextBox.Text,
                                                         hTextBox.Text,
                                                         hTextBox.Text,
-                                                        funcTextBox.Text);
+                                                        funcTextBox.Text));
             drawing.ReDraw(isShowAxis);
         }
 
         #endregion
+
+
+
+
 
         private void x2textBox_TextChanged(object sender, EventArgs e)
         {
 
         }
 
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void clearScene_Click(object sender, EventArgs e)
         {
-            int idx = listBox1.SelectedIndex;
-            if (idx != -1)
+            drawing.ClearScene();
+        }
+
+        private void sceneFigures_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (sceneFigures.SelectedIndex != -1)
             {
-                drawing.figure = drawing.sceneFigures[idx];
+                drawing.scene[checkedIdx].isHighLighthed = false;
+                checkedIdx = sceneFigures.SelectedIndex;
+                drawing.scene[checkedIdx].isHighLighthed = true;
+            }
+        }
+
+        private void drawingBox_SelectedValueChanged(object sender, EventArgs e)
+        {
+            switch (drawingBox.SelectedIndex)
+            {
+                case 0:
+                    drawing.kind = DRAWINGKIND.NORMAL;
+                    break;
+                case 1:
+                    drawing.kind = DRAWINGKIND.NONFACIAL;
+                    break;
+                case 2:
+                    drawing.kind = DRAWINGKIND.ZBUF;
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -251,26 +282,40 @@ namespace laba8
         {
             switch (e.KeyChar)
             {
-                case 'w': camera.Move(forwardbackward: 5); break;
-                case 'a': camera.Move(leftright: 5); break;
-                case 's': camera.Move(forwardbackward: -5); break;
-                case 'd': camera.Move(leftright: -5); break;
-                case 'q': camera.Move(updown: 5); break;
-                case 'e': camera.Move(updown: -5); break;
-                case 'i': camera.ChangeView(shiftY: 2); break;
-                case 'j': camera.ChangeView(shiftX: -2); break;
-                case 'k': camera.ChangeView(shiftY: -2); break;
-                case 'l': camera.ChangeView(shiftX: 2); break;
+                case 'w':
+                    drawing.cam.Move(forwardbackward: 5);
+                    break;
+                case 'a':
+                    drawing.cam.Move(leftright: 5);
+                    break;
+                case 's':
+                    drawing.cam.Move(forwardbackward: -5);
+                    break;
+                case 'd':
+                    drawing.cam.Move(leftright: -5);
+                    break;
+                case 'q':
+                    drawing.cam.Move(updown: 5);
+                    break;
+                case 'e':
+                    drawing.cam.Move(updown: -5);
+                    break;
+                case 'i':
+                    drawing.cam.ChangeView(shiftY: 2);
+                    break;
+                case 'j':
+                    drawing.cam.ChangeView(shiftX: -2);
+                    break;
+                case 'k':
+                    drawing.cam.ChangeView(shiftY: -2);
+                    break;
+                case 'l':
+                    drawing.cam.ChangeView(shiftX: 2);
+                    break;
+
                 default: return;
             }
-            //if (isPruningFaces)
-            //{
-            //    shapeWithoutNonFacial = findNonFacial(sceneShapes[listBox.SelectedIndex], camera);
-            //    redrawShapeWithoutNonFacial();
-            //}
-            //else
             drawing.ReDraw(isShowAxis);
-            e.Handled = true;
         }
     }
 }
