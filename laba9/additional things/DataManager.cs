@@ -1,4 +1,5 @@
-﻿using System;
+﻿using laba7;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -8,13 +9,14 @@ using System.Threading.Tasks;
 using static System.Windows.Forms.LinkLabel;
 
 
-namespace laba9
+namespace laba7
 {
     internal class DataManager
     {
 
-        public DataManager() {
-        
+        public DataManager()
+        {
+
         }
 
         public void Save(string filename, Polyhedron figure)
@@ -27,7 +29,7 @@ namespace laba9
 
                 foreach (var poly in figure.Polygons)
                 {
-                    var normal = poly.NormVector.Normalize();
+                    var normal = poly.GetNorm().Normalize();
                     outputFile.WriteLine($"vn {normal.XF} {normal.YF} {normal.ZF}");
                 }
                 int i = 1;
@@ -35,11 +37,11 @@ namespace laba9
                 foreach (var poly in figure.Polygons)
                 {
                     var str = "f ";
-                   
+
                     poly.Verts.ForEach(v =>
                     {
                         str += $"{verts.IndexOf(v) + 1}//{i} ";
-      
+
                     });
                     outputFile.WriteLine(str);
                     i += 1;
@@ -48,12 +50,12 @@ namespace laba9
         }
 
 
-        public Polyhedron Load(string filePath) {
+        public Polyhedron Load(string filePath)
+        {
 
-            Polyhedron res = new Polyhedron(Color.Empty);
+            Polyhedron res = new Polyhedron();
             List<Point> vertices = new List<Point>();
             List<Vector> normales = new List<Vector>();
-            List<TexturePoint> textureVertices = new List<TexturePoint>();
             var lines = File.ReadAllLines(filePath);
             foreach (var line in lines)
             {
@@ -64,18 +66,15 @@ namespace laba9
                 }
                 if (data[0] == "v")
                 {
-                    vertices.Add(new Point(float.Parse(data[1] ),
-                        float.Parse(data[2]) , float.Parse(data[3])));
+                    vertices.Add(new Point(float.Parse(data[1]),
+                        float.Parse(data[2]), float.Parse(data[3])));
                 }
 
                 if (data[0] == "vn")
                 {
-                    normales.Add(new Vector(float.Parse(data[1] ), float.Parse(data[2] ), float.Parse(data[3]) ));
+                    normales.Add(new Vector(float.Parse(data[1]), float.Parse(data[2]), float.Parse(data[3])));
                 }
-                if (data[0] == "vt")
-                {
-                    textureVertices.Add(new TexturePoint(float.Parse(data[1]), float.Parse(data[2])));
-                }
+
                 if (data[0] == "f")
                 {
                     var face = new Polygon();
@@ -87,7 +86,7 @@ namespace laba9
                             break;
                         }
                         face.Add(new Vertex(vertices[int.Parse(stringVertex[0]) - 1],
-                            normales[int.Parse(stringVertex[2]) - 1], textureVertices[int.Parse(stringVertex[1]) - 1]));
+                            normales[int.Parse(stringVertex[2]) - 1]));
                     }
 
 

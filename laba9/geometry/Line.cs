@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace laba9
+namespace laba7
 {
     internal class Line
     {
+        //TODO: ERASE
         Point start, end;
 
         public Line(Point start, Point end)
@@ -16,16 +17,8 @@ namespace laba9
             this.end = end;
         }
 
-        public Point Start { get => start; set => start = value; }
-        public Point End { get => end; set => end = value; }
-        public Point GetVectorCoordinates()
-        {
-            return new Point(end.XF - start.XF, end.YF - start.YF, end.ZF - start.ZF);
-        }
+        public Point Start { get => start; set => start=value; }
+        public Point End { get => end; set => end=value; }
 
-        public Point GetReverseVectorCoordinates()
-        {
-            return new Point(start.XF - end.XF, start.YF - end.YF, start.ZF - end.ZF);
-        }
     }
 }

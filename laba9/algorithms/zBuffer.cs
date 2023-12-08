@@ -1,24 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System;
-using System.Drawing;
 
-namespace laba9
+namespace laba7
 {
-    using FastBitmap;
 
-    class zBuffer
+    internal class zBuffer
     {
-        /// <summary>
-        /// Интерполяция точек
-        /// </summary>
-        /// <param name="x1">Стартовая точка</param>
-        /// <param name="y1">Стартовая точка</param>
-        /// <param name="x2">Конечная точка</param>
-        /// <param name="y2">Конечная точка</param>
         public static List<int> interpolate(int x1, int y1, int x2, int y2)
         {
             List<int> res = new List<int>();
@@ -27,7 +19,7 @@ namespace laba9
                 res.Add(y2);
             }
 
-            float step = (y2 - y1) * 1.0f / (x2 - x1); //с таким шагом будем получать новые точки
+            float step = (y2 - y1) * 1.0f / (x2 - x1); 
             float y = y1;
             for (int i = x1; i <= x2; i++)
             {
@@ -37,15 +29,7 @@ namespace laba9
 
             return res;
         }
-        //https://habr.com/ru/post/342708/
-        //интерполяция освещенности
-        /// <summary>
-        /// https://habr.com/ru/post/342708/
-        /// </summary>
-        /// <param name="x1">Стартовая точка</param>
-        /// <param name="i1">Стартовая точка</param>
-        /// <param name="x2">Конечная точка</param>
-        /// <param name="i2">Конечная точка</param>
+
         public static List<float> interpolate_intense(int x1, float i1, int x2, float i2)
         {
             List<float> res = new List<float>();
@@ -65,19 +49,18 @@ namespace laba9
             return res;
         }
 
+
         //растеризация треугольника
-        /// <summary>
-        /// Растеризация треугольника
-        /// </summary>
-        /// <param name="points">Список вершин треугольника</param>
-        public static List<Point> Raster(List<Point> points, bool mode)
+        public static List<Point> Raster(List<Point> points, bool isLight = false)
         {
             List<Point> res = new List<Point>();
-            //отсортировать точки по неубыванию ординаты
             points.Sort((p1, p2) => p1.Y.CompareTo(p2.Y));
             // "рабочие точки"
             // изначально они находятся в верхней точке
-            var wpoints = points.Select((p) => (x: (int)p.X, y: (int)p.Y, z: (int)p.Z, intense: p.Light)).ToList();
+            var wpoints = points.Select((p) => (x: p.X, y: p.Y, z: p.Z, intense:p.Intense)).ToList();
+            if (wpoints.Count == 0) {
+                return null;
+            }
             var xy01 = interpolate(wpoints[0].y, wpoints[0].x, wpoints[1].y, wpoints[1].x);
             var xy12 = interpolate(wpoints[1].y, wpoints[1].x, wpoints[2].y, wpoints[2].x);
             var xy02 = interpolate(wpoints[0].y, wpoints[0].x, wpoints[2].y, wpoints[2].x);
@@ -109,8 +92,7 @@ namespace laba9
                 rx = xy02;
                 rz = yz02;
             }
-
-            if (mode)
+            if (isLight)
             {
                 var lighting01 = interpolate_intense(wpoints[0].y, wpoints[0].intense, wpoints[1].y, wpoints[1].intense);
                 var lighting12 = interpolate_intense(wpoints[1].y, wpoints[1].intense, wpoints[2].y, wpoints[2].intense);
@@ -134,6 +116,7 @@ namespace laba9
 
             }
 
+
             int y0 = wpoints[0].y;
             int y2 = wpoints[2].y;
             for (int i = 0; i <= y2 - y0; i++)
@@ -141,8 +124,7 @@ namespace laba9
                 int leftx = lx[i];
                 int rightx = rx[i];
                 List<int> zcurr = interpolate(leftx, lz[i], rightx, rz[i]);
-                if (mode)//если освещаем, то интерполируем освещенность, которую мы получили в вершинах
-                {
+                if (isLight) {
                     List<float> intense_current = interpolate_intense(leftx, leftintense[i], rightx, rightintense[i]);
                     for (int j = leftx; j < rightx; j++)
                     {
@@ -161,14 +143,9 @@ namespace laba9
             return res;
         }
 
-        //разбиение на треугольники
-        /// <summary>
-        /// Разбиение полигона на треугольники
-        /// </summary>
-        /// <param name="points">Список вершин треугольника</param>
+
         public static List<List<Point>> Triangulate(List<Point> points)
         {
-            //если всего 3 точки, то это уже трекгольник
             List<List<Point>> res = new List<List<Point>>();
             if (points.Count == 3)
             {
@@ -177,37 +154,27 @@ namespace laba9
 
             for (int i = 2; i < points.Count(); i++)
             {
-                res.Add(new List<Point> { points[0], points[i - 1], points[i] }); //points[0]
+                res.Add(new List<Point> { points[0], points[i - 1], points[i] });
             }
 
             return res;
         }
 
-        //растеризовать фигуру
-        /// <summary>
-        /// Растеризация фигуры
-        /// </summary>
-        /// <param name="figure">Фигура</param>
-        /// <param name="camera">Камера</param>
-        public static List<List<Point>> RasterFigure(Polyhedron figure, Camera camera, bool mode)
+        public static List<List<Point>> RasterFigure(Polyhedron figure, Camera camera,bool isLight)
         {
             List<List<Point>> res = new List<List<Point>>();
-            foreach (var polygon in figure.Polygons) //каждая грань-это многоугольник, который надо растеризовать
+            foreach (var polygon in figure.Polygons)
             {
 
                 List<Point> currentface = new List<Point>();
                 List<Point> points = new List<Point>();
-                //добавим все вершины
-                for (int i = 0; i < polygon.Verts.Count(); i++)
-                {
-                    points.Add(polygon.Verts[i]);
-                }
+                points.AddRange(polygon.Verts);
 
-                List<List<Point>> triangles = Triangulate(points); //разбили все грани на треугольники
+
+                List<List<Point>> triangles = Triangulate(points);
                 foreach (var triangle in triangles)
                 {
-                    currentface.AddRange(Raster(ProjectionToPlane(triangle, camera), mode)); //projection(triangle)
-                    //currentface.AddRange(Raster(triangle));
+                    currentface.AddRange(Raster(ProjectionToPlane(triangle, camera),isLight));
                 }
 
                 res.Add(currentface);
@@ -216,25 +183,17 @@ namespace laba9
             return res;
         }
 
-        /// <summary>
-        /// Проецирование точек на экран с учетом камеры и вида проекции
-        /// </summary>
-        /// <param name="points">Список точек</param>
-        /// <param name="camera">Камера</param>
-        public static List<Point> ProjectionToPlane(List<Point> points, Camera camera) //Camera camera,ProjectionType type 
+
+        public static List<Point> ProjectionToPlane(List<Point> points, Camera camera)
         {
             List<Point> res = new List<Point>();
-            // float c = 1000;
-            //Matrix matrix = new Matrix(4, 4).fill(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -1 / c, 0, 0, 0, 1);//перспективная чисто для начала
-            foreach (var p in points) //потом заменить Projection(camera)
+
+            foreach (var p in points)
             {
                 var current = p.Projection(camera);
                 if (current.Item1 != null)
                 {
-                    // Point newpoint = new Point(current.Item1.Value.X, current.Item1.Value.Y,current.Item2);
-                    //var current = transformPoint(p, matrix);
-                    //var tocamv = camera.toCameraView(p);
-                    Point newpoint = new Point(current.Item1.Value.X, current.Item1.Value.Y, current.Item2, p.Light);
+                    Point newpoint = new Point(current.Item1.Value.X, current.Item1.Value.Y, current.Item2,p.Intense);
                     res.Add(newpoint);
                 }
             }
@@ -243,80 +202,67 @@ namespace laba9
         }
 
 
-        /// <summary>
-        /// Алгоритм z-буфера
-        /// </summary>
-        /// <param name="width">Ширина канваса</param>
-        /// <param name="height">Высота канваса</param>
-        /// <param name="scene">Множество фигур на сцене</param>
-        /// <param name="camera">Камера</param>
-        /// <param name="light">Источник света</param>
-        /// <param name="colors">Список цветов</param>
-        /// <param name="mode">Режим: false для отсечения невидимых и true для освещения</param>
-        public static Bitmap z_buf(int width, int height, List<Polyhedron> scene, Camera camera,  List<Color> colors, FastBitmap fbmp, bool mode=false, LightingSource light=null)
-        {
-            //Bitmap bitmap = new Bitmap(width, height);
-            if (mode == true)
-            {
-                foreach (var shape in scene)
-                {
 
-                   // Lighting.CalculateLambert(shape, light);
+        public static Bitmap z_buf(int width, int height, List<Polyhedron> scene, Camera camera, List<Color> colors, bool isLight=false, LightSource light=null)
+        {
+            if (isLight)
+            {
+                foreach (var figure in scene)
+                {
+                    Lighting.CalculateLambert(figure, light);
                 }
+
             }
-            // bool mode = false;
-            Bitmap canvas = new Bitmap(width, height);
-            //new FastBitmap(bitmap);
-            for (int i = 0; i < width; i++)
-                for (int j = 0; j < height; j++)
-                    fbmp.SetPixel(new System.Drawing.Point(i, j), Color.White); //new System.Drawing.Point(i, j)
+
+            Bitmap bmp = new Bitmap(width, height);
             //z-буфер
             float[,] zbuffer = new float[width, height];
             for (int i = 0; i < width; i++)
                 for (int j = 0; j < height; j++)
-                    zbuffer[i, j] = float.MaxValue; //Изначально, буфер
-            // инициализируется значением z = zmax
+                    zbuffer[i, j] = float.MaxValue;
             List<List<List<Point>>> rasterscene = new List<List<List<Point>>>();
             for (int i = 0; i < scene.Count(); i++)
             {
-                rasterscene.Add(RasterFigure(scene[i], camera, mode)); //растеризовали все фигуры
+                rasterscene.Add(RasterFigure(scene[i], camera,isLight)); //растеризовали все фигуры
             }
+
 
             int index = 0;
             for (int i = 0; i < rasterscene.Count(); i++)
             {
-                Color color1 = scene[i].GetColor;
+                var color = scene[i].GetColor();
                 for (int j = 0; j < rasterscene[i].Count(); j++)
                 {
-                    List<Point> current = rasterscene[i][j]; //это типа грань но уже растеризованная
+                    List<Point> current = rasterscene[i][j];
+                    Debug.WriteLine(current.Where(x => x.Intense > 0).Count());
                     foreach (Point p in current)
                     {
-                        int x = (int)(p.X); //
+                        int x = (p.X);
 
-                        int y = (int)(p.Y); // + heightmiddle 
-                        ;
+                        int y = (p.Y);
+
                         if (x < width && y < height && y > 0 && x > 0)
                         {
                             if (p.ZF < zbuffer[x, y])
                             {
                                 zbuffer[x, y] = p.ZF;
-                                if (mode == false)//если это алгоритм отсечения невидимых граней
+                                if (isLight)
                                 {
-                                    canvas.SetPixel(x,y, colors[index % colors.Count()]); //canvas.Height - 
+                                    bmp.SetPixel(x, y, Color.FromArgb((int)(p.Intense * color.R), (int)(p.Intense * color.G), (int)(p.Intense * color.B)));
+                           
                                 }
-                                else//иначе это осчещение, тогда меняем цвет точки согласно степени ее освещенности
-                                {
-                                    canvas.SetPixel(x, y, Color.FromArgb((int)(p.Light * color1.R), (int)(p.Light * color1.G), (int)(p.Light * color1.B)));
-                                }
+                                else
+                                    bmp.SetPixel(x, y, colors[index % colors.Count()]);
                             }
                         }
                     }
-
                     index++;
                 }
             }
 
-            return canvas;
+            return bmp;
         }
+
+
     }
 }
