@@ -47,8 +47,8 @@ namespace laba7
 
         public static void CalculateLambert(Polyhedron s, LightSource light)
         {
-  
-            for (int i = 0; i < s.Polygons.Count; i++)
+
+            Parallel.For(0, s.Polygons.Count, i =>
             {
                 Polygon f = s.Polygons[i];
                 foreach (var vert in f.Verts)
@@ -57,7 +57,9 @@ namespace laba7
                     vert.normVector = NormalVertex(polys);
                 }
 
-            }
+            });
+            
+         
 
             //посчитать вектор нормали для каждой вершины
             foreach (var f in s.Polygons)

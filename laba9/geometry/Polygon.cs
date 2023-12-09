@@ -13,9 +13,10 @@ namespace laba7
         List<Vertex> vertices;
         Vector normVector; //мне уже конкретно не норм
         public bool isFacial {  get; set; }  
-        public Polygon() { 
+        public Polygon(Vector normVector=null) { 
             vertices = new List<Vertex>();
             isFacial = true;
+            this.normVector= normVector;
         }
 
         public Polygon(List<Vertex> vertices)
@@ -31,7 +32,7 @@ namespace laba7
             isFacial = true;
         }
 
-        public Polygon Add(Vertex vert, Vector norm)
+        public Polygon Add(Vertex vert)
         {
             vertices.Add(vert);
             return this;
@@ -68,11 +69,13 @@ namespace laba7
         }
 
         public Vector GetNorm() {
-
+            if (normVector == null)
+            {
                 var v1 = new Vector(vertices[0], vertices[1]);
                 var v2 = new Vector(vertices[0], vertices.Last());
-                return -(v1 * v2);
-       
+                normVector= -(v1 * v2);
+            }
+            return normVector;
         }
         public override string ToString()
         {

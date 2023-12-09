@@ -56,6 +56,7 @@ namespace laba7
             Polyhedron res = new Polyhedron();
             List<Point> vertices = new List<Point>();
             List<Vector> normales = new List<Vector>();
+            List<TexturePoint> textureVertices = new List<TexturePoint>();
             var lines = File.ReadAllLines(filePath);
             foreach (var line in lines)
             {
@@ -74,6 +75,10 @@ namespace laba7
                 {
                     normales.Add(new Vector(float.Parse(data[1]), float.Parse(data[2]), float.Parse(data[3])));
                 }
+                if (data[0] == "vt")
+                {
+                    textureVertices.Add(new TexturePoint(float.Parse(data[1]), float.Parse(data[2])));
+                }
 
                 if (data[0] == "f")
                 {
@@ -86,7 +91,7 @@ namespace laba7
                             break;
                         }
                         face.Add(new Vertex(vertices[int.Parse(stringVertex[0]) - 1],
-                            normales[int.Parse(stringVertex[2]) - 1]));
+                            normales[int.Parse(stringVertex[2]) - 1], textureVertices[int.Parse(stringVertex[1]) - 1]));
                     }
 
 

@@ -19,11 +19,11 @@ namespace laba7
         static float c = 1000f;
         public static PointF world;
         public static ProjectionKind kind = ProjectionKind.PERSPECTIVE;
-        static Size screenSize;
-        static float zScreenNear, zScreenFar, fov;
         static Transformations transformations = new Transformations();
         static Matrix perspectiveProjectionMatrix;
         float intense;
+
+
         //public Matrix isometric = new Matrix(4, 4).Fill(
         //    (float)Math.Cos(2), 0, (float)Math.Sin(2), 0,
         //    (float)Math.Sin(4) * (float)Math.Sin(2), (float)Math.Cos(4), -(float)Math.Sin(4) * (float)Math.Cos(2), 0,
@@ -35,14 +35,16 @@ namespace laba7
             (float)(-1 / Math.Sqrt(2)), (float)(1 / Math.Sqrt(6)), (float)(1 / Math.Sqrt(3)),
             0,(float)(-2 / Math.Sqrt(6)), (float)(1 / Math.Sqrt(3))
             );
-        public Point(float x, float y, float z, float intense=0) {
-            this.x = x; this.y = y; this.z = z; this.intense = intense;
+
+
+        public Point(float x, float y, float z, float intense=0 ) {
+            this.x = x; this.y = y; this.z = z; this.intense = intense; 
   
         }
 
         public Point(Point p)
         {
-            x = p.x; y = p.y; z = p.z;
+            x = p.x; y = p.y; z = p.z; intense = p.intense;
             transformations = new Transformations();
         }
 
@@ -78,10 +80,6 @@ namespace laba7
 
         public static void SetProjection(Size screenSize, float zScreenNear, float zScreenFar, float fov)
         {
-            Point.screenSize = screenSize;
-            Point.zScreenNear = zScreenNear;
-            Point.zScreenFar = zScreenFar;
-            Point.fov = fov;
             perspectiveProjectionMatrix = new Matrix(4, 4).Fill(
                 screenSize.Height / (float)(Math.Tan(transformations.DegreeToRadian(fov / 2)) * screenSize.Width), 0, 0, 0, 0,
                 1.0f / (float)Math.Tan(transformations.DegreeToRadian(fov / 2)), 0, 0, 0, 0,

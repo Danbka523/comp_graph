@@ -27,18 +27,6 @@ namespace laba7
         }
 
 
-        public Matrix Translate(Point p)
-        {
-            return new Matrix(4, 4).Fill(
-                1, 0, 0, p.XF,
-                0, 1, 0, p.YF,
-                0, 0, 1, p.ZF,
-                0, 0, 0, 1
-
-                );
-
-        }
-
         public void MirrorAroundAxis(Polyhedron figure, string axis)
         {
             Matrix mirror;
@@ -74,7 +62,7 @@ namespace laba7
                 for (int i = 0; i < poly.Verts.Count; i++)
                 {
                     var res = mirror * new Matrix(4, 1).Fill(poly.Verts[i].XF, poly.Verts[i].YF, poly.Verts[i].ZF, 1);
-                    poly.Verts[i] = new Vertex(res[0, 0], res[1, 0], res[2, 0]);
+                    poly.Verts[i] = new Vertex(res[0, 0], res[1, 0], res[2, 0], poly.Verts[i].Intense, poly.Verts[i].normVector, poly.Verts[i].texturePoint);
 
                 }
             }
@@ -94,7 +82,7 @@ namespace laba7
                 for (int i = 0; i < poly.Verts.Count; i++)
                 {
                     var res = shift * new Matrix(4, 1).Fill(poly.Verts[i].XF, poly.Verts[i].YF, poly.Verts[i].ZF, 1);
-                    poly.Verts[i] = new Vertex(res[0, 0], res[1, 0], res[2, 0]);
+                    poly.Verts[i] = new Vertex(res[0, 0], res[1, 0], res[2, 0], poly.Verts[i].Intense, poly.Verts[i].normVector, poly.Verts[i].texturePoint);
 
                 }
             }
@@ -112,7 +100,7 @@ namespace laba7
                 for (int i = 0; i < poly.Verts.Count; i++)
                 {
                     var res = scale * new Matrix(4, 1).Fill(poly.Verts[i].XF, poly.Verts[i].YF, poly.Verts[i].ZF, 1);
-                    poly.Verts[i] = new Vertex(res[0, 0], res[1, 0], res[2, 0]);
+                    poly.Verts[i] = new Vertex(res[0, 0], res[1, 0], res[2, 0], poly.Verts[i].Intense, poly.Verts[i].normVector, poly.Verts[i].texturePoint);
 
                 }
             }
@@ -127,7 +115,7 @@ namespace laba7
                 for (int i = 0; i < poly.Verts.Count; i++)
                 {
                     var res = rotate * new Matrix(4, 1).Fill(poly.Verts[i].XF, poly.Verts[i].YF, poly.Verts[i].ZF, 1);
-                    poly.Verts[i] = new Vertex(res[0, 0], res[1, 0], res[2, 0]);
+                    poly.Verts[i] = new Vertex(res[0, 0], res[1, 0], res[2, 0], poly.Verts[i].Intense, poly.Verts[i].normVector, poly.Verts[i].texturePoint);
 
                 }
             }
@@ -169,7 +157,7 @@ namespace laba7
                 for (int i = 0; i < poly.Verts.Count; i++)
                 {
                     var res = rotate * new Matrix(4, 1).Fill(poly.Verts[i].XF, poly.Verts[i].YF, poly.Verts[i].ZF, 1);
-                    poly.Verts[i] = new Vertex(res[0, 0], res[1, 0], res[2, 0]);
+                    poly.Verts[i] = new Vertex(res[0, 0], res[1, 0], res[2, 0], poly.Verts[i].Intense, poly.Verts[i].normVector, poly.Verts[i].texturePoint);
 
                 }
             }
@@ -191,7 +179,7 @@ namespace laba7
                 for (int i = 0; i < poly.Verts.Count; i++)
                 {
                     var res = rotate * new Matrix(4, 1).Fill(poly.Verts[i].XF, poly.Verts[i].YF, poly.Verts[i].ZF, 1);
-                    poly.Verts[i] = new Vertex(res[0, 0], res[1, 0], res[2, 0]);
+                    poly.Verts[i] = new Vertex(res[0, 0], res[1, 0], res[2, 0], poly.Verts[i].Intense, poly.Verts[i].normVector, poly.Verts[i].texturePoint);
 
                 }
             }
@@ -209,7 +197,7 @@ namespace laba7
                 for (int i = 0; i < poly.Verts.Count; i++)
                 {
                     var res = rotate * new Matrix(4, 1).Fill(poly.Verts[i].XF, poly.Verts[i].YF, poly.Verts[i].ZF, 1);
-                    poly.Verts[i] = new Vertex(res[0, 0], res[1, 0], res[2, 0]);
+                    poly.Verts[i] = new Vertex(res[0, 0], res[1, 0], res[2, 0], poly.Verts[i].Intense, poly.Verts[i].normVector, poly.Verts[i].texturePoint);
 
                 }
             }

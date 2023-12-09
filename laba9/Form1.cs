@@ -247,6 +247,7 @@ namespace laba7
 
         private void clearScene_Click(object sender, EventArgs e)
         {
+            sceneFigures.Items.Clear();
             drawing.ClearScene();
         }
 
@@ -275,6 +276,9 @@ namespace laba7
                     break;
                 case 3:
                     drawing.kind = DRAWINGKIND.LIGHT;
+                    break;
+                case 4:
+                    drawing.kind = DRAWINGKIND.TEXTURING;
                     break;
                 default:
                     break;
@@ -334,6 +338,22 @@ namespace laba7
             label24.Text = drawing.lightSource.Position.ToString();
             drawing.lightSource.Move(x, y, z);
             drawing.ReDraw(isShowAxis);
+        }
+
+        private void textureButton_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "all files (*.*)|*.*";
+                openFileDialog.FilterIndex = 2;
+                openFileDialog.RestoreDirectory = true;
+                string filePath;
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    filePath = openFileDialog.FileName;
+                    drawing.texturePath=filePath; 
+                }
+            }
         }
     }
 }

@@ -95,6 +95,7 @@
             drawingBox = new ComboBox();
             shiftLightButton = new Button();
             label24 = new Label();
+            textureButton = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -727,7 +728,7 @@
             // 
             // clearScene
             // 
-            clearScene.Location = new System.Drawing.Point(1505, 423);
+            clearScene.Location = new System.Drawing.Point(1430, 423);
             clearScene.Name = "clearScene";
             clearScene.Size = new Size(75, 23);
             clearScene.TabIndex = 74;
@@ -739,7 +740,7 @@
             // 
             drawingBox.DropDownStyle = ComboBoxStyle.DropDownList;
             drawingBox.FormattingEnabled = true;
-            drawingBox.Items.AddRange(new object[] { "Обычный", "Без нелицевых граней", "Zbuffer", "Zbuffer+освещение" });
+            drawingBox.Items.AddRange(new object[] { "Обычный", "Без нелицевых граней", "Zbuffer", "Zbuffer+освещение", "Zbuffer+текстурирование" });
             drawingBox.Location = new System.Drawing.Point(1431, 457);
             drawingBox.Name = "drawingBox";
             drawingBox.Size = new Size(121, 23);
@@ -767,11 +768,22 @@
             label24.TabIndex = 77;
             label24.Text = "label24";
             // 
+            // textureButton
+            // 
+            textureButton.Location = new System.Drawing.Point(1558, 457);
+            textureButton.Name = "textureButton";
+            textureButton.Size = new Size(114, 23);
+            textureButton.TabIndex = 78;
+            textureButton.Text = "Выбрать текстуру";
+            textureButton.UseVisualStyleBackColor = true;
+            textureButton.Click += textureButton_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1684, 710);
+            Controls.Add(textureButton);
             Controls.Add(label24);
             Controls.Add(shiftLightButton);
             Controls.Add(drawingBox);
@@ -918,6 +930,7 @@
         private ComboBox drawingBox;
         private Button shiftLightButton;
         private Label label24;
+        private Button textureButton;
     }
 }
 

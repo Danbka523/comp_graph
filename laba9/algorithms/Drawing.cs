@@ -7,22 +7,28 @@ using System.Threading.Tasks;
 
 namespace laba7
 {
-    public enum DRAWINGKIND { NONFACIAL, ZBUF, NORMAL, LIGHT}
+    public enum DRAWINGKIND { NONFACIAL, ZBUF, NORMAL, LIGHT,
+        TEXTURING
+    }
     internal class Drawing
     {
 
         public List<Polyhedron> scene=new();
         Bitmap bmp;
         Graphics g;
+
         public Camera cam;
         public Pen figureDrawPen;
         public Pen highlightPen;
         public DRAWINGKIND kind = DRAWINGKIND.NORMAL;
+        public LightSource lightSource;
+
         Transformations transformations;
         PictureBox pb;
-        public LightSource lightSource;
         List<Color> colors;
-        int iColor = 0; 
+
+        int iColor = 0;
+        public string texturePath = "";
         public Drawing(PictureBox pb, Graphics g) { 
             this.pb = pb;
             bmp = new Bitmap(pb.Width, pb.Height);
@@ -178,9 +184,9 @@ namespace laba7
             Debug.WriteLine("");
         }
 
-        Bitmap DrawZbuffer(bool isLight=false,LightSource light=null)
+        Bitmap DrawZbuffer(bool isLight=false,LightSource light=null, bool isTexturing = false, string filePath=null)
         {
-            return zBuffer.z_buf(pb.Width, pb.Height, scene, cam,colors,isLight,light);
+            return zBuffer.z_buf(pb.Width, pb.Height, scene, cam,colors,isLight,light,isTexturing,filePath);
 
         }
 
@@ -197,8 +203,7 @@ namespace laba7
 
             Bitmap bmp = new Bitmap(pb.Width, pb.Height);
 
-            if (isShowAxis)
-                DrawAxis(bmp);
+            
             foreach (var fig in scene)
             {
                 switch (kind)
@@ -212,9 +217,15 @@ namespace laba7
                         break;
                     case DRAWINGKIND.ZBUF:
                         bmp=DrawZbuffer();
+                     
+                        break;
+                    case DRAWINGKIND.TEXTURING:
+                        bmp = DrawZbuffer(isTexturing:true,filePath:texturePath);
+
                         break;
                     case DRAWINGKIND.LIGHT:
                         bmp = DrawZbuffer(true,lightSource);
+                  
                         break;
                     case DRAWINGKIND.NORMAL:
                         fig.ResetFacial();
@@ -227,7 +238,8 @@ namespace laba7
                         break;
                 }
             }
-
+            if (isShowAxis)
+                DrawAxis(bmp);
             pb.Image= bmp;
         }
         public void AddToScene(Polyhedron polyhedron) { scene.Add(polyhedron); polyhedron.SetColor(colors[iColor++]); }
