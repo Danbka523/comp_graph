@@ -22,7 +22,7 @@ namespace laba7
         static Transformations transformations = new Transformations();
         static Matrix perspectiveProjectionMatrix;
         float intense;
-
+        public static Size screenSize;
 
         //public Matrix isometric = new Matrix(4, 4).Fill(
         //    (float)Math.Cos(2), 0, (float)Math.Sin(2), 0,
@@ -119,6 +119,10 @@ namespace laba7
                 Matrix res = new Matrix(1, 3).Fill(XF, YF, ZF) * isometric;
                 return (new PointF(world.X + res[0, 0], world.Y + res[0, 1]),res[0,2]);
             }
+        }
+
+        public PointF? Projection() {
+            return new PointF(Math.Clamp(X, 0, screenSize.Width - 1), Math.Clamp((int)(world.Y - YF), 0, screenSize.Height - 1));
         }
     }
 }

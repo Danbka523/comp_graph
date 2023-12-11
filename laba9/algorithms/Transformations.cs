@@ -1,6 +1,7 @@
 ﻿using AngouriMath;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Numerics;
@@ -120,10 +121,15 @@ namespace laba7
                 }
             }
         }
-
-        public Matrix RotateAroundAxis(float degree, string axis)
+        public Point RotateAroundAxis(Point p, float degree, string axis)
         {
 
+            Matrix rotate = GetRotationAroundAxisMatrix(axis, degree);
+            var res = rotate * new Matrix(4, 1).Fill(p.XF, p.YF, p.ZF, 1);
+            return new Point(res[0, 0], res[1, 0], res[2, 0]);
+        }
+        public Matrix RotateAroundAxis(float degree, string axis)
+        {
             return  GetRotationAroundAxisMatrix(axis, degree);
         }
 
@@ -256,8 +262,6 @@ namespace laba7
 
 
         public float EvalFunc(string func, float x, float y) {
-            var t = func.Replace("x", x.ToString()).Replace("y", y.ToString());
-
             Entity f = func.Replace("x", x.ToString()).Replace("y", y.ToString()).Replace(",", ".");
             return (float)f.EvalNumerical();
         }

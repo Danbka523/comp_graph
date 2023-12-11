@@ -14,6 +14,7 @@ using System.Windows.Forms;
 
 namespace laba7
 {
+    public enum MODE { NORMAL, FLOATING };
     public partial class Form1 : Form
     {
         Graphics g;
@@ -24,6 +25,7 @@ namespace laba7
         Drawing drawing;
         int checkedIdx = 0;
         Camera camera;
+        MODE mode = MODE.NORMAL;
         public Form1()
         {
             InitializeComponent();
@@ -224,14 +226,21 @@ namespace laba7
 
         private void button2_Click(object sender, EventArgs e)
         {
-            drawing.scene.Add(new FigureCreator().CreateFunction(x1functextBox.Text,
-                                                        y1functextBox.Text,
-                                                        x2functextBox.Text,
-                                                        y2functextBox.Text,
-                                                        hTextBox.Text,
-                                                        hTextBox.Text,
-                                                        funcTextBox.Text));
-            drawing.ReDraw(isShowAxis);
+            if (floatingHorizonCheck.Checked)
+            {
+                new FloatingForm(funcTextBox.Text).Show();
+            }
+            else
+            {
+                drawing.scene.Add(new FigureCreator().CreateFunction(x1functextBox.Text,
+                                                            y1functextBox.Text,
+                                                            x2functextBox.Text,
+                                                            y2functextBox.Text,
+                                                            hTextBox.Text,
+                                                            hTextBox.Text,
+                                                            funcTextBox.Text));
+                drawing.ReDraw(isShowAxis);
+            }
         }
 
         #endregion
@@ -287,42 +296,51 @@ namespace laba7
 
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            switch (e.KeyChar)
+            if (mode == MODE.NORMAL)
             {
-                case 'w':
-                    drawing.cam.Move(forwardbackward: 5);
-                    break;
-                case 'a':
-                    drawing.cam.Move(leftright: 5);
-                    break;
-                case 's':
-                    drawing.cam.Move(forwardbackward: -5);
-                    break;
-                case 'd':
-                    drawing.cam.Move(leftright: -5);
-                    break;
-                case 'q':
-                    drawing.cam.Move(updown: 5);
-                    break;
-                case 'e':
-                    drawing.cam.Move(updown: -5);
-                    break;
-                case 'i':
-                    drawing.cam.ChangeView(shiftY: 2);
-                    break;
-                case 'j':
-                    drawing.cam.ChangeView(shiftX: -2);
-                    break;
-                case 'k':
-                    drawing.cam.ChangeView(shiftY: -2);
-                    break;
-                case 'l':
-                    drawing.cam.ChangeView(shiftX: 2);
-                    break;
+                switch (e.KeyChar)
+                {
+                    case 'w':
+                        drawing.cam.Move(forwardbackward: 5);
+                        break;
+                    case 'a':
+                        drawing.cam.Move(leftright: 5);
+                        break;
+                    case 's':
+                        drawing.cam.Move(forwardbackward: -5);
+                        break;
+                    case 'd':
+                        drawing.cam.Move(leftright: -5);
+                        break;
+                    case 'q':
+                        drawing.cam.Move(updown: 5);
+                        break;
+                    case 'e':
+                        drawing.cam.Move(updown: -5);
+                        break;
+                    case 'i':
+                        drawing.cam.ChangeView(shiftY: 2);
+                        break;
+                    case 'j':
+                        drawing.cam.ChangeView(shiftX: -2);
+                        break;
+                    case 'k':
+                        drawing.cam.ChangeView(shiftY: -2);
+                        break;
+                    case 'l':
+                        drawing.cam.ChangeView(shiftX: 2);
+                        break;
 
-                default: return;
+                    default: return;
+                }
+                drawing.ReDraw(isShowAxis);
             }
-            drawing.ReDraw(isShowAxis);
+            else
+            {
+
+
+
+            }
         }
 
         private void drawingBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -351,9 +369,14 @@ namespace laba7
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     filePath = openFileDialog.FileName;
-                    drawing.texturePath=filePath; 
+                    drawing.texturePath = filePath;
                 }
             }
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

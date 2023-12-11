@@ -65,7 +65,7 @@ namespace laba7
         }
 
         #region VU
-        void DrawVuLine(PointF? p1, PointF? p2, Color color, Bitmap bmp)
+        public void DrawVuLine(PointF? p1, PointF? p2, Color color, Bitmap bmp)
         {
             int x1 = (int)p1.Value.X;
             int y1 = (int)p1.Value.Y;

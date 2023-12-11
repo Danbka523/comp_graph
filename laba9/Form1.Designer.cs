@@ -96,6 +96,7 @@
             shiftLightButton = new Button();
             label24 = new Label();
             textureButton = new Button();
+            floatingHorizonCheck = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -622,7 +623,7 @@
             // 
             // button2
             // 
-            button2.Location = new System.Drawing.Point(1505, 205);
+            button2.Location = new System.Drawing.Point(1493, 205);
             button2.Name = "button2";
             button2.Size = new Size(86, 23);
             button2.TabIndex = 63;
@@ -778,11 +779,23 @@
             textureButton.UseVisualStyleBackColor = true;
             textureButton.Click += textureButton_Click;
             // 
+            // floatingHorizonCheck
+            // 
+            floatingHorizonCheck.AutoSize = true;
+            floatingHorizonCheck.Location = new System.Drawing.Point(1431, 232);
+            floatingHorizonCheck.Name = "floatingHorizonCheck";
+            floatingHorizonCheck.Size = new Size(148, 19);
+            floatingHorizonCheck.TabIndex = 79;
+            floatingHorizonCheck.Text = "Плавающий горизонт";
+            floatingHorizonCheck.UseVisualStyleBackColor = true;
+            floatingHorizonCheck.CheckedChanged += checkBox1_CheckedChanged;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1684, 710);
+            Controls.Add(floatingHorizonCheck);
             Controls.Add(textureButton);
             Controls.Add(label24);
             Controls.Add(shiftLightButton);
@@ -931,6 +944,7 @@
         private Button shiftLightButton;
         private Label label24;
         private Button textureButton;
+        private CheckBox floatingHorizonCheck;
     }
 }
 

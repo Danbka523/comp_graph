@@ -256,7 +256,7 @@ namespace laba7
 
                     // Создание полигонов
                     res.AddPolygon(
-                        new Polygon().Add(topLeft, topRight, bottomRight, bottomRight));
+                        new Polygon().Add(topLeft, topRight, bottomRight, bottomLeft));
                      
                 }
             }
