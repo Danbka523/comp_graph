@@ -7,7 +7,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
+#include <array>
+#include <initializer_list>
 
+#define deg2rad M_PI /180.0
 
 
 void SetIcon(sf::Window& wnd);
@@ -24,7 +27,6 @@ void ShaderLog(unsigned int shader);
 struct Vertex {
     GLfloat x;
     GLfloat y;
-    GLfloat z;
 };
 
 GLuint Program;
@@ -33,21 +35,26 @@ GLuint Attrib_color;
 GLuint VBO;
 GLuint VBO_color;
 GLuint location;
-float x = 1, y = 1, z = 1;
+GLint Unif_xscale;
+GLint Unif_yscale;
+float x = 1.0f, y = 1.0f;
 
 // Исходный код вершинного шейдера
 const char* VertexShaderSource = R"(
     #version 330 core
-    in vec3 coord;
-    in vec3 color;
-    out vec3 outColor;
+    in vec2 coord;
+    in vec4 color;
+    out vec4 outColor;
 
-    uniform mat4 model;
-    uniform mat4 view;
-    uniform mat4 projection;
 
+    uniform float scale_x;
+    uniform float scale_y;
+    
     void main() {      
-        gl_Position = projection * view * model * vec4(coord, 1.0);
+       vec3 position = vec3(coord, 1.0) * mat3( scale_x,0,0,
+                                                0,scale_y,0,
+                                                0,0,1);
+        gl_Position = vec4(position[0],position[1], 0.0, 1.0);
         outColor = color;
     }
 )";
@@ -56,11 +63,11 @@ const char* VertexShaderSource = R"(
 // Исходный код фрагментного шейдера
 const char* FragShaderSource= R"(
     #version 330 core
-    in vec3 outColor;
+    in vec4 outColor;
     out vec4 fragColor;
    
     void main() {
-        fragColor = vec4(outColor, 1);
+        fragColor = outColor;
     }
 )";
 
@@ -108,12 +115,6 @@ int main() {
                 case sf::Keyboard::Key::S:
                     y -= 0.1f;
                     break;
-                case sf::Keyboard::Key::Q:
-                    z += 0.1f;
-                    break;
-                case sf::Keyboard::Key::E:
-                    z -= 0.1f;
-                    break;
                 }
             }
         }
@@ -153,7 +154,7 @@ void ReleaseShader() {
 void Init() {
     InitShader();
     InitVBO();
-    glEnable(GL_DEPTH_TEST);
+   // glEnable(GL_DEPTH_TEST);
 }
 
 void InitShader() {
@@ -203,73 +204,110 @@ void InitShader() {
         std::cout << "could not bind color " << attr_name2 << std::endl;
         return;
     }
+
+    // Вытягиваем ID юниформ
+    const char* unif_name = "scale_x";
+    Unif_xscale = glGetUniformLocation(Program, unif_name);
+    if (Unif_xscale == -1)
+    {
+        std::cout << "could not bind uniform " << unif_name << std::endl;
+        return;
+    }
+
+    unif_name = "scale_y";
+    Unif_yscale = glGetUniformLocation(Program, unif_name);
+    if (Unif_yscale == -1)
+    {
+        std::cout << "could not bind uniform " << unif_name << std::endl;
+        return;
+    }
+
+
     checkOpenGLerror();
 }
 
+const int circleVertexCount = 360;
+
+float bytify(float color)
+{
+    return (1 / 100.0) * color;
+}
+
+std::array<float, 4> HSVtoRGB(float hue, float saturation = 100.0, float value = 100.0)
+{
+    int sw = (int)floor(hue / 60) % 6;
+    float vmin = ((100.0f - saturation) * value) / 100.0;
+    float a = (value - vmin) * (((int)hue % 60) / 60.0);
+    float vinc = vmin + a;
+    float vdec = value - a;
+    switch (sw)
+    {
+    case 0: return { bytify(value), bytify(vinc), bytify(vmin), 1.0 };
+    case 1: return { bytify(vdec), bytify(value), bytify(vmin), 1.0 };
+    case 2: return { bytify(vmin), bytify(value), bytify(vinc), 1.0 };
+    case 3: return { bytify(vmin), bytify(vdec), bytify(value), 1.0 };
+    case 4: return { bytify(vinc), bytify(vmin), bytify(value), 1.0 };
+    case 5: return { bytify(value), bytify(vmin), bytify(vdec), 1.0 };
+    }
+    return { 0, 0, 0 , 0 };
+}
 
 void InitVBO() {
     glGenBuffers(1, &VBO); //glew.h
-    float verts[] = {
-        0.0f,1.0f,0.0f,    1.0f, 0.0f, 0.0f, 
-        -1.0f,-1.0f,-1.0f,    0.0f, 1.0f, 0.0f,
-        1.0f,-1.0f,-1.0f,    0.0f, 0.0f, 1.0f,
+    glGenBuffers(1, &VBO_color);
+    std::array<std::array<float, 4>, circleVertexCount * 3> colors = {};
 
-        0.0f,1.0f,0.0f,    1.0f, 1.0f, 0.0f,
-        1.0f,-1.0f,-1.0f,    1.0f, 0.0f, 1.0f,
-        0.0f,0.0f,1.0f,    1.0f, 0.0f, 0.0f,
-
-        0.0f,1.0f,0.0f,    1.0f, 0.0f, 0.0f,
-        0.0f,0.0f,1.0f,    1.0f, 1.0f, 0.0f,
-        -1.0f,-1.0f,-1.0f,    0.0f, 1.0f, 0.0f,
-
-        -1.0f,-1.0f,-1.0f,    1.0f, 0.0f, 0.0f,
-        1.0f,-1.0f,-1.0f,    0.0f, 1.0f, 0.0f,
-        0.0f,0.0f,1.0f,    1.0f, 0.0f, 1.0f,
-    };
-
-
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-
+    Vertex circle[circleVertexCount * 3] = {};
+    for (int i = 0; i < circleVertexCount; i++) {
+        circle[i * 3] = { 0.5f * (float)cos(i * (360.0 / circleVertexCount) * deg2rad), 0.5f * (float)sin(i * (360.0 / circleVertexCount) * deg2rad) };
+        circle[i * 3 + 1] = { 0.5f * (float)cos((i + 1) * (360.0 / circleVertexCount) * deg2rad), 0.5f * (float)sin((i + 1) * (360.0 / circleVertexCount) * deg2rad) };
+        circle[i * 3 + 2] = { 0.0f, 0.0f };
+        colors[i * 3] = HSVtoRGB(i % 360);
+        colors[i * 3 + 1] = HSVtoRGB((i + 1) % 360);
+        colors[i * 3 + 2] = { 1.0, 1.0, 1.0, 1.0 };
+    }
 
     // Передаем вершины в буфер
-    glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(circle), circle, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_color);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors.data(), GL_STATIC_DRAW);
     checkOpenGLerror();
 }
 
 
 // Функция непосредственно отрисовки сцены
 void Draw() {
-    glUseProgram(Program); // Устанавливаем шейдерную программу текущей
+    // Устанавливаем шейдерную программу текущей
+    glUseProgram(Program);
+
+    glUniform1f(Unif_xscale, x);
+    glUniform1f(Unif_yscale, y);
 
 
-
-    glEnableVertexAttribArray(Attrib_vertex); // Включаем массив атрибутов
-    glBindBuffer(GL_ARRAY_BUFFER, VBO); // Подключаем VBO
-    glVertexAttribPointer(Attrib_vertex, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    // Включаем массивы атрибутов
+    glEnableVertexAttribArray(Attrib_vertex);
     glEnableVertexAttribArray(Attrib_color);
-    glVertexAttribPointer(Attrib_color, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-    
-    glm::mat4 model = glm::mat4(1.0f);
 
-    model = glm::translate(model, glm::vec3(x, 0.0f, 0.0f));
-    model = glm::translate(model, glm::vec3(0.0f, y, 0.0f));
-    model = glm::translate(model, glm::vec3(0.0f, 0.0f, z));
+    // Подключаем VBO_position
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glVertexAttribPointer(Attrib_vertex, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
-    glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
+    // Подключаем VBO_color
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_color);
+    glVertexAttribPointer(Attrib_color, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
-    glUniformMatrix4fv(glGetUniformLocation(Program, "model"), 1, GL_FALSE, &model[0][0]);
-    glUniformMatrix4fv(glGetUniformLocation(Program, "view"), 1, GL_FALSE, &view[0][0]);
-    glUniformMatrix4fv(glGetUniformLocation(Program, "projection"), 1, GL_FALSE, &projection[0][0]);
+    // Отключаем VBO
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    
-    glBindBuffer(GL_ARRAY_BUFFER, 0); // Отключаем VBO
-    glDrawArrays(GL_TRIANGLES, 0, 12); 
-    glDisableVertexAttribArray(Attrib_vertex); // Отключаем массив атрибутов
-    glDisableVertexAttribArray(Attrib_color); // Отключаем массив атрибутов
-    glUseProgram(0); // Отключаем шейдерную программу
+    // Передаем данные на видеокарту(рисуем)
+    glDrawArrays(GL_TRIANGLES, 0, circleVertexCount * 3);
+
+    // Отключаем массивы атрибутов
+    glDisableVertexAttribArray(Attrib_vertex);
+    glDisableVertexAttribArray(Attrib_color);
+
+    glUseProgram(0);
     checkOpenGLerror();
 }
 

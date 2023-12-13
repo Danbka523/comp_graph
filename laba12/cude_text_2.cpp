@@ -370,6 +370,8 @@ void Draw() {
 
     glBindTexture(GL_TEXTURE_2D, 0);
     glDisableVertexAttribArray(Attrib_vertex); // Отключаем массив атрибутов
+    glDisableVertexAttribArray(Attrib_color); // Отключаем массив атрибутов
+    glDisableVertexAttribArray(Attrib_tex); // Отключаем массив атрибутов
     glUseProgram(0); // Отключаем шейдерную программу
     checkOpenGLerror();
 }
