@@ -116,9 +116,13 @@ namespace laba7
                 for (int i = 0; i < poly.Verts.Count; i++)
                 {
                     var res = rotate * new Matrix(4, 1).Fill(poly.Verts[i].XF, poly.Verts[i].YF, poly.Verts[i].ZF, 1);
+      
                     poly.Verts[i] = new Vertex(res[0, 0], res[1, 0], res[2, 0], poly.Verts[i].Intense, poly.Verts[i].normVector, poly.Verts[i].texturePoint);
-
+                    
                 }
+                var norm = poly.normVector;
+                var res1 = rotate * new Matrix(4, 1).Fill(norm.XF, norm.YF, norm.ZF, 1);
+                poly.normVector = new Vector(res1[0, 0], res1[1, 0], res1[2,0]);    
             }
         }
         public Point RotateAroundAxis(Point p, float degree, string axis)

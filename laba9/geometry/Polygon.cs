@@ -11,7 +11,7 @@ namespace laba7
     internal class Polygon
     {
         List<Vertex> vertices;
-        Vector normVector; //мне уже конкретно не норм
+        public Vector normVector; //мне уже конкретно не норм
         public bool isFacial {  get; set; }  
         public Polygon(Vector normVector=null) { 
             vertices = new List<Vertex>();

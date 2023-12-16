@@ -12,7 +12,7 @@ namespace laba7
     {
         const int scaleFactor = 100;
         const float threshold = 5;
-        const float splitting = 50;
+        const float splitting = 20;
         float yawAngle;
         float pitchAngle;
         float[] upHorizon;
