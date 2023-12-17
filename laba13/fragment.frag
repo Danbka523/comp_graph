@@ -2,7 +2,7 @@
 in vec2 otexcoord;
 out vec4 fragcolor;
 
-unifrom sampler2d tex;
+uniform sampler2D tex;
 
 void main(){
 	fragcolor = texture(tex,otexcoord);

@@ -25,13 +25,13 @@ class Mesh {
 
 	vector<float> vertices;
 	GLuint VBO;
-
+	GLuint VAO;
 
 	void parse_file(const string& path) {
 		try {
 			ifstream file(path);
 			if (!file.is_open()) {
-				throw exception("file can't be oppened");
+				throw exception("obj can't be oppened");
 			}
 
 			vector<vector<float>> v;
@@ -75,7 +75,6 @@ class Mesh {
 				else if (type == "f") {
 
 					auto splitted = split(line, ' ');
-					if (splitted.size() < 5) {
 						for (size_t i = 1; i < splitted.size(); i++)
 						{
 							auto triplet = split(splitted[i], '/');
@@ -92,76 +91,33 @@ class Mesh {
 								vertices.push_back(vt[textureIndex][j]);
 							}
 						}
-					}
-					else {
-						vector<vector<string>> verts = {
-							split(splitted[1], '/'),
-							split(splitted[2], '/'),
-							split(splitted[3], '/'),
-							split(splitted[4], '/'),
-						};
-
-						vector<vector<string>> triang0 = {
-							verts[0], verts[1], verts[2]
-						};
-						for (auto& triplet : triang0) {
-							int positionIndex = stoi(triplet[0]) - 1;
-							for (int j = 0; j < 3; j++) {
-								vertices.push_back(v[positionIndex][j]);
-							}
-							int normaleIndex = stoi(triplet[2]) - 1;
-							for (int j = 0; j < 3; j++) {
-								vertices.push_back(vn[normaleIndex][j]);
-							}
-							int textureIndex = stoi(triplet[1]) - 1;
-							for (int j = 0; j < 2; j++) {
-								vertices.push_back(vt[textureIndex][j]);
-							}
-
-						}
-
-						vector<vector<string>> triang1 = {
-							verts[0], verts[2], verts[3]
-						};
-						for (auto& triplet : triang1) {
-							int positionIndex = stoi(triplet[0]) - 1;
-							for (int j = 0; j < 3; j++) {
-								vertices.push_back(v[positionIndex][j]);
-							}
-							int normaleIndex = stoi(triplet[2]) - 1;
-							for (int j = 0; j < 3; j++) {
-								vertices.push_back(vn[normaleIndex][j]);
-							}
-							int textureIndex = stoi(triplet[1]) - 1;
-							for (int j = 0; j < 2; j++) {
-								vertices.push_back(vt[textureIndex][j]);
-							}
-						}
-					}
+					
 
 				}
 				else {
 					continue;
 				}
 			}
-			return;
+			
 		}
 		catch (const exception& e)
 		{
 			cerr << e.what() << endl;
 		}
-		cout << "Verts count:" << vertices.size() << endl;
+		cout << "Data count:" << vertices.size() << endl;
 	}
 
 	void init_buffer() {
-		glGenBuffers(GL_ARRAY_BUFFER,&VBO);
-		glBindBuffer(1, VBO);
-
-		GLint i0;
-		GLint i1;
-		GLint i2;
+		glGenVertexArrays(1, &VAO);
+		glGenBuffers(1,&VBO);
+		glBindVertexArray(VAO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		GLint i0=0;
+		GLint i1=1;
+		GLint i2=2;
 		
 		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
+		checkOpenGLerror();
 		//pos
 		glVertexAttribPointer(i0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
 		glEnableVertexAttribArray(i0);
@@ -171,17 +127,53 @@ class Mesh {
 		//tex
 		glVertexAttribPointer(i2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
 		glEnableVertexAttribArray(i2);
+		
 	
 		glBindVertexArray(0);
 		glDisableVertexAttribArray(i0);
 		glDisableVertexAttribArray(i1);
 		glDisableVertexAttribArray(i2);
+	
 	}
 
+	void init_textue(const string& tex) {
+		
+		//InitTexture
+		glGenTextures(1, &texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		int width, height;
+		unsigned char* image = SOIL_load_image(tex.c_str(), &width, &height, 0, SOIL_LOAD_RGB);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
 public:
-	Mesh(const string& path) {
+	GLuint texture;
+	Mesh() {}
+	Mesh(const string& path,const string& tex="") {
 		parse_file(path);
+		init_textue(tex);
 		init_buffer();
 	}
-	
+	~Mesh() {}
+
+	void Draw() {
+		glBindVertexArray(VAO);
+		glDrawArraysInstanced(GL_TRIANGLES, 0, vertices.size(),5);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glBindVertexArray(0);
+	}
+
+	void ReleaseVBO()
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glDeleteBuffers(1, &VBO);
+		glDeleteVertexArrays(1, &VAO);
+	}
 };

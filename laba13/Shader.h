@@ -29,7 +29,7 @@ class Shader {
 			}
 		}
 	}
-
+public:
 	void getUniformLocation(const string& name, GLint& pos) const {
 		auto _pos = glGetUniformLocation(ID, name.c_str());
 		if (_pos == -1)
@@ -39,32 +39,33 @@ class Shader {
 		}
 		pos = _pos;
 	}
-public:
+
 	GLuint ID;
 	void Release() {
 		glUseProgram(0);
 		glDeleteProgram(ID);
 	
 	}
-
+	Shader() {}
 	Shader(const string& vertex_path, const string& frag_path) {
 		string vertex_code;
 		string fragment_code;
-		ifstream vShaderSource; //vertex
-		ifstream fShaderSource; //fragment
-		
-		vShaderSource.exceptions(ifstream::failbit | ifstream::badbit);
-		fShaderSource.exceptions(ifstream::failbit | ifstream::badbit);
+
 		//reading source code
 		try {
-			vShaderSource.open(vertex_path);
-			fShaderSource.open(frag_path);
-
 			stringstream vShaderStream, fShaderStream;
+			ifstream vShaderSource(vertex_path); //vertex
+			if (!vShaderSource.is_open()) {
+				throw exception("vertex shader code can't be oppened");
+			}
 			vShaderStream << vShaderSource.rdbuf();
-			fShaderStream << fShaderSource.rdbuf();
-
 			vShaderSource.close();
+
+			ifstream fShaderSource(frag_path); //fragment
+			if (!fShaderSource.is_open()) {
+				throw exception("fragment shader code can't be oppened");
+			}
+			fShaderStream << fShaderSource.rdbuf();
 			fShaderSource.close();
 
 			vertex_code = vShaderStream.str();
@@ -76,7 +77,6 @@ public:
 		catch (ifstream::failure& e) {
 			cerr << "can't read shader file" << e.what() << endl;
 		}
-
 
 
 		const char* v_code = vertex_code.c_str();
@@ -109,7 +109,7 @@ public:
 	}
 
 
-	inline void use() {
+	inline void use() const {
 		glUseProgram(ID);
 	}
 
