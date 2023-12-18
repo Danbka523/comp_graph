@@ -25,7 +25,7 @@ int main() {
 		throw std::runtime_error(std::string(reinterpret_cast<const char*>(glewGetErrorString(errorcode))));
 	}
 	glEnable(GL_DEPTH_TEST);
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	//glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 	const string obj = "test1.obj";
 	const string tex = "sila.jpg";
 	const string ver = "vertex.vert";
@@ -70,10 +70,10 @@ int main() {
 					s->camera.ProcessRotation(-0.1f);
 					break;
 				case sf::Keyboard::L:
-					s->camera.ProcessRotation(0.0f,-1.0f);
+					s->camera.ProcessRotation(0.0f,1.0f);
 					break;
 				case sf::Keyboard::J:
-					s->camera.ProcessRotation(0.0f,1.0f);
+					s->camera.ProcessRotation(0.0f,-1.0f);
 					break;
 				default:
 					break;
