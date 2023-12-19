@@ -163,12 +163,12 @@ public:
 	}
 	~Mesh() {}
 
-	void Draw() {
+	void Draw(int count) {
 		glBindVertexArray(VAO);		
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
-		glDrawArraysInstanced(GL_TRIANGLES, 0, vertices.size(),5);
+		glDrawArraysInstanced(GL_TRIANGLES, 0, vertices.size(),count);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glBindVertexArray(0);
 	}

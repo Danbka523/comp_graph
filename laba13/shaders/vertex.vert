@@ -8,8 +8,8 @@ out vec2 otexcoord;
 
 uniform mat4 view;
 uniform mat4 projection;
-uniform mat4 models[5];
-uniform float sizes[5];
+uniform mat4 models[10];
+uniform float sizes[10];
 
 void main(){
      mat4 model = models[gl_InstanceID];

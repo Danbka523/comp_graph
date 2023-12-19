@@ -30,7 +30,8 @@ int main() {
 	const string tex = "sila.jpg";
 	const string ver = "vertex.vert";
 	const string fra = "fragment.frag";
-	Scene* s = new Scene(obj,tex,ver,fra);
+	int count = 10;
+	Scene* s = new Scene(obj,tex,ver,fra,count);
 	while (window.isOpen()) {
 		sf::Event event;
 		while (window.pollEvent(event)) {

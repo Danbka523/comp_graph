@@ -26,12 +26,13 @@ public:
 	Mesh mesh;
 	Shader shaders;
 	Camera camera;
-	Scene(const string& meshPath, const string& tex, const string& vShaderPath,const string& fShaderPath) {
+	int count;
+	Scene(const string& meshPath, const string& tex, const string& vShaderPath,const string& fShaderPath,int count) {
 		camera = Camera(glm::vec3(0.f, 0.f, 0.f));
 		mesh = Mesh(meshPath,tex);
 		
 		shaders = Shader(vShaderPath, fShaderPath);
-		
+		this->count = count;
 		init();
 		
 	}
@@ -44,7 +45,7 @@ public:
 		int r = 5000;
 		
 		positions.push_back(glm::vec3(0, 0, 0));
-		for (int i = 1; i < 5; i++) {
+		for (int i = 1; i < count; i++) {
 			float x = static_cast<float>(rand()) / r;
 			float y = static_cast<float>(rand()) / r / 10;
 			float z = static_cast<float>(rand()) / r;
@@ -52,13 +53,13 @@ public:
 		}
 
 		
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < count; i++) {
 			orbitSpeeds.push_back(static_cast<float>(rand()) / 5000);
 		}
 
 		
 		sizes.push_back(0.5f);
-		for (int i = 1; i < 5; i++) {
+		for (int i = 1; i < count; i++) {
 			sizes.push_back(0.1f);
 		}
 
@@ -70,7 +71,7 @@ public:
 		camera.UpdateUniforms(&shaders);
 		glUseProgram(0);
 		modelMatrices.push_back(glm::rotate(glm::mat4(1.0f), glm::radians(globalCl.getElapsedTime().asSeconds() * 60.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
-		for (int i = 1; i < 5; ++i) {
+		for (int i = 1; i < count; ++i) {
 			float orbitRadius = sqrt(positions[i].x * positions[i].x + positions[i].z * positions[i].z);	
 			float time = globalCl.getElapsedTime().asSeconds();
 			//cout << time << endl;
@@ -89,7 +90,7 @@ public:
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, mesh.texture);
 		glUniform1i(glGetUniformLocation(shaders.ID, "tex"), 0);
-		mesh.Draw();
+		mesh.Draw(count);
 		glUseProgram(0);
 		modelMatrices.clear();
 	}
