@@ -127,6 +127,13 @@ public:
 		glUniform3fv(pos, 1, &value[0]);
 	}
 
+	void SetVec4(const std::string& name, const glm::vec4& value) const
+	{
+		GLint pos;
+		getUniformLocation(name, pos);
+		glUniform4fv(pos, 1, &value[0]);
+	}
+
 
 	void SetMat3(const string& name, const glm::mat3& mat) const
 	{

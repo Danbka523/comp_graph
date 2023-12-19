@@ -64,10 +64,10 @@ int main() {
 					s->camera.ProcessKeyboard(Camera::DOWN, s->GetDeltaTime());
 					break;
 				case sf::Keyboard::I:
-					s->camera.ProcessRotation(0.1f);
+					s->camera.ProcessRotation(1.f);
 					break;
 				case sf::Keyboard::K:
-					s->camera.ProcessRotation(-0.1f);
+					s->camera.ProcessRotation(-1.f);
 					break;
 				case sf::Keyboard::L:
 					s->camera.ProcessRotation(0.0f,1.0f);

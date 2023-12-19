@@ -8,7 +8,7 @@ const glm::vec3 POSITION = glm::vec3(0.0f, 0.0f, 0.0f);
 const glm::vec3 WORLD_UP = glm::vec3(0.0f, 1.0f, 0.0f);
 const float YAW = -90.0f;
 const float PITCH = 0.0f;
-const float SPEED = 3.0f;
+const float SPEED = 5.0f;
 const float SENSITIVITY = 0.1f;
 const float ZOOM = 45.0f;
 
@@ -28,11 +28,7 @@ class Camera
 		Up = glm::normalize(glm::cross(Right, Front));
 	}
 
-	glm::vec3 Position;
-	glm::vec3 Front;
-	glm::vec3 Up;
-	glm::vec3 Right;
-	glm::vec3 WorldUp;
+
 
 	float Yaw;
 	float Pitch;
@@ -42,6 +38,11 @@ class Camera
 	float Zoom = ZOOM;
 
 public:
+	glm::vec3 Position;
+	glm::vec3 Front;
+	glm::vec3 Up;
+	glm::vec3 Right;
+	glm::vec3 WorldUp;
 
 	enum Camera_Movement {
 		FORWARD,

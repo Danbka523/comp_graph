@@ -168,7 +168,7 @@ public:
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
-		glDrawArraysInstanced(GL_TRIANGLES, 0, vertices.size(),5);
+		glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glBindVertexArray(0);
 	}

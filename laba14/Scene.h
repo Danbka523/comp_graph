@@ -2,7 +2,7 @@
 #include "Headers.h"
 #include "Camera.h"
 #include "Mesh.h"
-
+#include "Light.h"
 #include<vector>
 
 class Scene {
@@ -26,10 +26,14 @@ public:
 	Mesh mesh;
 	Shader shaders;
 	Camera camera;
+
+	PointLight pl;
+	DirLight dl;
+	SpotLight sl;
+	
 	Scene(const string& meshPath, const string& tex, const string& vShaderPath,const string& fShaderPath) {
-		camera = Camera(glm::vec3(0.f, 0.f, 0.f));
-		mesh = Mesh(meshPath,tex);
-		
+		camera = Camera();
+		mesh = Mesh(meshPath,tex);		
 		shaders = Shader(vShaderPath, fShaderPath);
 		
 		init();
@@ -41,6 +45,8 @@ public:
 		shaders.Release();
 	}
 	void init() {
+		init_light(&shaders, &camera);
+
 		int r = 5000;
 		
 		positions.push_back(glm::vec3(0, 0, 0));
@@ -65,33 +71,48 @@ public:
 		
 
 	}
+
+	void setLights(const Shader* shader) {
+
+
+	}
+	glm::vec3 cubePositions[10] = {
+		glm::vec3(0.0f,  -1.f,  0.0f),
+		glm::vec3(4.0f,  5.0f, -15.0f),
+		glm::vec3(-5.f, -10.f, -2.5f),
+		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3(2.4f, -4.f, -3.5f),
+		glm::vec3(-3.f,  3.0f, -7.5f),
+		glm::vec3(6.f, -2.0f, -2.5f),
+		glm::vec3(7.f,  2.0f, -2.5f),
+		glm::vec3(1.5f,  -2.f, -1.5f),
+		glm::vec3(-4.f,  1.0f, -1.5f)
+	};
+
 	void Draw() {
+		sl.SetUniforms(&shaders);
+		dl.SetUniforms(&shaders);
+		pl.SetUniforms(&shaders);
+
 		shaders.use();
 		camera.UpdateUniforms(&shaders);
 		glUseProgram(0);
-		modelMatrices.push_back(glm::rotate(glm::mat4(1.0f), glm::radians(globalCl.getElapsedTime().asSeconds() * 60.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
-		for (int i = 1; i < 5; ++i) {
-			float orbitRadius = sqrt(positions[i].x * positions[i].x + positions[i].z * positions[i].z);	
-			float time = globalCl.getElapsedTime().asSeconds();
-			//cout << time << endl;
-			float satelliteX = orbitRadius * cos(orbitSpeeds[i] * time);
-			float satelliteZ = orbitRadius * sin(orbitSpeeds[i] * time);
-
+		
+		for (unsigned int i = 0; i < 10; i++)
+		{
+			shaders.use();
 			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, glm::vec3(satelliteX, 0, satelliteZ));
-			model = glm::translate(model, glm::vec3(0, positions[i].y, 0));
-			model = glm::rotate(model, glm::radians(time*60.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-			modelMatrices.push_back(model);
+			model = glm::translate(model, cubePositions[i]);
+			float angle = 20.0f * i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			shaders.SetMat4("model", model);
+			checkOpenGLerror();
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, mesh.texture);
+			glUniform1i(glGetUniformLocation(shaders.ID, "tex"), 0);
+			mesh.Draw();
+			glUseProgram(0);
 		}
-		shaders.use();
-		glUniformMatrix4fv(glGetUniformLocation(shaders.ID,"models"), modelMatrices.size(), GL_FALSE, glm::value_ptr(modelMatrices[0]));
-		glUniform1fv(glGetUniformLocation(shaders.ID, "sizes"), sizes.size(), &sizes[0]);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, mesh.texture);
-		glUniform1i(glGetUniformLocation(shaders.ID, "tex"), 0);
-		mesh.Draw();
-		glUseProgram(0);
-		modelMatrices.clear();
 	}
 
 };
