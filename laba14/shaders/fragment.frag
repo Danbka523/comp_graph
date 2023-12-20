@@ -85,8 +85,8 @@
 	    result += CalcPointLight(pointLight, norm, FragPos, viewDir);    
 
 	    // spot light
-	    result += CalcSpotLight(spotLight, norm, FragPos, viewDir);    
-
+	    //result += CalcSpotLight(spotLight, norm, FragPos, viewDir);    
+		
 	    
 	    FragColor = vec4(result, 1.0);
 	}
@@ -197,3 +197,10 @@
 	
 	    return color;
 	}
+
+	vec3 AmiGuch()
+	{
+		vec3 = 
+		vec3 kCool = min 
+	}
+	

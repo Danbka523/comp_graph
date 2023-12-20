@@ -54,24 +54,22 @@
 	uniform sampler2D ourTexture;
 	uniform int num;
 	
-	vec3 CalcDirLight(DirLight light, vec3 norm, vec3 viewDir);
+	vec3 CalcDirLight(DirLight light, vec3 norm, vec3 viewDir, int num);
 	vec3 CalcPointLight(PointLight light, vec3 norm, vec3 opos, vec3 viewDir);
 	vec3 CalcSpotLight(SpotLight light, vec3 norm, vec3 opos, vec3 viewDir);
-	vec3 ApplyToonShading(vec3 color, vec3 norm, vec3 opos);
-	//TODO ANY SHADING
+	vec3 ApplyToonShading(vec3 color);
+	vec3 CalcRimLight(vec3 norm, vec3 viewDir, float rimIntensity, float rimPower);
 	
 	void main()
 	{    
 	    vec3 norm = normalize(onormal);
-	    vec3 viewDir = normalize(viewPos - opos);
+	    vec3 viewDir = normalize(opos - viewPos);
 		vec3 result;
 
 
 		//directional lighting
-	    result = CalcDirLight(dirLight, norm, viewDir);
+	    result = CalcDirLight(dirLight, norm, viewDir,1);
 
-		//if (num==2)
-	    	//result += ApplyToonShading(result);
 	    
 
 	    // point lights
@@ -79,13 +77,23 @@
 
 	    //spotlight
 	    result += CalcSpotLight(spotLight, norm, opos, viewDir);    
+		//if (num==0)
+			//result = ApplyToonShading(result);   
+	//	if (num ==1) 
 
-		//result = ApplyToonShading(result,norm,opos);    
 	    FragColor = vec4(result, 1.0);
 	}
-	
+
+	vec3 CalcRimLight(vec3 norm, vec3 viewDir, float rimIntensity, float rimPower)
+	{
+		float rimFactor = max(dot(norm, -viewDir), 0.0);
+		rimFactor = pow(rimFactor, rimPower);
+		vec3 rimColor = rimIntensity * rimFactor * vec3(1.0, 0.0, 0.0);
+		return rimColor;
+	}
+
 	// calculates the color when using a directional light.
-	vec3 CalcDirLight(DirLight light, vec3 norm, vec3 viewDir)
+	vec3 CalcDirLight(DirLight light, vec3 norm, vec3 viewDir, int num)
 	{
 		//ambient
 		vec3 ambient = light.ambient * vec3(texture(ourTexture, otexcoord));
@@ -102,7 +110,8 @@
 	   
 	    vec3 diffuse = light.diffuse * diff * vec3(texture(ourTexture, otexcoord));
 	    vec3 specular = light.specular * spec * vec3(texture(ourTexture, otexcoord));
-
+		if (num==1)
+			return (ambient + diffuse + specular)+CalcRimLight(norm,viewDir,1.0,32.0);
 	    return (ambient + diffuse + specular);
 	}
 	
@@ -133,7 +142,11 @@
 
 	    return (ambient + diffuse + specular);
 	}
+
+
 	
+
+
 	// calculates the color when using a spot light.
 	vec3 CalcSpotLight(SpotLight light, vec3 norm, vec3 opos, vec3 viewDir)
 	{
@@ -167,25 +180,30 @@
     	else 
     	{
 			// else, use ambient light so scene isn't completely dark outside the spotlight.
+			if (num==1)
+				return vec3(light.ambient * texture(ourTexture, otexcoord).rgb)+CalcRimLight(norm,viewDir,0.5,4.0);
 			return vec3(light.ambient * texture(ourTexture, otexcoord).rgb);
        
     	}
 	}
 
-	vec3 ApplyToonShading(vec3 color, vec3 norm, vec3 opos)
+	vec3 ApplyToonShading(vec3 FragColor)
 	{
-		vec3 lightDir = normalize(-dirLight.direction);
-		float toon_intensity = max(dot(norm, vec3(0.0, 0.0, 1.0)), 0.0);
+	
+		float intensity = (FragColor.r + FragColor.g + FragColor.b) / 3.0;
 
 
-		
-		if (toon_intensity > 0.95)
-			color=color;
-		else if (toon_intensity > 0.5)
-			color= 0.8 * color;
-		else if (toon_intensity > 0.25)
-			color = 0.5* color;
+		float threshold1 = 0.2;
+		float threshold2 = 0.6;
+
+
+		vec3 toonColor;
+		if (intensity > threshold2)
+			toonColor = texture(ourTexture,otexcoord).rgb*1.2;  // Высокий уровень интенсивности
+		else if (intensity > threshold1)
+			toonColor = texture(ourTexture,otexcoord).rgb*0.6;  // Средний уровень интенсивности
 		else
-			color = 0.2* color;
-		return color;
+			toonColor = texture(ourTexture,otexcoord).rgb*0.1;  // Низкий уровень интенсивности
+
+		return toonColor;
 	}
