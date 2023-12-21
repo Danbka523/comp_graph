@@ -26,7 +26,7 @@ struct DirLight {
 		//glm::vec3 direction = camera->Front;
 		glm::vec3 position = camera->Position;
 		s->use();
-		//s->SetVec3("viewPos", position);
+		s->SetVec3("viewPos", position);
 
 		s->SetVec3("dirLight.direction", direction);
 		s->SetVec3("dirLight.ambient", ambient);
@@ -38,7 +38,7 @@ struct DirLight {
 };
 
 struct PointLight {
-	glm::vec3 position{ 2.0f,0.0f,0.0f };
+	glm::vec3 lposition{ 2.0f,0.0f,0.0f };
 	glm::vec3 ambient{ 0.2f, 0.2f, 0.2f, };
 	glm::vec3 diffuse{ 1.0f, 1.0f, 1.0f };
 	glm::vec3 specular{ 1.0f, 1.0f, 1.0f };
@@ -50,10 +50,12 @@ struct PointLight {
 
 
 		glm::vec3 direction = camera->Front;
+		glm::vec3 position = camera->Position;
 		s->use();
+		
 		s->SetVec3("viewPos", position);
 
-		s->SetVec3("pointLight.position", position);
+		s->SetVec3("pointLight.position", lposition);
 		s->SetVec3("pointLight.ambient", ambient);
 		s->SetVec3("pointLight.diffuse", diffuse);
 		s->SetVec3("pointLight.specular", specular);
@@ -69,6 +71,8 @@ struct PointLight {
 struct SpotLight {
 
 	glm::vec3 ambient{ 0.2f, 0.2f, 0.2f, };
+	//glm::vec3 lposition{-1.f, 0.0f, 0.0f, };
+	glm::vec3 direction{ -1.0f,0.0f, 0.0f, };
 	glm::vec3 diffuse{ 1.0f, 1.0f, 1.0f };
 	glm::vec3 specular{ 1.0f, 1.0f, 1.0f };
 	float constant = 1.0f;

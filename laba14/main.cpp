@@ -25,8 +25,7 @@ int main() {
 		throw std::runtime_error(std::string(reinterpret_cast<const char*>(glewGetErrorString(errorcode))));
 	}
 	glEnable(GL_DEPTH_TEST);
-	//glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-	const string obj = "test1.obj";
+	const string obj = "new_sphere.obj";
 	const string tex = "sila.jpg";
 	const string ver = "vertex.vert";
 	const string fra = "fragment.frag";
