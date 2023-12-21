@@ -121,8 +121,12 @@ namespace laba7
                     
                 }
                 var norm = poly.normVector;
+                if (norm == null)
+                    poly.normVector = poly.GetNorm();
+                norm = poly.normVector;
                 var res1 = rotate * new Matrix(4, 1).Fill(norm.XF, norm.YF, norm.ZF, 1);
-                poly.normVector = new Vector(res1[0, 0], res1[1, 0], res1[2,0]);    
+                poly.normVector = new Vector(res1[0, 0], res1[1, 0], res1[2, 0]);
+                
             }
         }
         public Point RotateAroundAxis(Point p, float degree, string axis)

@@ -12,7 +12,7 @@ namespace laba7
     {
         List<Vertex> vertices;
         public Vector normVector; //мне уже конкретно не норм
-        public Pen pen;
+        public Pen pen = new Pen(Color.Violet);
         public bool isFacial {  get; set; }  
         public Polygon(Vector normVector=null) { 
             vertices = new List<Vertex>();

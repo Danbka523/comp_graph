@@ -20,7 +20,9 @@ namespace laba7
 
         private void createRoomButton_Click(object sender, EventArgs e)
         {
-            Scene scene = new Scene();
+            Scene scene = new Scene(pictureBox1.Width, pictureBox1.Height);
+            scene.Load();
+            pictureBox1.Image = scene.Draw();
         }
     }
 }

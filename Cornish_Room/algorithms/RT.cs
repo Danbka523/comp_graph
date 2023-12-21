@@ -23,13 +23,37 @@ namespace laba7
             {
                 for (int j = 0; j < height; j++)
                 {
-                    Ray ray = new Ray(pixels[i, j], new Vector(scene.cameraPos, pixels[i, j]));
-                    Vector color = RayTracing(ray,3);
-                    res.SetPixel(i, j,
-                      Color.FromArgb((int)(255 * color.XF), (int)(255 * color.YF), (int)(255 * color.ZF)));
+                    Ray ray = new Ray(pixels[i, j], new Vector(scene.cameraPos, pixels[i, j]).Normalize());
+                    Vector color = RayTracing(ray,10);
+                    res.SetPixel(i, j, Color.FromArgb((int)(255 * color.XF), (int)(255 * color.YF), (int)(255 * color.ZF)));
 
                 }
             }
+
+            //List<List<Vector>> colors = Enumerable.Repeat(new List<Vector>(), width).ToList();
+
+            //Bitmap res = new Bitmap(width, height);
+            //Parallel.For(0, width, i => {
+            //    Parallel.For(0, height, j => {
+            //        Ray ray = new Ray(pixels[i, j], new Vector(scene.cameraPos, pixels[i, j]).Normalize());
+            //        Vector color = RayTracing(ray, 5);
+            //        colors[i].Add(color);
+
+            //    });
+            //});
+
+
+            //for (int i = 0; i < width; i++)
+            //{
+            //    for (int j = 0; j < height; j++)
+            //    {
+
+            //        Vector color = colors[i][j];
+            //        res.SetPixel(i, j,
+            //          Color.FromArgb((int)(255 * color.XF), (int)(255 * color.YF), (int)(255 * color.ZF)));
+
+            //    }
+            //}
 
             return res;
         
@@ -41,13 +65,10 @@ namespace laba7
                 return color;
 
 
-            float intersection = 0;       
-            Vector normal = null;
-            Material material = new Material();
             bool refractFigure = false;
 
 
-            intersection = FindClosest(ray, ref normal, ref material);
+            float intersection = FindClosest(ray, out Vector normal, out Material material);
 
 
             if (intersection == 0)
@@ -71,8 +92,7 @@ namespace laba7
 
             //ambient
             Vector ambientR = scene.lightSource.Color * material.Ambient;
-            ambientR = new Vector(ambientR.X * material.Color.X, ambientR.Y * material.Color.Y,
-                ambientR.Z * material.Color.Z);
+            ambientR = new Vector(ambientR.XF * material.Color.XF, ambientR.YF * material.Color.YF,ambientR.ZF * material.Color.ZF);
             color += ambientR;
             
 
@@ -110,35 +130,36 @@ namespace laba7
         
         }
 
-        public float FindClosest(Ray ray, ref Vector normal, ref Material material) {
-            float res = 0;
-            float t = 0;
+        public float FindClosest(Ray ray, out Vector normal, out Material material) {
+            float intersectionPoint = 0;;
+            normal = null;
+            material = new Material();
             foreach (var figure in scene.figures)
             {
 
-                if (ray.Intersection(figure, ref res, ref t, ref normal)) {
-                    if (t < res || res == 0)
+                if (ray.Intersection(figure, out float intersect, out Vector norm)) {
+                    if (intersect < intersectionPoint|| intersectionPoint == 0)
                     {
-                        res = t;
+                        intersectionPoint = intersect;
+                        normal = norm;
                         material = new Material(figure.material);
                     }
 
                 }
             }
-            return res;
+            return intersectionPoint;
             
         }
 
         public static bool IsVisible(LightSource light, Point reachPoint, Scene scene)
         {
-            float length = (new Vector(light.Position) - new Vector(reachPoint)).Length();
-            Ray ray = new Ray(reachPoint, new Vector(light.Position));
-            Vector normal = null;
-            float res = 0;
-            float t =0;
+            float length = new Vector(reachPoint, light.Position).Length();
+            Ray ray = new Ray(reachPoint, new Vector(light.Position,reachPoint));
+            Vector normal;
+            float res;
             foreach (var fig in scene.figures)
             {
-                if (ray.Intersection(fig,ref res,ref t,ref normal))
+                if (ray.Intersection(fig,out res,out normal))
                     if (res < length && res > Polyhedron.eps)
                         return false;
             }

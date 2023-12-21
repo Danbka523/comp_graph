@@ -62,6 +62,10 @@ namespace laba7
         {
             return new Vector(k * b.x, k * b.y, k * b.z);
         }
+        public static Vector operator /(Vector b, float k)
+        {
+            return new Vector(b.x/k,b.y/k, b.z/k);
+        }
 
         public float Scalar(Vector other)
         {
@@ -86,7 +90,7 @@ namespace laba7
 
         internal float Length()
         {
-            return XF * XF + YF * YF + ZF * ZF;
+            return (float)Math.Sqrt(XF * XF + YF * YF + ZF * ZF);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace laba7
 {
     internal class Polyhedron
     {
-        public static float eps = 0.0001;
+        public static float eps = 0.0001f;
         List<Polygon> polygons;
         public bool isHighLighthed;
         public Material material;

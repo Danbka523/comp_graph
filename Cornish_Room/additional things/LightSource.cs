@@ -26,8 +26,8 @@ namespace laba7
 
         public Vector Shade( Vector normal, Vector matColor, float diffCoef)
         {
-            Vector dir = new Vector(Position, new Point(normal.XF, normal.YF, normal.ZF)).Normalize();
-            float coefCos = Math.Max(normal.Cos(dir), 0);
+            Vector dir = new Vector(Position, new Point(normal)).Normalize();
+            float coefCos = Math.Max(normal.Scalar(dir), 0);
 
             Vector diff = diffCoef * coefCos * Color;
             return new Vector(diff.XF * matColor.XF, diff.YF * matColor.YF, diff.ZF * matColor.ZF);

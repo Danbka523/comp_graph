@@ -62,21 +62,23 @@ namespace laba7
 
 
 
-        public bool Intersection(Polyhedron figure, ref float res, ref float t, ref Vector normal) {
+        public bool Intersection(Polyhedron figure, out float intersect, out Vector normal) {
             Polygon p=null;
+            intersect = 0;
+            normal = null;
             foreach (var poly in figure.Polygons)
             {
-                for (int i = 0; i < poly.Verts.Count-3; i+=3)
-                {
-                    if (RayTriangleIntersection(new Vector(poly.Verts[i]), new Vector(poly.Verts[i+1]), new Vector(poly.Verts[i+2]),ref t) && (res == 0 || t < res))
+
+                    if (RayTriangleIntersection(new Vector(poly.Verts[0]), new Vector(poly.Verts[1]), new Vector(poly.Verts[2]),out float t) 
+                    && (intersect == 0 || t < intersect))
                     {
-                        res = t;
+                        intersect = t;
                         p = poly;
                     }
-                }
+                
             }
 
-            if (res != 0)
+            if (intersect != 0)
             {
                 normal = p.GetNorm();
                 figure.material.Color = new Vector(p.pen.Color.R / 255f, p.pen.Color.G / 255f, p.pen.Color.B / 255f);
@@ -88,7 +90,7 @@ namespace laba7
         }
 
         //https://en.wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm
-        public bool RayTriangleIntersection(Vector p0, Vector p1, Vector p2, ref float intersect)
+        public bool RayTriangleIntersection(Vector p0, Vector p1, Vector p2, out float intersect)
         {
             float eps = 0.0001f;
             
@@ -99,17 +101,17 @@ namespace laba7
             float det = edge1.Scalar(pVec);
 
  
-            if (det > -eps && det < eps)
+            if (det > -eps && det < eps) //parallel 
                 return false;
 
             float invDet = 1.0f / det;
-            Vector s = new Vector(r.start) - p0;
+            Vector s = new Vector(p0,start);
             float u = invDet * s.Scalar(pVec);
             if (u < 0 || u > 1)
                 return false;
 
             Vector q = s * edge1;
-            float v = invDet * r.direction.Scalar(q);
+            float v = invDet * direction.Scalar(q);
 
             if (v < 0 || u + v > 1)
                 return false;

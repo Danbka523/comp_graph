@@ -22,24 +22,24 @@ namespace laba7
         public float Environment { get => environment; set => environment = value; }
         public Vector Color { get => color; set => color = value; }
 
-        public Material(float ambient, float diffuse, float reflection, float refraction, float environment, Vector color)
+        public Material(float ambient, float diffuse, float reflection, float refraction, float environment)
         {
             this.ambient = ambient;
             this.diffuse = diffuse;
             this.reflection = reflection;
             this.refraction = refraction;
             this.environment = environment;
-            this.color = color;
+
         }
 
         public Material(Material m)
         {
-            m.ambient = ambient;
-            m.diffuse = diffuse;
-            m.reflection = reflection;
-            m.refraction = refraction;
-            m.environment = environment;
-            m.color = color;
+            ambient = m.ambient;
+            diffuse = m.diffuse;
+            reflection = m.reflection;
+            refraction = m.refraction;
+            environment = m.environment;
+            color = m.color;
         }
 
         public Material() { }
