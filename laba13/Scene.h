@@ -42,7 +42,7 @@ public:
 		shaders.Release();
 	}
 	void init() {
-		int r = 5000;
+		int r = 3000;
 		
 		positions.push_back(glm::vec3(0, 0, 0));
 		for (int i = 1; i < count; i++) {
@@ -58,9 +58,9 @@ public:
 		}
 
 		
-		sizes.push_back(0.5f);
+		sizes.push_back(0.05f);
 		for (int i = 1; i < count; i++) {
-			sizes.push_back(0.1f);
+			sizes.push_back(0.01f);
 		}
 
 		
@@ -70,7 +70,8 @@ public:
 		shaders.use();
 		camera.UpdateUniforms(&shaders);
 		glUseProgram(0);
-		modelMatrices.push_back(glm::rotate(glm::mat4(1.0f), glm::radians(globalCl.getElapsedTime().asSeconds() * 60.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
+		//modelMatrices.push_back(glm::rotate(glm::mat4(1.0f), glm::radians(globalCl.getElapsedTime().asSeconds() * 60.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
+		modelMatrices.push_back(glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(-1.0f, 0.0f, 0.0f)));
 		for (int i = 1; i < count; ++i) {
 			float orbitRadius = sqrt(positions[i].x * positions[i].x + positions[i].z * positions[i].z);	
 			float time = globalCl.getElapsedTime().asSeconds();
