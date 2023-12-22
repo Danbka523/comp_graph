@@ -16,13 +16,29 @@ namespace laba7
         RT rayTracing;
         int width;
         int height;
-        public Scene(int width, int height) {
+        public bool isMirror;
+        public bool isTrans;
+        List<Material> materials=new();
+        public Scene(int width, int height, bool isMirror, bool isTrans) {
             dataManager=new DataManager();
             transformations = new Transformations();
             this.width= width;
             this.height = height;
+            GenMaterials();
+            this.isTrans= isTrans;
+            this.isMirror= isMirror;
         }
 
+        void GenMaterials()
+        {
+            Material transparensy = new Material(0.1f, 0.5f, 0.0f, 0.7f, 1f);
+            transparensy.Color = new Vector(1, 1, 1);
+            Material mirror = new Material(0.0f,0.1f,0.9f,0.0f,1f);
+            mirror.Color = new Vector(1, 0, 0);
+            materials.Add(transparensy);
+            materials.Add(mirror);
+
+        }
 
         public void Load() {
             Polyhedron cube = dataManager.Load("cube.obj");
@@ -46,20 +62,33 @@ namespace laba7
             room.Polygons[11].pen = new Pen(Color.White);
 
             transformations.Scale(room, 5, 5, 5);          
-            transformations.Shift(cube, -1, 2, -1f);
-            transformations.Scale(cube, 1.2f, 1.2f, 1.2f);
+            transformations.Shift(cube, -4, 0, -3);
+            transformations.Shift(sphere, 1, 0, 0);
+            //transformations.Scale(cube, 1.2f, 1.2f, 1.2f);
             transformations.RotateAroundAxis(cube, 30, "Z");
 
-            cube.material = new Material(0f, 0f, 0.1f, 0.0f, 1.5f);
-            room.material = new Material(0.005f, 0.5f, 0.0f, 0.0f, 1f);
+            if (isMirror)
+            {
+                cube.material = new Material(materials[1]);
+
+            }
+            else if (isTrans)
+            {
+                cube.material = new Material(materials[0]);
+            }
+            else 
+                cube.material = new Material(0.1f, 0.7f, 0.0f, 0.0f, 1.5f);
             sphere.material = new Material(0.1f, 0.5f, 0.3f, 0.7f, 1f);
 
-            cube.material.Color = new Vector(1.0f, 1.0f, 1.0f);            
+            room.material = new Material(0.005f, 0.7f, 0.0f, 0.0f, 1f);
+
+
+            cube.material.Color = new Vector(1.0f, 0.0f, 0.0f);            
             sphere.material.Color = new Vector(0.0f, 1.0f, 0.0f);
             room.material.Color = new Vector(0.2f, 0.2f, 0.2f);
 
             
-            lightSource =new LightSource(new Point(0f, 0f, 4.9f),new Vector(1,1,1));
+            lightSource =new LightSource(new Point(0f, 4f, 4.9f),new Vector(1,1,1));
 
             rayTracing = new RT(this);
 

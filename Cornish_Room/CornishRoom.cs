@@ -12,6 +12,8 @@ namespace laba7
 {
     public partial class CornishRoom : Form
     {
+        bool isMirror;
+        bool isTrans;
         public CornishRoom()
         {
             InitializeComponent();
@@ -20,9 +22,29 @@ namespace laba7
 
         private void createRoomButton_Click(object sender, EventArgs e)
         {
-            Scene scene = new Scene(pictureBox1.Width, pictureBox1.Height);
+            Scene scene = new Scene(pictureBox1.Width, pictureBox1.Height, isMirror, isTrans);
             scene.Load();
             pictureBox1.Image = scene.Draw();
+        }
+
+        private void reflectCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            if (reflectCheck.Checked)
+            {
+                isMirror = true;
+            }
+            else
+                isMirror = false;
+        }
+
+        private void transparencyCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            if (transparencyCheck.Checked)
+            {
+                isTrans = true;
+            }
+            else
+                isTrans = false;
         }
     }
 }

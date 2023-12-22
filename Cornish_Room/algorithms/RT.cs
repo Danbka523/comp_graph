@@ -98,7 +98,7 @@ namespace laba7
 
             //diffuse
             if (IsVisible(scene.lightSource, reachPoint, scene))
-                color += scene.lightSource.Shade(normal, material.Color, material.Diffuse);
+                color += scene.lightSource.Shade(reachPoint,normal, material.Color, material.Diffuse);
 
 
             if (material.Reflection > 0)
@@ -153,8 +153,8 @@ namespace laba7
 
         public static bool IsVisible(LightSource light, Point reachPoint, Scene scene)
         {
-            float length = new Vector(reachPoint, light.Position).Length();
-            Ray ray = new Ray(reachPoint, new Vector(light.Position,reachPoint));
+            float length = new Vector(reachPoint, light.Position).Normalize().Length();
+            Ray ray = new Ray(reachPoint, new Vector(reachPoint, light.Position));
             Vector normal;
             float res;
             foreach (var fig in scene.figures)

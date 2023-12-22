@@ -74,9 +74,9 @@ namespace laba7
             {
                 var v1 = new Vector(vertices[0], vertices[1]);
                 var v2 = new Vector(vertices[0], vertices.Last());
-                normVector= -(v1 * v2);
+                normVector= -(v1 * v2).Normalize();
             }
-            return normVector;
+            return normVector.Normalize();
         }
         public override string ToString()
         {

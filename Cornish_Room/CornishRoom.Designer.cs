@@ -74,6 +74,7 @@
             reflectCheck.TabIndex = 3;
             reflectCheck.Text = "Зеркальность";
             reflectCheck.UseVisualStyleBackColor = true;
+            reflectCheck.CheckedChanged += reflectCheck_CheckedChanged;
             // 
             // wallComboBox
             // 
@@ -93,6 +94,7 @@
             transparencyCheck.TabIndex = 5;
             transparencyCheck.Text = "Прозрачность";
             transparencyCheck.UseVisualStyleBackColor = true;
+            transparencyCheck.CheckedChanged += transparencyCheck_CheckedChanged;
             // 
             // CornishRoom
             // 

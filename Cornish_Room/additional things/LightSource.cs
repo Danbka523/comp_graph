@@ -24,9 +24,9 @@ namespace laba7
             position.ZF += z;      
         }
 
-        public Vector Shade( Vector normal, Vector matColor, float diffCoef)
+        public Vector Shade(Point reachPoint, Vector normal, Vector matColor, float diffCoef)
         {
-            Vector dir = new Vector(Position, new Point(normal)).Normalize();
+            Vector dir = new Vector(reachPoint, position).Normalize();
             float coefCos = Math.Max(normal.Scalar(dir), 0);
 
             Vector diff = diffCoef * coefCos * Color;
