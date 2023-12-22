@@ -11,9 +11,10 @@ namespace laba7
     internal class RT
     {
         Scene scene;
-        public RT(Scene scene) {
+        public RT(Scene scene, List<LightSource> lightSources = null)
+        {
             this.scene = scene;
-        
+             
         }
 
 
@@ -89,40 +90,42 @@ namespace laba7
             //луча – один в направлении отражения (1), второй – в направлении 
             //источника света (2), третий в направлении преломления 
             //прозрачной поверхностью (3)
+            foreach (var light in scene.lightSources)
+            {
+                //ambient
+                Vector ambientR = light.Color * material.Ambient;
+                ambientR = new Vector(ambientR.XF * material.Color.XF, ambientR.YF * material.Color.YF, ambientR.ZF * material.Color.ZF);
+                color += ambientR;
 
-            //ambient
-            Vector ambientR = scene.lightSource.Color * material.Ambient;
-            ambientR = new Vector(ambientR.XF * material.Color.XF, ambientR.YF * material.Color.YF,ambientR.ZF * material.Color.ZF);
-            color += ambientR;
+
+                //diffuse
+
+                if (IsVisible(light, reachPoint, scene))
+                    color += light.Shade(reachPoint, normal, material.Color, material.Diffuse);
+
+            }
+                if (material.Reflection > 0)
+                {
+                    Ray reflectionRay = ray.Reflect(reachPoint, normal);
+                    color += material.Reflection * RayTracing(reflectionRay, iter - 1);
+                }
             
+                if (material.Refraction > 0)
+                {
+                    //коэффициент преломления
+                    float refractRatio;
+                    //если угол острый получился, то
+                    if (refractFigure)
+                        refractRatio = material.Environment;
+                    else
+                        refractRatio = 1 / material.Environment;
 
-            //diffuse
-            if (IsVisible(scene.lightSource, reachPoint, scene))
-                color += scene.lightSource.Shade(reachPoint,normal, material.Color, material.Diffuse);
+                    Ray transparencyRay = ray.Refract(reachPoint, normal, material.Refraction, refractRatio);
+                    if (transparencyRay != null)
+                        color += material.Refraction * RayTracing(transparencyRay, iter - 1);
+                }
 
-
-            if (material.Reflection > 0)
-            {
-                Ray reflectionRay = ray.Reflect(reachPoint, normal);
-                color += material.Reflection * RayTracing(reflectionRay, iter - 1);
-            }
-
-            if (material.Refraction > 0)
-            {
-                //коэффициент преломления
-                float refractRatio;
-                //если угол острый получился, то
-                if (refractFigure)
-                    refractRatio = material.Environment;
-                else
-                    refractRatio = 1 / material.Environment;
-
-                Ray transparencyRay = ray.Refract(reachPoint, normal, material.Refraction, refractRatio);
-                if (transparencyRay != null)
-                    color += material.Refraction * RayTracing(transparencyRay, iter - 1);
-            }
-
-
+            
 
             if (color.XF > 1.0f || color.YF > 1.0f || color.ZF > 1.0f)
                 return color.Normalize();

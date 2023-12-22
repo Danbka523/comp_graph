@@ -29,6 +29,11 @@ namespace laba7
             return this;
         }
 
+        public void SetPen(Pen pen)
+        {
+            polygons.ForEach(polygon => { polygon.pen = pen; });
+        }
+
         public Color GetColor() => color;
         public void SetColor(Color c) => color = c;
 
