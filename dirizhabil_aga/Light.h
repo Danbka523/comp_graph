@@ -10,7 +10,7 @@ const Camera* camera;
 	float shininess = 32.0f;
 	s->SetFloat("material.shininess", shininess);
 	glm::vec4 diffuse{ 0.7f, 0.7f, 0.7f, 1.f };
-	s->SetVec3("material.diffuse", diffuse);
+	//s->SetVec3("material.diffuse", diffuse);
 	glUseProgram(0);
 	camera = c;
 }

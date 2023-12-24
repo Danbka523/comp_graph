@@ -49,10 +49,10 @@ public:
 	
 	}
 	Shader() {}
-	Shader(const string& vertex_path, const string& frag_path, string name="") {
+	Shader(const string& vertex_path, const string& frag_path) {
 		string vertex_code;
 		string fragment_code;
-		this->name = name;
+
 		//reading source code
 		try {
 			stringstream vShaderStream, fShaderStream;

@@ -12,7 +12,7 @@ class Entity
 
 	void update_uniforms() {
 		auto model_matrix = glm::translate(glm::mat4(1.f), position)
-			* glm::rotate(glm::mat4(1.f), rotation.y, glm::vec3(0.f, 1.f, 0.f))
+			* glm::rotate(glm::mat4(1.f), glm::radians(ry), glm::vec3(0.f, 1.f, 0.f))
 			* glm::scale(glm::mat4(1.f), scale);
 
 		shader->SetMat4("model", model_matrix);
@@ -20,8 +20,8 @@ class Entity
 	}
 public:
 	string name;
-	Mesh* mesh = nullptr;
-	Shader* shader = nullptr;
+	Mesh* mesh;
+	Shader* shader;
 
 
 	glm::vec3 position{ x,y,z };
@@ -36,7 +36,8 @@ public:
 		this->name = name;
 	}
 
-	~Entity() {}
+	~Entity() {
+	}
 
 
 	void draw() {
@@ -49,21 +50,21 @@ public:
 		glUseProgram(0);
 	}
 
-	void move(float x, float y, float z) {
+	void moving(float x, float y, float z) {
 		this->x += x;
 		this->y += y;
 		this->z += z;
 		position = { x,y,z };
 	}
 
-	void rotate(float rx, float ry, float rz) {
+	void rotating(float rx, float ry, float rz) {
 		this->rx += rx;
 		this->ry += ry;
 		this->rz += rz;
 		rotation = { rx,ry,rz };
 	}
 
-	void scale(float cx, float cy, float cz) {
+	void scaling(float cx, float cy, float cz) {
 		this->cx += cx;
 		this->cy += cy;
 		this->cz += cz;

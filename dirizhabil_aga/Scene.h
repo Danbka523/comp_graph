@@ -39,17 +39,18 @@ public:
 		{
 			meshes.push_back(Mesh(meshes_path[i], textures_path[i]));
 			shaders.push_back(Shader(verts_shaders_path[i], frag_shaders_path[i]));
-			if (i == 0)
+			/*if (i == 0)
 				entities.push_back(Entity(&meshes[i], &shaders[i],"grass"));
 			else if (i==1)
-				entities.push_back(Entity(&meshes[i], &shaders[i], "fir"));
-			else if (i == 2)
 				entities.push_back(Entity(&meshes[i], &shaders[i], "airship"));
+			else if (i==2)		
+				entities.push_back(Entity(&meshes[i], &shaders[i], "fir"));
 			else if (i==3)
 				entities.push_back(Entity(&meshes[i], &shaders[i], "gift"));
 			else 
-				entities.push_back(Entity(&meshes[i], &shaders[i], "house"));
+				entities.push_back(Entity(&meshes[i], &shaders[i], "house"));*/
 		}
+		
 		init();
 		
 	}
@@ -65,11 +66,7 @@ public:
 		}
 	}
 	void init() {
-		init_grass();
-		init_houses();
-
-
-
+		init_lights();
 
 
 		/*
@@ -99,7 +96,7 @@ public:
 	}
 
 	void move_airship(float x, float y, float z) {
-		entities[2].move(x, y, z);
+		entities[1].moving(x, y, z);
 	}
 
 	void init_grass() {
@@ -108,12 +105,19 @@ public:
 	}
 
 	void init_houses() {
-		
+		for (size_t i = 4; i <  entities.size(); i++)
+		{
+
+		}
 	
 	}
 
-	void setLights(const Shader* shader) {
-
+	void init_lights() {
+		for  ( auto& shader : shaders)
+		{
+			init_light(&shader, &camera);
+			dl.SetUniforms(&shader);
+		}
 
 	}
 	glm::vec3 cubePositions[10] = {
@@ -134,17 +138,25 @@ public:
 		sl.SetUniforms(&shaders);
 		dl.SetUniforms(&shaders);
 		pl.SetUniforms(&shaders);
-
-		shaders.use();
-		camera.UpdateUniforms(&shaders);
-		glUseProgram(0);
 		*/
-
-
-
-		for (unsigned int i = 0; i < 1; i++)
+		for (auto& shader : shaders)
 		{
+			camera.UpdateUniforms(&shader);
+		}
+		
 
+		for (unsigned int i = 0; i < entities.size(); i++)
+		{
+			entities[i].shader->use();
+
+			glActiveTexture(GL_TEXTURE0);
+		    glBindTexture(GL_TEXTURE_2D, entities[i].mesh->texture);
+			auto t = glGetUniformLocation(entities[i].shader->ID, "ourTexture");
+			glUniform1i(glGetUniformLocation(entities[i].shader->ID, "ourTexture"), 0);
+			entities[i].draw();
+
+
+			glUseProgram(0);
 
 			/*
 			//shaders.use();

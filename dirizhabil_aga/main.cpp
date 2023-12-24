@@ -14,6 +14,18 @@ bool isCamTouched = false;
 glm::vec2 mousePos;
 glm::vec2 mouseDelta;
 
+static void make_scene(Scene* s) {
+
+	auto grass = Entity(&s->meshes[0], &s->shaders[0]);
+	s->entities.push_back(grass);
+	grass.position += glm::vec3(0,0,-2.0f);
+	grass.scale+=glm::vec3(2, 2, 2);
+
+	auto airship = Entity(&s->meshes[1], &s->shaders[1]);
+	airship.position += glm::vec3(2.5f, 0.f, 0.0f);
+	s->entities.push_back(airship);
+
+}
 
 int main() {
 	sf::Window window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "dirizhabyl' aga", sf::Style::Default, sf::ContextSettings(24));
@@ -25,11 +37,12 @@ int main() {
 		throw std::runtime_error(std::string(reinterpret_cast<const char*>(glewGetErrorString(errorcode))));
 	}
 	glEnable(GL_DEPTH_TEST);
-	const string obj = "new_sphere.obj";
-	const string tex = "sila.jpg";
-	const string ver = "vertex.vert";
-	const string fra = "fragment.frag";
-	Scene* s = new Scene();
+	vector<string> meshes{ "models/cube.obj", "models/cube.obj" };
+	vector<string> textures{ "textures/sila.jpg","textures/sila.jpg" };
+	vector<string> vertes_s{ "shaders/vertex.vert","shaders/vertex.vert" };
+	vector<string> frags_s{ "shaders/fragment.frag","shaders/fragment.frag" };
+	Scene* s = new Scene(meshes,textures,vertes_s,frags_s);
+	make_scene(s);
 	while (window.isOpen()) {
 		sf::Event event;
 		while (window.pollEvent(event)) {
@@ -42,26 +55,17 @@ int main() {
 				switch (event.key.code)
 				{
 				case sf::Keyboard::W:
-					s->camera.ProcessKeyboard(Camera::FORWARD, s->GetDeltaTime());
-					break;
-
+					s->move_airship(0.0f, 0.1f, 0);			break;
 				case sf::Keyboard::A:
-					s->camera.ProcessKeyboard(Camera::LEFT, s->GetDeltaTime());
-					break;
-
+					s->move_airship(-0.1f, 0, 0);			break;
 				case sf::Keyboard::S:
-					s->camera.ProcessKeyboard(Camera::BACKWARD, s->GetDeltaTime());
-					break;
-
+					s->move_airship(0.0f, -0.1f, 0);			break;
 				case sf::Keyboard::D:
-					s->camera.ProcessKeyboard(Camera::RIGHT, s->GetDeltaTime());
-					break;
+					s->move_airship(0.1f, 0, 0);				break;
 				case sf::Keyboard::Q:
-					s->camera.ProcessKeyboard(Camera::UP, s->GetDeltaTime());
-					break;
+					s->move_airship(0.0f, 0, -0.1f);			break;
 				case sf::Keyboard::E:
-					s->camera.ProcessKeyboard(Camera::DOWN, s->GetDeltaTime());
-					break;
+					s->move_airship(0.0f, 0, 0.1f);			break;
 
 				default:
 					break;
