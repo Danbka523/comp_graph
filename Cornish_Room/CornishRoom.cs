@@ -14,6 +14,7 @@ namespace laba7
     {
         bool isMirror;
         bool isTrans;
+        bool isLight;
         public CornishRoom()
         {
             InitializeComponent();
@@ -22,7 +23,7 @@ namespace laba7
 
         private void createRoomButton_Click(object sender, EventArgs e)
         {
-            Scene scene = new Scene(pictureBox1.Width, pictureBox1.Height, isMirror, isTrans);
+            Scene scene = new Scene(pictureBox1.Width, pictureBox1.Height, isMirror, isTrans, isLight);
             scene.Load();
             pictureBox1.Image = scene.Draw();
         }
@@ -45,6 +46,16 @@ namespace laba7
             }
             else
                 isTrans = false;
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox2.Checked)
+            {
+                isLight = true;
+            }
+            else
+                isLight = false;
         }
     }
 }

@@ -89,7 +89,8 @@ namespace laba7
 
         }
 
-        //https://en.wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm
+        //https://en.m.wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm\
+        //need to copy
         public bool RayTriangleIntersection(Vector p0, Vector p1, Vector p2, out float intersect)
         {
             float eps = 0.0001f;

@@ -34,6 +34,7 @@
             reflectCheck = new CheckBox();
             wallComboBox = new ComboBox();
             transparencyCheck = new CheckBox();
+            checkBox2 = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -96,11 +97,23 @@
             transparencyCheck.UseVisualStyleBackColor = true;
             transparencyCheck.CheckedChanged += transparencyCheck_CheckedChanged;
             // 
+            // checkBox2
+            // 
+            checkBox2.AutoSize = true;
+            checkBox2.Location = new System.Drawing.Point(373, 516);
+            checkBox2.Name = "checkBox2";
+            checkBox2.Size = new Size(75, 19);
+            checkBox2.TabIndex = 6;
+            checkBox2.Text = "Еще свет";
+            checkBox2.UseVisualStyleBackColor = true;
+            checkBox2.CheckedChanged += checkBox2_CheckedChanged;
+            // 
             // CornishRoom
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(597, 572);
+            Controls.Add(checkBox2);
             Controls.Add(transparencyCheck);
             Controls.Add(wallComboBox);
             Controls.Add(reflectCheck);
@@ -122,5 +135,6 @@
         private CheckBox reflectCheck;
         private ComboBox wallComboBox;
         private CheckBox transparencyCheck;
+        private CheckBox checkBox2;
     }
 }

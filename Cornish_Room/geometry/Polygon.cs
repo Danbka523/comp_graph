@@ -78,6 +78,17 @@ namespace laba7
             }
             return normVector.Normalize();
         }
+
+        public Vector GetNormNon()
+        {
+            if (normVector == null)
+            {
+                var v1 = new Vector(vertices[0], vertices[1]);
+                var v2 = new Vector(vertices[0], vertices.Last());
+                normVector = -(v1 * v2);
+            }
+            return normVector;
+        }
         public override string ToString()
         {
             string res = "";

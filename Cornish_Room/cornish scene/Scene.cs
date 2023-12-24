@@ -18,9 +18,10 @@ namespace laba7
         int height;
         public bool isMirror;
         public bool isTrans;
+        bool isLight;
         List<Material> materials=new();
         public List<LightSource> lightSources=new();
-        public Scene(int width, int height, bool isMirror, bool isTrans) {
+        public Scene(int width, int height, bool isMirror, bool isTrans, bool isLight) {
             dataManager=new DataManager();
             transformations = new Transformations();
             this.width= width;
@@ -28,11 +29,12 @@ namespace laba7
             GenMaterials();
             this.isTrans= isTrans;
             this.isMirror= isMirror;
+            this.isLight = isLight;
         }
 
         void GenMaterials()
         {
-            Material transparensy = new Material(0.1f, 0.001f, 0.0f, 0.9f, 1f);
+            Material transparensy = new Material(0.0f, 0.001f, 0.0f, 0.9f, 1f);
             transparensy.Color = new Vector(1, 1, 1);
             Material mirror = new Material(0.0f,0.0f,1f,0.0f,1f);
             mirror.Color = new Vector(1, 1, 1);
@@ -44,14 +46,15 @@ namespace laba7
         public void Load() {
             Polyhedron cube = dataManager.Load("cube.obj");
             Polyhedron cube1 = dataManager.Load("cube.obj");
-            Polyhedron sphere = dataManager.Load("new_sphere.obj");
+            //Polyhedron sphere = dataManager.Load("new_sphere.obj");
+            Polyhedron sphere = dataManager.Load("sphere.obj");
             Polyhedron room = dataManager.Load("cube.obj");
 
 
          
 
-            room.Polygons[0].pen = new Pen(Color.Blue);
-            room.Polygons[1].pen = new Pen(Color.Blue);
+            room.Polygons[0].pen = new Pen(Color.Orange);
+            room.Polygons[1].pen = new Pen(Color.Orange);
             room.Polygons[2].pen = new Pen(Color.Red);
             room.Polygons[3].pen = new Pen(Color.Red);
             room.Polygons[4].pen = new Pen(Color.Green);
@@ -67,8 +70,9 @@ namespace laba7
             transformations.Shift(cube, 4, 0, -1);
             transformations.Shift(cube1, 0, 0, 0);
             transformations.Shift(sphere, -4, 0, 3);
-            //transformations.Scale(cube, 1.2f, 1.2f, 1.2f);
-            transformations.RotateAroundAxis(cube, 30, "Z");
+            transformations.Scale(cube, 1f, 1f, 1.8f);
+            transformations.RotateAroundAxis(cube, 10, "Z");
+            transformations.RotateAroundAxis(cube1, 30, "Z");
             cube.SetPen(new Pen(Color.Red));
             cube1.SetPen(new Pen(Color.Purple));
             sphere.SetPen(new Pen(Color.Lime));
@@ -92,8 +96,8 @@ namespace laba7
                 cube1.material = new Material(0.1f, 0.7f, 0.0f, 0.0f, 1.5f);
                 
                 cube.material.Color = new Vector(1f, 1f, 1f);
-                cube1.material.Color = new Vector(0.0f, 1.0f, 0.0f);
-                sphere.material = new Material(0.1f, 0.5f, 0.3f, 0.7f, 1f);
+                cube1.material.Color = new Vector(1.0f, 1.0f, 1.0f);
+                sphere.material = new Material(0.1f, 0.5f, 0.0f, 0.0f, 1.5f);
                 sphere.material.Color = new Vector(0.0f, 1.0f, 0.0f);
              
 
@@ -107,7 +111,8 @@ namespace laba7
             lightSource =new LightSource(new Point(0f, 4f, 4.9f),new Vector(1,1,1));
             lightSources.Add(lightSource);
             var lightSource1 = new LightSource(new Point(-3f, 4f, 4.9f), new Vector(1, 1, 1));
-            lightSources.Add(lightSource1);
+            if (isLight)
+                lightSources.Add(lightSource1);
             rayTracing = new RT(this);
 
             cameraPos = new Vector(room.Polygons[0].Verts[0])+ new Vector(room.Polygons[0].Verts[2])+ new Vector(room.Polygons[0].Verts[1])+ new Vector(room.Polygons[1].Verts[2]);

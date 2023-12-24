@@ -85,11 +85,11 @@ namespace laba7
       
             Point reachPoint = new Vector(ray.Direction * intersection + new Vector(ray.Start));
 
-            //из презентации 
-            //В точке пересечения луча с объектом строится три вторичных 
-            //луча – один в направлении отражения (1), второй – в направлении 
-            //источника света (2), третий в направлении преломления 
-            //прозрачной поверхностью (3)
+
+            //3 rays
+            //1)to light
+            //2)refract
+            //3)mirror
             foreach (var light in scene.lightSources)
             {
                 //ambient
@@ -102,19 +102,19 @@ namespace laba7
 
                 if (IsVisible(light, reachPoint, scene))
                     color += light.Shade(reachPoint, normal, material.Color, material.Diffuse);
-
             }
+
                 if (material.Reflection > 0)
                 {
                     Ray reflectionRay = ray.Reflect(reachPoint, normal);
                     color += material.Reflection * RayTracing(reflectionRay, iter - 1);
                 }
-            
+
                 if (material.Refraction > 0)
                 {
-                    //коэффициент преломления
+                    //coef refr
                     float refractRatio;
-                    //если угол острый получился, то
+                    //if <90
                     if (refractFigure)
                         refractRatio = material.Environment;
                     else
@@ -127,10 +127,10 @@ namespace laba7
 
             
 
-            if (color.XF > 1.0f || color.YF > 1.0f || color.ZF > 1.0f)
-                return color.Normalize();
-            return color;
-        
+                if (color.XF > 1.0f || color.YF > 1.0f || color.ZF > 1.0f)
+                    return color.Normalize();
+                return color;
+            
         }
 
         public float FindClosest(Ray ray, out Vector normal, out Material material) {
