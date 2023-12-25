@@ -6,9 +6,10 @@
 
 class Entity
 {
-	float x=0, y=0, z=0;
-	float rx=0, ry=0, rz=0;
+	float x = 0, y = 0, z = 0;
+	float rx = 0, ry = 0, rz = 0;
 	float cx = 1, cy = 1, cz = 1;
+	
 
 	void update_uniforms() {
 		auto model_matrix = glm::translate(glm::mat4(1.f), position)
@@ -43,31 +44,24 @@ public:
 	void draw() {
 		if (!mesh || !shader)
 			return;
-
 		shader->use();
 		update_uniforms();
-		mesh->Draw();
+		glUseProgram(0);
+		mesh->Draw(shader);
+		checkOpenGLerror();
 		glUseProgram(0);
 	}
 
 	void moving(float x, float y, float z) {
-		this->x += x;
-		this->y += y;
-		this->z += z;
-		position = { x,y,z };
+
+		position = { position.x+x,position.y+y,position.z+z };
 	}
 
 	void rotating(float rx, float ry, float rz) {
-		this->rx += rx;
-		this->ry += ry;
-		this->rz += rz;
-		rotation = { rx,ry,rz };
+		rotation = { rotation.x+rx,rotation.y+ry,rotation.z+rz };
 	}
 
 	void scaling(float cx, float cy, float cz) {
-		this->cx += cx;
-		this->cy += cy;
-		this->cz += cz;
-		scale = { cx,cy,cz };
+		scale = { scale.x+cx,scale.y+cy,scale.z+cz };
 	}
 };

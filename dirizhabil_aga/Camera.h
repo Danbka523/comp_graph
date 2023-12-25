@@ -4,7 +4,7 @@
 #include "Shader.h"
 
 // Default camera values
-const glm::vec3 POSITION = glm::vec3(0.0f, 0.0f, 0.0f);
+const glm::vec3 POSITION = glm::vec3(0.0f, 0.0f, 50.0f);
 const glm::vec3 WORLD_UP = glm::vec3(0.0f, 1.0f, 0.0f);
 const float YAW = -90.0f;
 const float PITCH = 0.0f;
@@ -73,8 +73,9 @@ public:
 
 	void UpdateUniforms(const Shader* s) const {
 		s->use();
-
+		
 		s->SetMat4("view",GetViewMatrix());
+		checkOpenGLerror();
 		s->SetMat4("projection",GetProjectionMatrix());
 		
 		checkOpenGLerror();
@@ -114,7 +115,7 @@ public:
 	void ProcessRotation(float pitch=0,float yaw=0) {
 		Yaw += yaw;
 		Pitch += pitch;
-		glm::clamp(pitch, -89.0f, 89.0f);
+		Pitch=glm::clamp(pitch, -89.0f, 89.0f);
 		updateVectors();
 	}
 

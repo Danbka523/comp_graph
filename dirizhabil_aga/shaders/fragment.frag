@@ -69,7 +69,7 @@
 
 		//directional lighting
 	    result = CalcDirLight(dirLight, norm, viewDir,1);
-		result+=CalcRimLight(norm,viewDir,1.0,4.0);
+		//result+=CalcRimLight(norm,viewDir,1.0,4.0);
 	    
 
 	    // point lights

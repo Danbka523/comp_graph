@@ -17,13 +17,16 @@ glm::vec2 mouseDelta;
 static void make_scene(Scene* s) {
 
 	auto grass = Entity(&s->meshes[0], &s->shaders[0]);
+	//grass.position += glm::vec3(0,0,-50.0f);
+	grass.scale+=glm::vec3(10, 10, 0);
 	s->entities.push_back(grass);
-	grass.position += glm::vec3(0,0,-2.0f);
-	grass.scale+=glm::vec3(2, 2, 2);
 
 	auto airship = Entity(&s->meshes[1], &s->shaders[1]);
-	airship.position += glm::vec3(2.5f, 0.f, 0.0f);
+	airship.position += glm::vec3(0.0f, 0.f, 20.0f);
 	s->entities.push_back(airship);
+
+	auto fir = Entity(&s->meshes[2], &s->shaders[2]);
+	s->entities.push_back(fir);
 
 }
 
@@ -37,13 +40,15 @@ int main() {
 		throw std::runtime_error(std::string(reinterpret_cast<const char*>(glewGetErrorString(errorcode))));
 	}
 	glEnable(GL_DEPTH_TEST);
-	vector<string> meshes{ "models/cube.obj", "models/cube.obj" };
-	vector<string> textures{ "textures/sila.jpg","textures/sila.jpg" };
-	vector<string> vertes_s{ "shaders/vertex.vert","shaders/vertex.vert" };
-	vector<string> frags_s{ "shaders/fragment.frag","shaders/fragment.frag" };
+	//glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	vector<string> meshes{ "models/cube.obj", "models/cube.obj", "models/fir1.obj"};
+	vector<string> textures{ "textures/grass.jpg ","textures/sila.jpg", "textures/fir.jpg"};
+	vector<string> vertes_s{ "shaders/vertex.vert","shaders/vertex.vert", "shaders/vertex.vert" };
+	vector<string> frags_s{ "shaders/fragment.frag","shaders/fragment.frag","shaders/fragment.frag" };
 	Scene* s = new Scene(meshes,textures,vertes_s,frags_s);
 	make_scene(s);
 	while (window.isOpen()) {
+
 		sf::Event event;
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed) { window.close(); } // poll events
@@ -73,7 +78,8 @@ int main() {
 			}
 		}
 		s->ResetClock();
-		
+		//glClearColor(0, 0, 0, 1);
+	
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		s->Draw();

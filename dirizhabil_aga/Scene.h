@@ -132,16 +132,18 @@ public:
 		glm::vec3(1.5f,  -2.f, -1.5f),
 		glm::vec3(-4.f,  1.0f, -1.5f)
 	};
-
+	
 	void Draw() {
 		/*
 		sl.SetUniforms(&shaders);
-		dl.SetUniforms(&shaders);
+		
 		pl.SetUniforms(&shaders);
 		*/
+		
 		for (auto& shader : shaders)
 		{
 			camera.UpdateUniforms(&shader);
+			dl.SetUniforms(&shader);
 		}
 		
 
@@ -151,12 +153,11 @@ public:
 
 			glActiveTexture(GL_TEXTURE0);
 		    glBindTexture(GL_TEXTURE_2D, entities[i].mesh->texture);
-			auto t = glGetUniformLocation(entities[i].shader->ID, "ourTexture");
 			glUniform1i(glGetUniformLocation(entities[i].shader->ID, "ourTexture"), 0);
-			entities[i].draw();
-
 
 			glUseProgram(0);
+
+			entities[i].draw();
 
 			/*
 			//shaders.use();

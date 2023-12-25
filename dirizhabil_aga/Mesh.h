@@ -5,6 +5,7 @@
 #include<sstream>
 #include<fstream>
 #include<vector>
+#include "Shader.h"
 using namespace std;
 
 
@@ -117,7 +118,7 @@ class Mesh {
 		GLint i2=2;
 		
 		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
-		checkOpenGLerror();
+	
 		//pos
 		glVertexAttribPointer(i0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
 		glEnableVertexAttribArray(i0);
@@ -163,7 +164,8 @@ public:
 	}
 	~Mesh() {}
 
-	void Draw() {
+	void Draw(Shader* shader) {
+		shader->use();
 		glBindVertexArray(VAO);		
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);

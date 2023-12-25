@@ -7,7 +7,7 @@ const Camera* camera;
 
  void init_light(const Shader* s,const Camera* c) {
 	s->use();
-	float shininess = 32.0f;
+	float shininess = 64.0f;
 	s->SetFloat("material.shininess", shininess);
 	glm::vec4 diffuse{ 0.7f, 0.7f, 0.7f, 1.f };
 	//s->SetVec3("material.diffuse", diffuse);
@@ -17,7 +17,7 @@ const Camera* camera;
 
 
 struct DirLight {
-	glm::vec3 direction{ -0.2f, -1.0f, -0.3f };
+	glm::vec3 direction{ 0.5f, 0.f, -0.3f };
 	glm::vec3 ambient{ 0.2f, 0.2f, 0.2f };
 	glm::vec3 diffuse{ 0.5f, 0.5f, 0.5f};
 	glm::vec3 specular{ 1.0f, 1.0f, 1.0f};
