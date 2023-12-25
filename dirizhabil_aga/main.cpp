@@ -18,14 +18,16 @@ static void make_scene(Scene* s) {
 
 	auto grass = Entity(&s->meshes[0], &s->shaders[0]);
 	//grass.position += glm::vec3(0,0,-50.0f);
-	grass.scale+=glm::vec3(10, 10, 0);
+	grass.scaling(20, 20, 0);
 	s->entities.push_back(grass);
 
 	auto airship = Entity(&s->meshes[1], &s->shaders[1]);
-	airship.position += glm::vec3(0.0f, 0.f, 20.0f);
+	airship.moving(0.0f, 0.f, 30.0f);
 	s->entities.push_back(airship);
 
 	auto fir = Entity(&s->meshes[2], &s->shaders[2]);
+	fir.scaling(0.008, 0.008, 0.008);
+	fir.rotating(90, glm::vec3{ 1.f,0.f,0.f });
 	s->entities.push_back(fir);
 
 }
@@ -40,9 +42,9 @@ int main() {
 		throw std::runtime_error(std::string(reinterpret_cast<const char*>(glewGetErrorString(errorcode))));
 	}
 	glEnable(GL_DEPTH_TEST);
-	//glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-	vector<string> meshes{ "models/cube.obj", "models/cube.obj", "models/fir1.obj"};
-	vector<string> textures{ "textures/grass.jpg ","textures/sila.jpg", "textures/fir.jpg"};
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	vector<string> meshes{ "models/cube.obj", "models/cube.obj", "models/fir.obj" };
+	vector<string> textures{ "textures/grass.jpg ","textures/sila.jpg", "textures/fir.png" };
 	vector<string> vertes_s{ "shaders/vertex.vert","shaders/vertex.vert", "shaders/vertex.vert" };
 	vector<string> frags_s{ "shaders/fragment.frag","shaders/fragment.frag","shaders/fragment.frag" };
 	Scene* s = new Scene(meshes,textures,vertes_s,frags_s);

@@ -16,5 +16,5 @@ void main(){
      opos = vec3(model*vec4(pos,1.0));
      onormal = mat3(transpose(inverse(model)))*normal;
      gl_Position = projection * view * vec4(opos,1.0);
-     otexcoord = texcoord;
+     otexcoord =  vec2(texcoord.x, 1.0f - texcoord.y);
 }

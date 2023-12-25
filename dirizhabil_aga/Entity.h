@@ -6,14 +6,14 @@
 
 class Entity
 {
-	float x = 0, y = 0, z = 0;
-	float rx = 0, ry = 0, rz = 0;
+	float x, y, z;
+	float rx=1, ry=0, rz=0;
 	float cx = 1, cy = 1, cz = 1;
-	
+	float degrees=0;
 
 	void update_uniforms() {
 		auto model_matrix = glm::translate(glm::mat4(1.f), position)
-			* glm::rotate(glm::mat4(1.f), glm::radians(ry), glm::vec3(0.f, 1.f, 0.f))
+			* glm::rotate(glm::mat4(1.f), glm::radians(degrees), rotation)
 			* glm::scale(glm::mat4(1.f), scale);
 
 		shader->SetMat4("model", model_matrix);
@@ -46,22 +46,27 @@ public:
 			return;
 		shader->use();
 		update_uniforms();
-		glUseProgram(0);
 		mesh->Draw(shader);
 		checkOpenGLerror();
 		glUseProgram(0);
 	}
 
 	void moving(float x, float y, float z) {
-
-		position = { position.x+x,position.y+y,position.z+z };
+		this->x += x;
+		this->y += y;
+		this->z += z;
+		position = glm::vec3( this->x,this->y,this->z );
 	}
 
-	void rotating(float rx, float ry, float rz) {
-		rotation = { rotation.x+rx,rotation.y+ry,rotation.z+rz };
+	void rotating(float degrees,glm::vec3 rot) {
+		rotation = rot;
+		this->degrees = degrees;
 	}
 
 	void scaling(float cx, float cy, float cz) {
-		scale = { scale.x+cx,scale.y+cy,scale.z+cz };
+		this->cx = cx;
+		this->cy = cy;
+		this->cz = cz;
+		scale = { cx,cy,cz };
 	}
 };
