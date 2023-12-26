@@ -41,22 +41,16 @@ public:
 	
 	Scene(vector<string>& meshes_path, vector<string>& textures_path, vector<string>& verts_shaders_path, vector<string>& frag_shaders_path) {
 		camera = Camera();
-		for (size_t i = 0; i < meshes_path.size(); i++)
+		for (size_t i = 0; i < meshes_path.size()-1; i++)
 		{
 			meshes.push_back(Mesh(meshes_path[i], textures_path[i]));
 			shaders.push_back(Shader(verts_shaders_path[i], frag_shaders_path[i]));
-			/*if (i == 0)
-				entities.push_back(Entity(&meshes[i], &shaders[i],"grass"));
-			else if (i==1)
-				entities.push_back(Entity(&meshes[i], &shaders[i], "airship"));
-			else if (i==2)		
-				entities.push_back(Entity(&meshes[i], &shaders[i], "fir"));
-			else if (i==3)
-				entities.push_back(Entity(&meshes[i], &shaders[i], "gift"));
-			else 
-				entities.push_back(Entity(&meshes[i], &shaders[i], "house"));*/
 		}
-		
+		for (size_t i = 0; i < 5; i++)
+		{
+			meshes.push_back(Mesh(meshes_path[meshes_path.size() - 1], textures_path[meshes_path.size() - 1]));
+			shaders.push_back(Shader(verts_shaders_path[meshes_path.size() - 1], frag_shaders_path[meshes_path.size() - 1]));
+		}
 		init();
 		
 	}
@@ -211,7 +205,7 @@ public:
 		for (unsigned int i = 0; i < entities.size(); i++)
 		{
 			entities[i].shader->use();
-
+			
 
 			if (entities[i].name == "fir") {
 				entities[i].shader->SetFloat("time", globalCl.getElapsedTime().asSeconds());

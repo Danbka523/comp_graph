@@ -71,6 +71,11 @@ public:
 	}
 
 	void scaling(float cx, float cy, float cz) {
+		
+		x *= cx;
+		y *= cy;
+		z *= cz;
+		position = glm::vec3(x, y, z);
 		this->cx = cx;
 		this->cy = cy;
 		this->cz = cz;

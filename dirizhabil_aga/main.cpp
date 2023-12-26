@@ -2,6 +2,7 @@
 #include "Mesh.h"
 #include "Shader.h"
 #include "Scene.h"
+#include <ctime>
 #include <iostream>
 
 using namespace std;
@@ -14,8 +15,25 @@ bool isCamTouched = false;
 glm::vec2 mousePos;
 glm::vec2 mouseDelta;
 
-static void make_scene(Scene* s) {
 
+static int random(int a, int b) {
+	srand((unsigned int)time(NULL));
+	return a + rand() % (b - a + 1);
+}
+float find_houses_dist(vector<Entity> houses, glm::vec3 new_house_c, Scene* s) {
+	float min = MAXINT;
+	for (size_t i = 0; i < houses.size(); i++)
+	{
+		auto dist = s->find_dist(houses[i].position, new_house_c);
+		if (dist < min)
+			min = dist;
+	}
+	return min;
+}
+
+
+static void make_scene(Scene* s) {
+	vector < glm::vec2> poses;
 	auto grass = Entity(&s->meshes[0], &s->shaders[0]);
 	//grass.position += glm::vec3(0,0,-50.0f);
 	grass.scaling(20, 20, 0);
@@ -35,7 +53,50 @@ static void make_scene(Scene* s) {
 	//gift.rotating(90, glm::vec3{ 1.f,0.f,0.f });
 	s->entities.push_back(gift);
 
+
+	vector<Entity> houses;
+	int a=-18, b=18;
+	for (size_t i = 4; i < s->meshes.size()-2; i++)
+	{
+		
+		auto house = Entity(&s->meshes[i], &s->shaders[i], "house", 3);
+		
+		float x = random(a, b);
+		float y = random(a, b);
+		while (x * x + y * y < 10 || find_houses_dist(houses,glm::vec3(x,y,1),s)<5) {
+			x = random(a, b);
+			y = random(a, b);
+		}
+		house.scaling(0.005, 0.005, 0.005);
+		house.set_pos(glm::vec3(x, y, 1));
+		house.rotating(90, glm::vec3{ 1.f,0.f,0.f });
+		s->entities.push_back(house);
+		houses.push_back(house);
+	}
+
+	for (size_t i = s->meshes.size() - 2; i < s->meshes.size(); i++)
+	{
+
+		auto house = Entity(&s->meshes[i], &s->shaders[i], "", 3);
+
+		float x = random(a, b);
+		float y = random(a, b);
+		while (x * x + y * y < 10 || find_houses_dist(houses, glm::vec3(x, y, 1), s) < 5) {
+			x = random(a, b);
+			y = random(a, b);
+		}
+		house.scaling(0.005, 0.005, 0.005);
+		house.set_pos(glm::vec3(x, y, 1));
+		house.rotating(90, glm::vec3{ 1.f,0.f,0.f });
+		s->entities.push_back(house);
+		houses.push_back(house);
+	}
+
+
+	
 }
+
+
 
 int main() {
 	sf::Window window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "dirizhabyl' aga", sf::Style::Default, sf::ContextSettings(24));
@@ -48,10 +109,10 @@ int main() {
 	}
 	glEnable(GL_DEPTH_TEST);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-	vector<string> meshes{ "models/cube.obj", "models/cube.obj", "models/fir.obj" , "models/gift.obj"};
-	vector<string> textures{ "textures/grass.jpg ","textures/sila.jpg", "textures/fir.png", "textures/gift.png"};
-	vector<string> vertes_s{ "shaders/vertex.vert","shaders/vertex.vert", "shaders/fir_vertex.vert","shaders/vertex.vert" };
-	vector<string> frags_s{ "shaders/fragment.frag","shaders/fragment.frag","shaders/fragment.frag","shaders/fragment.frag" };
+	vector<string> meshes{ "models/cube.obj", "models/cube.obj", "models/fir.obj" , "models/gift.obj","models/car.obj","models/sign.obj", "models/house.obj"};
+	vector<string> textures{ "textures/grass.jpg ","textures/sila.jpg", "textures/fir.png", "textures/gift.png","textures/car.png","textures/sign.obj","textures/house.png" };
+	vector<string> vertes_s{ "shaders/vertex.vert","shaders/vertex.vert", "shaders/fir_vertex.vert","shaders/vertex.vert","shaders/vertex.vert","shaders/vertex.vert","shaders/vertex.vert" };
+	vector<string> frags_s{ "shaders/fragment.frag","shaders/fragment.frag","shaders/fragment.frag","shaders/gift_frag.frag","shaders/gift_frag.frag","shaders/gift_frag.frag","shaders/fragment.frag" };
 	Scene* s = new Scene(meshes,textures,vertes_s,frags_s);
 	make_scene(s);
 	while (window.isOpen()) {
