@@ -212,6 +212,12 @@ public:
 		{
 			entities[i].shader->use();
 
+
+			if (entities[i].name == "fir") {
+				entities[i].shader->SetFloat("time", globalCl.getElapsedTime().asSeconds());
+			}
+			
+
 			glActiveTexture(GL_TEXTURE0);
 		    glBindTexture(GL_TEXTURE_2D, entities[i].mesh->texture);
 			glUniform1i(glGetUniformLocation(entities[i].shader->ID, "ourTexture"), 0);

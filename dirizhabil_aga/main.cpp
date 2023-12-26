@@ -50,7 +50,7 @@ int main() {
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 	vector<string> meshes{ "models/cube.obj", "models/cube.obj", "models/fir.obj" , "models/gift.obj"};
 	vector<string> textures{ "textures/grass.jpg ","textures/sila.jpg", "textures/fir.png", "textures/gift.png"};
-	vector<string> vertes_s{ "shaders/vertex.vert","shaders/vertex.vert", "shaders/vertex.vert","shaders/vertex.vert" };
+	vector<string> vertes_s{ "shaders/vertex.vert","shaders/vertex.vert", "shaders/fir_vertex.vert","shaders/vertex.vert" };
 	vector<string> frags_s{ "shaders/fragment.frag","shaders/fragment.frag","shaders/fragment.frag","shaders/fragment.frag" };
 	Scene* s = new Scene(meshes,textures,vertes_s,frags_s);
 	make_scene(s);
