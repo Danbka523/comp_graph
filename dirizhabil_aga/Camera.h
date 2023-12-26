@@ -111,6 +111,9 @@ public:
 		}
 		
 	}
+	void reset() {
+		Position = POSITION;
+	}
 
 	void ProcessRotation(float pitch=0,float yaw=0) {
 		Yaw += yaw;

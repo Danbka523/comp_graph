@@ -23,7 +23,7 @@ public:
 	string name;
 	Mesh* mesh;
 	Shader* shader;
-
+	float radius;
 
 	glm::vec3 position{ x,y,z };
 	glm::vec3 rotation{ rx,ry,rz };
@@ -31,15 +31,22 @@ public:
 
 
 	Entity() {}
-	Entity(Mesh* mesh, Shader* shader, string name="") {
+	Entity(Mesh* mesh, Shader* shader, string name="", float radius=0) {
 		this->mesh = mesh;
 		this->shader = shader;
 		this->name = name;
+		this->radius = radius;
 	}
 
 	~Entity() {
 	}
 
+	void set_pos(glm::vec3 pos) {
+		x = pos.x;
+		y = pos.y;
+		z = pos.z;
+		position = glm::vec3(this->x, this->y, this->z);
+	}
 
 	void draw() {
 		if (!mesh || !shader)

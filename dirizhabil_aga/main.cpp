@@ -25,10 +25,15 @@ static void make_scene(Scene* s) {
 	airship.moving(0.0f, 0.f, 30.0f);
 	s->entities.push_back(airship);
 
-	auto fir = Entity(&s->meshes[2], &s->shaders[2]);
+	auto fir = Entity(&s->meshes[2], &s->shaders[2],"fir",5);
 	fir.scaling(0.008, 0.008, 0.008);
 	fir.rotating(90, glm::vec3{ 1.f,0.f,0.f });
 	s->entities.push_back(fir);
+
+	auto gift = Entity(&s->meshes[3], &s->shaders[3],"gift",2);
+	gift.scaling(0.08, 0.08, 0.08);
+	//gift.rotating(90, glm::vec3{ 1.f,0.f,0.f });
+	s->entities.push_back(gift);
 
 }
 
@@ -43,10 +48,10 @@ int main() {
 	}
 	glEnable(GL_DEPTH_TEST);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-	vector<string> meshes{ "models/cube.obj", "models/cube.obj", "models/fir.obj" };
-	vector<string> textures{ "textures/grass.jpg ","textures/sila.jpg", "textures/fir.png" };
-	vector<string> vertes_s{ "shaders/vertex.vert","shaders/vertex.vert", "shaders/vertex.vert" };
-	vector<string> frags_s{ "shaders/fragment.frag","shaders/fragment.frag","shaders/fragment.frag" };
+	vector<string> meshes{ "models/cube.obj", "models/cube.obj", "models/fir.obj" , "models/gift.obj"};
+	vector<string> textures{ "textures/grass.jpg ","textures/sila.jpg", "textures/fir.png", "textures/gift.png"};
+	vector<string> vertes_s{ "shaders/vertex.vert","shaders/vertex.vert", "shaders/vertex.vert","shaders/vertex.vert" };
+	vector<string> frags_s{ "shaders/fragment.frag","shaders/fragment.frag","shaders/fragment.frag","shaders/fragment.frag" };
 	Scene* s = new Scene(meshes,textures,vertes_s,frags_s);
 	make_scene(s);
 	while (window.isOpen()) {
@@ -73,7 +78,15 @@ int main() {
 					s->move_airship(0.0f, 0, -0.1f);			break;
 				case sf::Keyboard::E:
 					s->move_airship(0.0f, 0, 0.1f);			break;
-
+				case sf::Keyboard::C:
+					s->is_aiming = !s->is_aiming;
+					break;
+				case sf::Keyboard::Space:
+					if (s->can_send) {
+						s->set_gift();
+						s->can_send = false;
+					}
+					break;
 				default:
 					break;
 				}

@@ -18,6 +18,12 @@ protected:
 	sf::Clock globalCl;
 
 public:
+
+	bool is_aiming;
+	bool is_send;
+	bool can_send=true;
+
+
 	inline const float GetDeltaTime() { return deltaTime; }
 
 	inline void ResetClock() {
@@ -112,6 +118,50 @@ public:
 	
 	}
 
+	void send_gift(){
+		if (!can_send)
+			entities[3].moving(0, 0, -0.1);
+		//cout << can_send << endl;
+		if (check_gift())
+			can_send = true;
+	
+	}
+
+	bool check_gift() {
+		if (!can_send) {
+			if (entities[3].position.z <= 0) {
+				set_destroy(&entities[3]);
+				return true;
+			}
+
+
+
+			for (size_t i = 0; i < entities.size(); i++)
+			{
+				if (entities[i].name == "fir" && entities[3].radius + entities[i].radius > find_dist(entities[3].position, entities[i].position)) {
+					set_destroy(&entities[3]);
+					return true;
+				}
+				if (entities[i].name == "house" && entities[3].radius + entities[i].radius > find_dist(entities[3].position, entities[i].position)) {
+					set_destroy(&entities[3]);
+					set_destroy(&entities[i]);
+					return true;
+				}
+			}
+			return false;
+		}
+		else 
+		 return false;
+	}
+
+	float find_dist(glm::vec3 p1, glm::vec3 p2) {
+		return sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2) + pow(p2.z - p1.z, 2));
+	}
+
+	void set_destroy(Entity* e) {
+		e->set_pos(glm::vec3(e->position.x, e->position.y, e->position.z - 50));
+	}
+
 	void init_lights() {
 		for  ( auto& shader : shaders)
 		{
@@ -120,6 +170,15 @@ public:
 		}
 
 	}
+	void set_gift() {
+		entities[3].set_pos(glm::vec3(entities[1].position.x, entities[1].position.y, entities[1].position.z - 1));
+	}
+	void set_camera() {
+		if (is_aiming)
+			camera.Position = glm::vec3(entities[1].position.x, entities[1].position.y, entities[1].position.z-1);
+		else camera.reset();
+	}
+
 	glm::vec3 cubePositions[10] = {
 		glm::vec3(0.0f,  -1.f,  0.0f),
 		glm::vec3(4.0f,  5.0f, -15.0f),
@@ -132,8 +191,10 @@ public:
 		glm::vec3(1.5f,  -2.f, -1.5f),
 		glm::vec3(-4.f,  1.0f, -1.5f)
 	};
-	
+	//our update
 	void Draw() {
+		set_camera();
+		send_gift();
 		/*
 		sl.SetUniforms(&shaders);
 		
