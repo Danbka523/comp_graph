@@ -97,7 +97,18 @@ public:
 
 	void move_airship(float x, float y, float z) {
 		entities[1].moving(x, y, z);
+		if (z == 0) {
+			float t = x != 0 ? x : y;
+			float a = 90;
+			if (y > 0)
+				a = 180;
+			if (y < 0) {
+				a = 0;
+			}
+			entities[1].rotating(a, glm::vec3(0, 0, t));
+		}
 	}
+
 
 	void init_grass() {
 	

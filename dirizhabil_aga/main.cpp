@@ -55,15 +55,15 @@ static void make_scene(Scene* s) {
 
 
 	vector<Entity> houses;
-	int a=-18, b=18;
-	for (size_t i = 4; i < s->meshes.size()-2; i++)
+	int a=-17, b=17;
+	for (size_t i = 6; i < s->meshes.size(); i++)
 	{
 		
 		auto house = Entity(&s->meshes[i], &s->shaders[i], "house", 3);
 		
 		float x = random(a, b);
 		float y = random(a, b);
-		while (x * x + y * y < 10 || find_houses_dist(houses,glm::vec3(x,y,1),s)<5) {
+		while (x * x + y * y < 6 || find_houses_dist(houses,glm::vec3(x,y,1),s)<7) {
 			x = random(a, b);
 			y = random(a, b);
 		}
@@ -74,23 +74,23 @@ static void make_scene(Scene* s) {
 		houses.push_back(house);
 	}
 
-	for (size_t i = s->meshes.size() - 2; i < s->meshes.size(); i++)
-	{
+	//for (size_t i = s->meshes.size() - 2; i < s->meshes.size(); i++)
+	//{
 
-		auto house = Entity(&s->meshes[i], &s->shaders[i], "", 3);
+	//	auto house = Entity(&s->meshes[i], &s->shaders[i], "", 3);
 
-		float x = random(a, b);
-		float y = random(a, b);
-		while (x * x + y * y < 10 || find_houses_dist(houses, glm::vec3(x, y, 1), s) < 5) {
-			x = random(a, b);
-			y = random(a, b);
-		}
-		house.scaling(0.005, 0.005, 0.005);
-		house.set_pos(glm::vec3(x, y, 1));
-		house.rotating(90, glm::vec3{ 1.f,0.f,0.f });
-		s->entities.push_back(house);
-		houses.push_back(house);
-	}
+	//	float x = random(a, b);
+	//	float y = random(a, b);
+	//	while (x * x + y * y < 10 || find_houses_dist(houses, glm::vec3(x, y, 1), s) < 5) {
+	//		x = random(a, b);
+	//		y = random(a, b);
+	//	}
+	//	house.scaling(0.005, 0.005, 0.005);
+	//	house.set_pos(glm::vec3(x, y, 1));
+	//	house.rotating(90, glm::vec3{ 1.f,0.f,0.f });
+	//	s->entities.push_back(house);
+	//	houses.push_back(house);
+	//}
 
 
 	
@@ -109,8 +109,8 @@ int main() {
 	}
 	glEnable(GL_DEPTH_TEST);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-	vector<string> meshes{ "models/cube.obj", "models/cube.obj", "models/fir.obj" , "models/gift.obj","models/car.obj","models/sign.obj", "models/house.obj"};
-	vector<string> textures{ "textures/grass.jpg ","textures/sila.jpg", "textures/fir.png", "textures/gift.png","textures/car.png","textures/sign.obj","textures/house.png" };
+	vector<string> meshes{ "models/cube.obj", "models/car.obj", "models/fir.obj" , "models/gift.obj","models/car.obj","models/sign.obj", "models/house.obj"};
+	vector<string> textures{ "textures/grass.jpg ","textures/car.png", "textures/fir.png", "textures/gift.png","textures/car.png","textures/sign.obj","textures/house.png" };
 	vector<string> vertes_s{ "shaders/vertex.vert","shaders/vertex.vert", "shaders/fir_vertex.vert","shaders/vertex.vert","shaders/vertex.vert","shaders/vertex.vert","shaders/vertex.vert" };
 	vector<string> frags_s{ "shaders/fragment.frag","shaders/fragment.frag","shaders/fragment.frag","shaders/gift_frag.frag","shaders/gift_frag.frag","shaders/gift_frag.frag","shaders/fragment.frag" };
 	Scene* s = new Scene(meshes,textures,vertes_s,frags_s);
@@ -128,7 +128,7 @@ int main() {
 				switch (event.key.code)
 				{
 				case sf::Keyboard::W:
-					s->move_airship(0.0f, 0.1f, 0);			break;
+					s->move_airship(0.0f, 0.1f, 0);	    	break;
 				case sf::Keyboard::A:
 					s->move_airship(-0.1f, 0, 0);			break;
 				case sf::Keyboard::S:
